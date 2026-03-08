@@ -1,10 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, BookOpen, Target, Sparkles } from "lucide-react";
+import { Home, BookOpen, Target, Sparkles, Layers } from "lucide-react";
 import { motion } from "framer-motion";
 
 const tabs = [
   { icon: Home, label: "Home", path: "/" },
   { icon: BookOpen, label: "Learn", path: "/lessons" },
+  { icon: Layers, label: "Canvas", path: "/canvas" },
   { icon: Target, label: "Practice", path: "/practice" },
   { icon: Sparkles, label: "Brands", path: "/brands" },
 ];
