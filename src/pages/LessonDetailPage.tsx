@@ -5,6 +5,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { lessons, COMMON_PRESETS } from "@/data/lessons";
 import InteractiveBezierGraph from "@/components/InteractiveBezierGraph";
 import AnimationPreview from "@/components/AnimationPreview";
+import DualGraphComparison from "@/components/DualGraphComparison";
+import BezierTheoryExplainer from "@/components/BezierTheoryExplainer";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 
@@ -19,8 +21,9 @@ const LessonDetailPage = () => {
     lesson?.defaultBezier || [0, 0, 1, 1]
   );
   const [duration, setDuration] = useState(0.6);
-  const [playing, setPlaying] = useState(false);
   const [showTheory, setShowTheory] = useState(true);
+  const [showDual, setShowDual] = useState(false);
+  const [showExplainer, setShowExplainer] = useState(false);
 
   if (!lesson) {
     return (
@@ -47,26 +50,13 @@ const LessonDetailPage = () => {
       </motion.div>
 
       {/* Description */}
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.05 }}
-        className="mb-4 text-[12px] leading-relaxed text-muted-foreground"
-      >
+      <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.05 }} className="mb-4 text-[12px] leading-relaxed text-muted-foreground">
         {lesson.description}
       </motion.p>
 
       {/* Theory toggle */}
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="mb-4"
-      >
-        <button
-          onClick={() => setShowTheory(!showTheory)}
-          className="ae-label flex items-center gap-1 mb-2"
-        >
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-4">
+        <button onClick={() => setShowTheory(!showTheory)} className="ae-label flex items-center gap-1 mb-2">
           <span>{showTheory ? "▾" : "▸"}</span>
           <span>Theory</span>
         </button>
@@ -87,13 +77,8 @@ const LessonDetailPage = () => {
         )}
       </motion.div>
 
-      {/* Interactive Graph */}
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.15 }}
-        className="mb-4"
-      >
+      {/* Interactive Graph with snap-to-grid */}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="mb-4">
         <InteractiveBezierGraph
           bezier={bezier}
           onChange={setBezier}
@@ -101,31 +86,30 @@ const LessonDetailPage = () => {
           height={240}
           label="Value Graph — Drag to explore"
           color="var(--ae-yellow)"
+          snapToGrid={false}
         />
       </motion.div>
 
       {/* Animation Preview */}
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="mb-4"
-      >
-        <AnimationPreview bezier={bezier} duration={duration} playing={playing} />
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-4">
+        <AnimationPreview bezier={bezier} duration={duration} />
+      </motion.div>
+
+      {/* Side-by-Side Toggle */}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.22 }} className="mb-4">
+        <button onClick={() => setShowDual(!showDual)} className="ae-label flex items-center gap-1 mb-2">
+          <span>{showDual ? "▾" : "▸"}</span>
+          <span>Value vs Speed — Side by Side</span>
+        </button>
+        {showDual && <DualGraphComparison bezier={bezier} width={320} />}
       </motion.div>
 
       {/* Controls */}
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.25 }}
-        className="mb-4 ae-panel"
-      >
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="mb-4 ae-panel">
         <div className="ae-panel-header">
           <span className="ae-label">Controls</span>
         </div>
         <div className="p-3 space-y-3">
-          {/* Duration */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <span className="ae-label">Duration</span>
@@ -133,8 +117,6 @@ const LessonDetailPage = () => {
             </div>
             <Slider value={[duration]} onValueChange={([v]) => setDuration(v)} min={0.1} max={2} step={0.05} />
           </div>
-
-          {/* Presets */}
           <div>
             <span className="ae-label block mb-1.5">Presets</span>
             <div className="flex flex-wrap gap-1">
@@ -145,9 +127,7 @@ const LessonDetailPage = () => {
                     key={p.label}
                     onClick={() => setBezier([...p.bezier])}
                     className={`rounded px-2 py-1 ae-mono text-[9px] border transition-all ${
-                      isActive
-                        ? "border-primary bg-primary/10 text-primary"
-                        : "border-border bg-card text-muted-foreground hover:bg-accent"
+                      isActive ? "border-primary bg-primary/10 text-primary" : "border-border bg-card text-muted-foreground hover:bg-accent"
                     }`}
                   >
                     {p.label}
@@ -159,13 +139,8 @@ const LessonDetailPage = () => {
         </div>
       </motion.div>
 
-      {/* Key Principles */}
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="mb-4"
-      >
+      {/* Key Takeaways */}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-4">
         <span className="ae-label block mb-2">Key Takeaways</span>
         <div className="space-y-1.5">
           {lesson.keyPrinciples.map((p, i) => (
@@ -178,28 +153,23 @@ const LessonDetailPage = () => {
       </motion.div>
 
       {/* Tip */}
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.35 }}
-        className="mb-5 ae-panel p-3 border-l-2"
-        style={{ borderLeftColor: "hsl(var(--ae-green))" }}
-      >
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} className="mb-4 ae-panel p-3 border-l-2" style={{ borderLeftColor: "hsl(var(--ae-green))" }}>
         <p className="ae-mono text-[10px] mb-1" style={{ color: "hsl(var(--ae-green))" }}>PRO TIP</p>
         <p className="text-[11px] leading-relaxed text-foreground/70">{lesson.tip}</p>
       </motion.div>
 
+      {/* Beginner Explainer Toggle */}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.38 }} className="mb-5">
+        <button onClick={() => setShowExplainer(!showExplainer)} className="ae-label flex items-center gap-1 mb-2">
+          <span>{showExplainer ? "▾" : "▸"}</span>
+          <span>📖 Complete Beginner's Guide to Bezier Curves</span>
+        </button>
+        {showExplainer && <BezierTheoryExplainer />}
+      </motion.div>
+
       {/* Navigation */}
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="space-y-2"
-      >
-        <Button
-          onClick={() => navigate(`/practice/${lesson.id}`)}
-          className="w-full rounded-lg py-5 text-sm font-medium"
-        >
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="space-y-2">
+        <Button onClick={() => navigate(`/practice/${lesson.id}`)} className="w-full rounded-lg py-5 text-sm font-medium">
           Practice This Curve →
         </Button>
         {nextLesson && (
