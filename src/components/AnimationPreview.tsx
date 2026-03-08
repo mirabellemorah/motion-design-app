@@ -44,7 +44,7 @@ const AnimationPreview = ({ params, type = "translate", playing, onComplete }: A
     if (type === "bounce") {
       return {
         duration: duration * 2,
-        ease: [0.22, 1, 0.36, 1],
+        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
         delay,
         repeat: playing ? Infinity : 0,
         repeatDelay: 0.8,
