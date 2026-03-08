@@ -23,7 +23,7 @@ const LessonDetailPage = () => {
   );
   const [duration, setDuration] = useState(0.6);
   const [showTheory, setShowTheory] = useState(true);
-  const [showDual, setShowDual] = useState(false);
+  const [showDual, setShowDual] = useState(true);
   const [showExplainer, setShowExplainer] = useState(false);
 
   if (!lesson) {
