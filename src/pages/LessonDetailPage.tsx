@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { lessons, COMMON_PRESETS } from "@/data/lessons";
 import InteractiveBezierGraph from "@/components/InteractiveBezierGraph";
+import SpeedGraph from "@/components/SpeedGraph";
 import AnimationPreview from "@/components/AnimationPreview";
 import DualGraphComparison from "@/components/DualGraphComparison";
 import BezierTheoryExplainer from "@/components/BezierTheoryExplainer";
