@@ -1,12 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, BookOpen, Target, BarChart3 } from "lucide-react";
+import { Home, BookOpen, Target, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
 const tabs = [
   { icon: Home, label: "Home", path: "/" },
   { icon: BookOpen, label: "Learn", path: "/lessons" },
   { icon: Target, label: "Practice", path: "/practice" },
-  { icon: BarChart3, label: "Progress", path: "/progress" },
+  { icon: Sparkles, label: "Brands", path: "/brands" },
 ];
 
 const BottomNav = () => {
