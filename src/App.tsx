@@ -11,6 +11,7 @@ import LessonDetailPage from "@/pages/LessonDetailPage";
 import PracticePage from "@/pages/PracticePage";
 import ProgressPage from "@/pages/ProgressPage";
 import BrandCurvesPage from "@/pages/BrandCurvesPage";
+import CanvasPage from "@/pages/CanvasPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
