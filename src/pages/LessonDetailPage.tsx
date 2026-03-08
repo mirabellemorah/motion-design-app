@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { lessons, COMMON_PRESETS } from "@/data/lessons";
 import InteractiveBezierGraph from "@/components/InteractiveBezierGraph";
+import SpeedGraph from "@/components/SpeedGraph";
 import AnimationPreview from "@/components/AnimationPreview";
 import DualGraphComparison from "@/components/DualGraphComparison";
 import BezierTheoryExplainer from "@/components/BezierTheoryExplainer";
@@ -22,7 +23,7 @@ const LessonDetailPage = () => {
   );
   const [duration, setDuration] = useState(0.6);
   const [showTheory, setShowTheory] = useState(true);
-  const [showDual, setShowDual] = useState(false);
+  const [showDual, setShowDual] = useState(true);
   const [showExplainer, setShowExplainer] = useState(false);
 
   if (!lesson) {
@@ -90,12 +91,17 @@ const LessonDetailPage = () => {
         />
       </motion.div>
 
+      {/* Speed Graph (dedicated) */}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }} className="mb-4">
+        <SpeedGraph bezier={bezier} width={320} height={160} color="var(--ae-green)" label="Speed Graph — Velocity over time" />
+      </motion.div>
+
       {/* Animation Preview */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-4">
         <AnimationPreview bezier={bezier} duration={duration} />
       </motion.div>
 
-      {/* Side-by-Side Toggle */}
+      {/* Side-by-Side Comparison (open by default) */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.22 }} className="mb-4">
         <button onClick={() => setShowDual(!showDual)} className="ae-label flex items-center gap-1 mb-2">
           <span>{showDual ? "▾" : "▸"}</span>
