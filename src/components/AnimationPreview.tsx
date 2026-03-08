@@ -9,44 +9,30 @@ interface AnimationPreviewProps {
 }
 
 const AnimationPreview = ({ params, type = "translate", playing, onComplete }: AnimationPreviewProps) => {
-  const getAnimationProps = () => {
-    const transition = params.easing === "spring"
-      ? { type: "spring", stiffness: params.stiffness || 200, damping: 15, bounce: params.bounce || 0.3 }
-      : { duration: params.duration, ease: params.easing, delay: params.delay };
+  const duration = params.duration;
+  const ease = params.easing === "spring" ? "easeInOut" : params.easing as any;
+  const delay = params.delay;
 
+  const getAnimateProps = () => {
     switch (type) {
       case "bounce":
-        return {
-          animate: playing
-            ? { y: [0, -80, 0], scaleX: [1, 0.9, 1.1, 1], scaleY: [1, 1.1, 0.9, 1] }
-            : { y: 0, scaleX: 1, scaleY: 1 },
-          transition: { ...transition, y: { ...transition, repeat: playing ? Infinity : 0, repeatDelay: 0.5 } },
-        };
+        return playing
+          ? { y: [0, -80, 0], scaleX: [1, 0.9, 1.1, 1], scaleY: [1, 1.1, 0.9, 1] }
+          : { y: 0, scaleX: 1, scaleY: 1 };
       case "scale":
-        return {
-          animate: playing
-            ? { scale: [1, 1.3, 0.9, 1.05, 1] }
-            : { scale: 1 },
-          transition,
-        };
+        return playing
+          ? { scale: [1, 1.3, 0.9, 1.05, 1] }
+          : { scale: 1 };
       case "arc":
-        return {
-          animate: playing
-            ? { x: [0, 60, 120], y: [0, -60, 0] }
-            : { x: 0, y: 0 },
-          transition,
-        };
+        return playing
+          ? { x: [0, 60, 120], y: [0, -60, 0] }
+          : { x: 0, y: 0 };
       default:
-        return {
-          animate: playing
-            ? { x: [0, 140, 0] }
-            : { x: 0 },
-          transition: { ...transition, repeat: playing ? Infinity : 0, repeatDelay: 0.3 },
-        };
+        return playing
+          ? { x: [0, 140, 0] }
+          : { x: 0 };
     }
   };
-
-  const animProps = getAnimationProps();
 
   return (
     <div className="relative flex h-32 items-center justify-start overflow-hidden rounded-xl bg-muted/50 px-8">
@@ -61,7 +47,14 @@ const AnimationPreview = ({ params, type = "translate", playing, onComplete }: A
       </div>
       <motion.div
         className="relative z-10 h-12 w-12 rounded-xl bg-primary shadow-lg"
-        {...animProps}
+        animate={getAnimateProps()}
+        transition={{
+          duration,
+          ease,
+          delay,
+          repeat: playing ? Infinity : 0,
+          repeatDelay: 0.5,
+        }}
         onAnimationComplete={onComplete}
       />
     </div>
