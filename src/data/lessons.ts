@@ -1,15 +1,20 @@
-import { Clock, TrendingUp, Circle, Eye, ArrowRight, RotateCw, Layers, Layout } from "lucide-react";
+export interface CurvePreset {
+  label: string;
+  bezier: [number, number, number, number];
+}
 
 export interface Lesson {
   id: string;
   title: string;
   subtitle: string;
+  chapter: number;
   description: string;
-  icon: typeof Clock;
-  color: string;
-  keyPrinciples: string[];
+  theory: string[];
+  aeContext: string;
+  defaultBezier: [number, number, number, number];
+  targetBezier?: [number, number, number, number];
   tip: string;
-  defaultParams: AnimationParams;
+  keyPrinciples: string[];
 }
 
 export interface AnimationParams {
@@ -18,6 +23,7 @@ export interface AnimationParams {
   delay: number;
   bounce?: number;
   stiffness?: number;
+  bezier?: [number, number, number, number];
 }
 
 export interface UserProgress {
@@ -36,142 +42,195 @@ export interface UserStats {
   totalLessons: number;
 }
 
-export const EASING_OPTIONS = [
-  { label: "Linear", value: "linear" },
-  { label: "Ease In", value: "easeIn" },
-  { label: "Ease Out", value: "easeOut" },
-  { label: "Ease In Out", value: "easeInOut" },
-  { label: "Spring", value: "spring" },
+export const COMMON_PRESETS: CurvePreset[] = [
+  { label: "Linear", bezier: [0, 0, 1, 1] },
+  { label: "Ease", bezier: [0.25, 0.1, 0.25, 1] },
+  { label: "Ease In", bezier: [0.42, 0, 1, 1] },
+  { label: "Ease Out", bezier: [0, 0, 0.58, 1] },
+  { label: "Ease In Out", bezier: [0.42, 0, 0.58, 1] },
+  { label: "AE Default", bezier: [0.33, 0, 0.67, 1] },
+  { label: "Snappy", bezier: [0.5, 0, 0.1, 1] },
+  { label: "Overshoot", bezier: [0.175, 0.885, 0.32, 1.275] },
 ];
+
+export const EASING_OPTIONS = COMMON_PRESETS.map(p => ({
+  label: p.label,
+  value: p.label.toLowerCase().replace(/\s+/g, ''),
+}));
 
 export const lessons: Lesson[] = [
   {
-    id: "timing-spacing",
-    title: "Timing & Spacing",
-    subtitle: "Control the speed and rhythm of your animations",
-    description: "Timing is how long an animation takes, while spacing is how the motion is distributed across that time. Together they create the feel of weight, momentum, and personality.",
-    icon: Clock,
-    color: "lavender",
-    keyPrinciples: [
-      "Slow animations feel heavy and deliberate",
-      "Fast animations feel light and snappy",
-      "Most UI animations should be 200-500ms",
-      "Shorter feels jerky, longer feels sluggish",
+    id: "what-is-a-graph",
+    title: "What Is the Graph Editor?",
+    subtitle: "Your most powerful animation tool",
+    chapter: 1,
+    description: "The Graph Editor is where professional animators spend 80% of their time. It's the difference between amateur and professional motion.",
+    theory: [
+      "In After Effects, every animated property has a graph behind it.",
+      "The graph shows how a value changes over time — the X axis is time, the Y axis is the property value.",
+      "By default, AE uses 'linear' interpolation: a straight line from A to B. This looks robotic.",
+      "The Graph Editor lets you shape HOW the animation moves between keyframes using bezier curves.",
     ],
-    tip: "Most UI animations feel best between 200-400ms. Any longer feels sluggish, any shorter feels jarring.",
-    defaultParams: { duration: 0.4, easing: "easeInOut", delay: 0 },
+    aeContext: "Select a keyframed property → press the Graph Editor button in the Timeline panel (or Shift+F3).",
+    defaultBezier: [0, 0, 1, 1],
+    tip: "The graph is where amateur animations become professional ones. Learn to read it and you'll never animate blindly again.",
+    keyPrinciples: [
+      "The steeper the curve, the faster the motion at that point",
+      "A flat curve means the object is stationary or barely moving",
+      "The shape of the curve IS the feel of your animation",
+    ],
   },
   {
-    id: "easing",
-    title: "Easing",
-    subtitle: "Make animations feel natural with curves",
-    description: "Easing defines the acceleration curve of an animation. Nothing in nature moves at a constant speed — easing makes motion feel organic and alive.",
-    icon: TrendingUp,
-    color: "sage",
-    keyPrinciples: [
-      "Linear motion feels robotic and unnatural",
-      "Ease-out is best for elements entering the screen",
-      "Ease-in is best for elements leaving the screen",
-      "Ease-in-out works great for state transitions",
+    id: "value-graph-basics",
+    title: "Reading the Value Graph",
+    subtitle: "Understand position over time",
+    chapter: 1,
+    description: "The Value Graph shows the actual property value at each point in time. When you see the curve go up, the value increases. When it flattens, the object slows down.",
+    theory: [
+      "The Value Graph plots the actual value of a property (e.g., X position) against time.",
+      "A straight diagonal line = constant speed (linear interpolation).",
+      "A curve that's steep at the start and flat at the end = fast start, slow stop (ease out).",
+      "A curve that's flat at the start and steep at the end = slow start, fast finish (ease in).",
     ],
-    tip: "Use ease-out for entrances and ease-in for exits. This mimics how objects naturally accelerate and decelerate.",
-    defaultParams: { duration: 0.5, easing: "easeOut", delay: 0 },
+    aeContext: "In the Graph Editor, click the 'Show Value Graph' button (looks like a simple curve icon).",
+    defaultBezier: [0, 0, 0.58, 1],
+    tip: "Think of the Value Graph like a position map. The Y-axis IS where your object is at any given moment in time.",
+    keyPrinciples: [
+      "Steep = fast movement, Flat = slow or stopped",
+      "The slope at any point = the speed at that moment",
+      "S-curves mean the object accelerates then decelerates",
+    ],
   },
   {
-    id: "squash-stretch",
-    title: "Squash & Stretch",
-    subtitle: "Add life and flexibility to your animations",
-    description: "Squash and stretch is the most important principle in animation. It gives a sense of weight and flexibility to objects, making them feel alive rather than rigid.",
-    icon: Circle,
-    color: "lavender",
-    keyPrinciples: [
-      "Preserve volume — when an object squashes, it should widen",
-      "More squash/stretch = more cartoony feel",
-      "Subtle amounts work great for UI elements",
-      "Apply to buttons, modals, and bouncing elements",
+    id: "speed-graph-basics",
+    title: "Reading the Speed Graph",
+    subtitle: "Understand velocity over time",
+    chapter: 1,
+    description: "The Speed Graph shows how fast a property is changing at each moment. A peak means maximum velocity. Zero means the object is stopped.",
+    theory: [
+      "The Speed Graph shows velocity (rate of change) — not position.",
+      "A flat line at the top = constant high speed. A flat line at zero = object is stopped.",
+      "A curve that starts at zero and rises = the object is accelerating (ease in).",
+      "A curve that starts high and drops to zero = the object is decelerating (ease out).",
     ],
-    tip: "Keep squash and stretch subtle for UI. A scale of 0.95-1.05 is usually enough for buttons and cards.",
-    defaultParams: { duration: 0.6, easing: "spring", delay: 0, bounce: 0.4 },
+    aeContext: "In the Graph Editor, click 'Show Speed Graph' (looks like a mountain/bell curve icon).",
+    defaultBezier: [0.42, 0, 0.58, 1],
+    tip: "The Speed Graph is the derivative of the Value Graph. When the Value Graph is steep, the Speed Graph is high.",
+    keyPrinciples: [
+      "High point = fastest motion, Zero = completely stopped",
+      "Bell curve shape = classic ease in-out (accelerate then decelerate)",
+      "Flat top = constant speed section (like linear)",
+    ],
   },
   {
-    id: "anticipation",
-    title: "Anticipation",
-    subtitle: "Prepare the viewer for what's about to happen",
-    description: "Anticipation is a small movement that precedes a larger action. It tells the user something is about to change, creating a sense of cause and effect.",
-    icon: Eye,
-    color: "sage",
-    keyPrinciples: [
-      "A small wind-up before a big action",
-      "Helps users predict what will happen next",
-      "Pull back before launching forward",
-      "Great for delete confirmations and page transitions",
+    id: "ease-in",
+    title: "Ease In: Slow Start",
+    subtitle: "Objects that accelerate from rest",
+    chapter: 2,
+    description: "Ease In starts slow and finishes fast. Use it for objects leaving the screen or falling under gravity. The curve is flat at the start (slow) and steep at the end (fast).",
+    theory: [
+      "Ease In mimics objects overcoming inertia — they start slow and accelerate.",
+      "On the Value Graph: flat start, steep end.",
+      "On the Speed Graph: starts at zero, rises to maximum at the end.",
+      "In CSS: cubic-bezier(0.42, 0, 1, 1). In AE: pull the first keyframe's handle to the right.",
     ],
-    tip: "Use a subtle scale-down (0.95) before scaling up to draw attention to important state changes.",
-    defaultParams: { duration: 0.5, easing: "easeInOut", delay: 0.1 },
+    aeContext: "Select keyframes → Right-click → Keyframe Interpolation → Temporal: Bezier. Then drag the first handle right.",
+    defaultBezier: [0.42, 0, 1, 1],
+    targetBezier: [0.55, 0, 1, 1],
+    tip: "Use Ease In for exits. When something leaves the screen, it should accelerate away — like throwing a ball.",
+    keyPrinciples: [
+      "Best for: elements leaving the viewport, objects falling, throwing",
+      "The handle on the FIRST keyframe controls the ease-in amount",
+      "More extreme = slower start, more dramatic acceleration",
+    ],
   },
   {
-    id: "follow-through",
-    title: "Follow Through",
-    subtitle: "Different parts move at different rates",
-    description: "Follow through means that different parts of an object don't stop at the same time. When a main body stops, secondary elements continue to move briefly.",
-    icon: ArrowRight,
-    color: "lavender",
-    keyPrinciples: [
-      "Elements overshoot their target slightly",
-      "Creates a feeling of physics and momentum",
-      "Stagger child elements for organic feel",
-      "Use for lists, cards, and navigation transitions",
+    id: "ease-out",
+    title: "Ease Out: Slow End",
+    subtitle: "Objects that decelerate to rest",
+    chapter: 2,
+    description: "Ease Out starts fast and finishes slow. This is the MOST important easing for UI animation. Use it for anything appearing or arriving on screen.",
+    theory: [
+      "Ease Out mimics objects coming to rest — they arrive fast and gently decelerate.",
+      "On the Value Graph: steep start, flat end.",
+      "On the Speed Graph: starts at maximum, drops to zero.",
+      "In CSS: cubic-bezier(0, 0, 0.58, 1). In AE: pull the second keyframe's handle to the left.",
     ],
-    tip: "Stagger animations by 50-100ms between elements to create a natural cascade effect.",
-    defaultParams: { duration: 0.5, easing: "spring", delay: 0, bounce: 0.3 },
+    aeContext: "Select the LAST keyframe → drag its bezier handle to the LEFT to control how gradually it stops.",
+    defaultBezier: [0, 0, 0.58, 1],
+    targetBezier: [0.05, 0.5, 0.2, 1],
+    tip: "Google Material Design uses ease-out for almost all entrances. It feels responsive because the element arrives quickly, then settles.",
+    keyPrinciples: [
+      "Best for: elements entering the screen, objects landing, UI responses",
+      "The handle on the LAST keyframe controls the ease-out amount",
+      "This is the #1 easing curve for UI designers to master",
+    ],
   },
   {
-    id: "arcs",
-    title: "Arcs",
-    subtitle: "Natural movement follows curved paths",
-    description: "Most natural movements follow arcs rather than straight lines. Curved motion paths make animations feel more natural and organic.",
-    icon: RotateCw,
-    color: "sage",
-    keyPrinciples: [
-      "Straight-line motion feels mechanical",
-      "Curved paths feel natural and organic",
-      "Use for element repositioning",
-      "Great for navigation and page transitions",
+    id: "ease-in-out",
+    title: "Ease In-Out: The S-Curve",
+    subtitle: "Smooth acceleration and deceleration",
+    chapter: 2,
+    description: "Ease In-Out combines both: slow start, fast middle, slow end. It's the most natural-feeling motion and the default in most professional animation.",
+    theory: [
+      "Ease In-Out creates an S-shaped curve on the Value Graph.",
+      "Speed Graph shows a bell curve: zero → peak → zero.",
+      "Most physical objects move this way — they accelerate, reach peak speed, then decelerate.",
+      "The handles on BOTH keyframes are pulled inward, creating symmetrical or asymmetrical easing.",
     ],
-    tip: "When moving elements across the screen, add a slight curve to the path for a more natural feel.",
-    defaultParams: { duration: 0.6, easing: "easeInOut", delay: 0 },
+    aeContext: "Select both keyframes → F9 (Easy Ease). Then customize the handles for asymmetric timing.",
+    defaultBezier: [0.42, 0, 0.58, 1],
+    targetBezier: [0.65, 0, 0.35, 1],
+    tip: "F9 in After Effects applies 'Easy Ease' — a gentle ease in-out. But the best animators always customize the handles further.",
+    keyPrinciples: [
+      "F9 (Easy Ease) is just the starting point — always refine",
+      "Asymmetric ease-in-out often feels better than symmetric",
+      "Pull handles further apart for more dramatic easing",
+    ],
   },
   {
-    id: "secondary-action",
-    title: "Secondary Action",
-    subtitle: "Supporting animations that enhance the main action",
-    description: "Secondary actions are supplementary movements that support the main action. They add richness and dimension to your animations without taking focus away.",
-    icon: Layers,
-    color: "lavender",
-    keyPrinciples: [
-      "Should support, not compete with main action",
-      "Adds depth and polish to interactions",
-      "Examples: shadow changes, color shifts, icon rotations",
-      "Keep secondary actions subtle",
+    id: "overshoot",
+    title: "Overshoot & Settle",
+    subtitle: "Going past the target and bouncing back",
+    chapter: 3,
+    description: "Overshoot means the value goes BEYOND the final position, then settles back. On the graph, the curve goes above the endpoint. This adds energy and life.",
+    theory: [
+      "On the Value Graph, overshoot means the curve exceeds the final value then returns.",
+      "This is achieved by pulling the second control point ABOVE the end value (Y > 1).",
+      "The Speed Graph shows the velocity going negative briefly as it bounces back.",
+      "Amount of overshoot = how far past the target the value goes.",
     ],
-    tip: "Pair a position change with opacity and scale changes for richer, more polished transitions.",
-    defaultParams: { duration: 0.4, easing: "easeOut", delay: 0.05 },
+    aeContext: "Drag the last keyframe's bezier handle upward (above the value line). The further up, the more overshoot.",
+    defaultBezier: [0.175, 0.885, 0.32, 1.275],
+    targetBezier: [0.2, 0.9, 0.3, 1.4],
+    tip: "A tiny overshoot (1.05-1.1) adds life to UI. Too much (>1.3) feels cartoonish. Find the sweet spot for your brand.",
+    keyPrinciples: [
+      "Y values above 1.0 mean the property overshoots its final value",
+      "Creates a sense of physical momentum and elasticity",
+      "Subtle overshoot is used by Apple, Google, and Nike in their motion systems",
+    ],
   },
   {
-    id: "staging",
-    title: "Staging",
-    subtitle: "Direct the viewer's attention clearly",
-    description: "Staging is the presentation of an idea so that it is unmistakably clear. In UI, it means directing user attention to the most important element on screen.",
-    icon: Layout,
-    color: "sage",
-    keyPrinciples: [
-      "One main action per screen transition",
-      "Dim or blur non-essential elements",
-      "Use motion to guide the eye",
-      "Create clear visual hierarchy with animation",
+    id: "custom-curves",
+    title: "Crafting Custom Curves",
+    subtitle: "Developing your motion signature",
+    chapter: 3,
+    description: "Professional motion designers develop signature curves. Nike's motion is snappy with short ease-in and long ease-out. Apple's is smooth and controlled. Learn to craft your own.",
+    theory: [
+      "Every brand has a motion personality expressed through their curves.",
+      "Nike: aggressive ease-out with minimal ease-in → snappy, energetic.",
+      "Apple: smooth ease-in-out with slight overshoot → refined, premium.",
+      "Google: ease-out focused, 300ms standard → responsive, efficient.",
     ],
-    tip: "When showing a modal, dim the background and scale up the modal to clearly stage the new content.",
-    defaultParams: { duration: 0.35, easing: "easeOut", delay: 0 },
+    aeContext: "Study the Graph Editor curves of animations you admire. Screenshot them. Recreate them. Build a library of go-to curves.",
+    defaultBezier: [0.25, 0.1, 0.25, 1],
+    targetBezier: [0.5, 0, 0.1, 1],
+    tip: "Save your best curves as Animation Presets in AE (Animation → Save Animation Preset). Build a personal library over time.",
+    keyPrinciples: [
+      "Your curve library is your motion design toolkit",
+      "Different contexts need different curves — buttons vs page transitions vs reveals",
+      "Study cubic-bezier.com to test curves in real-time alongside your AE work",
+    ],
   },
 ];
 

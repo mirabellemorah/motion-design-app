@@ -1,228 +1,200 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft, Check } from "lucide-react";
-import { lessons, EASING_OPTIONS } from "@/data/lessons";
+import { ChevronLeft, RotateCw } from "lucide-react";
+import { lessons } from "@/data/lessons";
+import InteractiveBezierGraph from "@/components/InteractiveBezierGraph";
 import AnimationPreview from "@/components/AnimationPreview";
 import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
+
+function scoreCurve(user: [number, number, number, number], target: [number, number, number, number]): number {
+  const diff = user.reduce((sum, v, i) => sum + Math.abs(v - target[i]), 0);
+  return Math.max(0, Math.round(100 - diff * 40));
+}
 
 const PracticePage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const lesson = id ? lessons.find((l) => l.id === id) : lessons[0];
+  const lesson = id ? lessons.find((l) => l.id === id) : null;
 
-  // Target params (what user needs to match)
-  const target = useMemo(() => lesson ? {
-    duration: lesson.defaultParams.duration + (Math.random() * 0.3 - 0.15),
-    easing: lesson.defaultParams.easing,
-    delay: Math.round(Math.random() * 3) * 0.1,
-  } : { duration: 0.4, easing: "easeOut", delay: 0 }, [lesson]);
+  const target = useMemo<[number, number, number, number]>(() => {
+    if (lesson?.targetBezier) return lesson.targetBezier;
+    // Random practice curve
+    return [
+      Math.round(Math.random() * 60) / 100,
+      Math.round(Math.random() * 100) / 100,
+      Math.round((30 + Math.random() * 70)) / 100,
+      Math.round((80 + Math.random() * 40)) / 100,
+    ];
+  }, [lesson]);
 
-  const [userDuration, setUserDuration] = useState(0.5);
-  const [userEasing, setUserEasing] = useState("linear");
-  const [userDelay, setUserDelay] = useState(0);
+  const [userBezier, setUserBezier] = useState<[number, number, number, number]>([0.25, 0.25, 0.75, 0.75]);
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
-  const [targetPlaying, setTargetPlaying] = useState(true);
-  const [userPlaying, setUserPlaying] = useState(true);
-
-  const calculateScore = () => {
-    const durationDiff = Math.abs(target.duration - userDuration);
-    const durationScore = Math.max(0, 100 - durationDiff * 200);
-    const easingScore = target.easing === userEasing ? 100 : 30;
-    const delayDiff = Math.abs(target.delay - userDelay);
-    const delayScore = Math.max(0, 100 - delayDiff * 300);
-    return Math.round((durationScore + easingScore + delayScore) / 3);
-  };
 
   const handleSubmit = () => {
-    const s = calculateScore();
-    setScore(s);
+    setScore(scoreCurve(userBezier, target));
     setSubmitted(true);
   };
 
-  if (!lesson) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p>Select a lesson first</p>
-        <Button onClick={() => navigate("/lessons")} className="ml-4">Browse Lessons</Button>
-      </div>
-    );
-  }
+  const handleRetry = () => {
+    setUserBezier([0.25, 0.25, 0.75, 0.75]);
+    setSubmitted(false);
+    setScore(0);
+  };
 
   return (
-    <div className="min-h-screen bg-background px-5 pb-24 pt-12">
-      <motion.div
-        initial={{ opacity: 0, x: -10 }}
-        animate={{ opacity: 1, x: 0 }}
-        className="mb-4 flex items-center gap-3"
-      >
-        <button onClick={() => navigate(id ? `/lesson/${id}` : "/lessons")} className="text-muted-foreground">
+    <div className="min-h-screen bg-background px-4 pb-24 pt-8">
+      {/* Header */}
+      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="mb-4 flex items-center gap-3">
+        <button onClick={() => navigate(lesson ? `/lesson/${lesson.id}` : "/lessons")} className="text-muted-foreground">
           <ChevronLeft className="h-5 w-5" />
         </button>
         <div>
-          <h1 className="text-display text-lg font-bold">{lesson.title}</h1>
-          <p className="text-xs text-muted-foreground">Apply what you learned</p>
+          <h1 className="text-base font-semibold">
+            {lesson ? `Practice: ${lesson.title}` : "Curve Challenge"}
+          </h1>
+          <p className="text-[11px] text-muted-foreground">Match the green target curve</p>
         </div>
       </motion.div>
 
       {!submitted ? (
         <>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="mb-4 text-xs text-muted-foreground"
-          >
-            Adjust the timing to make this animation feel natural — not too fast, not too slow.
-          </motion.p>
-
-          {/* Target Animation */}
+          {/* Target preview */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
             className="mb-3"
           >
-            <p className="mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Target</p>
-            <AnimationPreview
-              params={target}
-              type="translate"
-              playing={targetPlaying}
-            />
+            <span className="ae-label block mb-1.5">Target Animation</span>
+            <AnimationPreview bezier={target} duration={0.7} playing label="Target" />
           </motion.div>
 
-          {/* User Animation */}
+          {/* Interactive graph with target overlay */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="mb-5"
+            className="mb-3"
           >
-            <p className="mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Your attempt</p>
-            <AnimationPreview
-              params={{ duration: userDuration, easing: userEasing, delay: userDelay }}
-              type="translate"
-              playing={userPlaying}
+            <InteractiveBezierGraph
+              bezier={userBezier}
+              onChange={setUserBezier}
+              targetBezier={target}
+              width={320}
+              height={260}
+              label="Your Curve — Match the green target"
+              color="var(--ae-yellow)"
             />
           </motion.div>
 
-          {/* Controls */}
+          {/* Your preview */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="mb-6 space-y-4 rounded-2xl glass-card p-5"
+            transition={{ delay: 0.15 }}
+            className="mb-4"
           >
-            <div>
-              <div className="flex justify-between mb-2">
-                <label className="text-xs font-medium">Duration</label>
-                <span className="text-xs font-mono text-muted-foreground">{userDuration.toFixed(2)}s</span>
-              </div>
-              <Slider value={[userDuration]} onValueChange={([v]) => setUserDuration(v)} min={0.1} max={2} step={0.05} />
-            </div>
-
-            <div>
-              <label className="text-xs font-medium mb-2 block">Easing</label>
-              <div className="flex flex-wrap gap-2">
-                {EASING_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.value}
-                    onClick={() => setUserEasing(opt.value)}
-                    className={`rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
-                      userEasing === opt.value
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <div className="flex justify-between mb-2">
-                <label className="text-xs font-medium">Delay</label>
-                <span className="text-xs font-mono text-muted-foreground">{userDelay.toFixed(2)}s</span>
-              </div>
-              <Slider value={[userDelay]} onValueChange={([v]) => setUserDelay(v)} min={0} max={1} step={0.05} />
-            </div>
+            <AnimationPreview bezier={userBezier} duration={0.7} playing label="Your Curve" />
           </motion.div>
 
-          {/* Tip */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="mb-5 rounded-xl gradient-sage px-4 py-3"
-          >
-            <p className="text-xs leading-relaxed text-foreground/70">
-              <span className="font-semibold text-success">Tip: </span>{lesson.tip}
-            </p>
-          </motion.div>
+          {/* Hint */}
+          {lesson && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="mb-4 ae-panel p-3 border-l-2"
+              style={{ borderLeftColor: "hsl(var(--ae-green))" }}
+            >
+              <p className="ae-mono text-[10px] mb-1" style={{ color: "hsl(var(--ae-green))" }}>HINT</p>
+              <p className="text-[11px] leading-relaxed text-muted-foreground">{lesson.tip}</p>
+            </motion.div>
+          )}
 
-          <Button
-            onClick={handleSubmit}
-            className="w-full rounded-xl bg-primary py-6 text-sm font-semibold text-primary-foreground"
-          >
-            <Check className="mr-2 h-4 w-4" />
-            Submit Answer
+          <Button onClick={handleSubmit} className="w-full rounded-lg py-5 text-sm font-medium">
+            Check My Curve →
           </Button>
         </>
       ) : (
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="flex flex-col items-center text-center pt-12"
+          className="pt-4"
         >
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 200, damping: 12, delay: 0.2 }}
-            className={`mb-6 flex h-20 w-20 items-center justify-center rounded-full ${
-              score >= 70 ? "bg-success" : score >= 40 ? "bg-xp-gold" : "bg-destructive"
-            }`}
-          >
-            <span className="text-3xl font-bold text-primary-foreground">{score >= 70 ? "🎉" : score >= 40 ? "👍" : "💪"}</span>
-          </motion.div>
+          {/* Score */}
+          <div className="text-center mb-6">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 200, damping: 12, delay: 0.2 }}
+              className="inline-flex items-center justify-center h-24 w-24 rounded-full mb-4"
+              style={{
+                background: score >= 80
+                  ? "hsl(var(--ae-green) / 0.15)"
+                  : score >= 50
+                  ? "hsl(var(--ae-yellow) / 0.15)"
+                  : "hsl(var(--ae-red) / 0.15)",
+                border: `2px solid ${score >= 80 ? "hsl(var(--ae-green))" : score >= 50 ? "hsl(var(--ae-yellow))" : "hsl(var(--ae-red))"}`,
+              }}
+            >
+              <span className="text-3xl font-bold" style={{
+                color: score >= 80 ? "hsl(var(--ae-green))" : score >= 50 ? "hsl(var(--ae-yellow))" : "hsl(var(--ae-red))",
+              }}>
+                {score}%
+              </span>
+            </motion.div>
+            <h2 className="text-lg font-semibold mb-1">
+              {score >= 80 ? "Excellent!" : score >= 50 ? "Getting there!" : "Keep practicing!"}
+            </h2>
+            <p className="text-xs text-muted-foreground">
+              {score >= 80 ? "Your curve closely matches the target." : "Try adjusting both control points to match the target shape."}
+            </p>
+          </div>
 
-          <h2 className="text-display text-2xl font-bold mb-2">
-            {score >= 70 ? "Great job!" : score >= 40 ? "Not bad!" : "Keep practicing!"}
-          </h2>
-          <p className="text-sm text-muted-foreground mb-8">
-            You scored {score}% on the {lesson.title} challenge
-          </p>
+          {/* Comparison */}
+          <div className="mb-4">
+            <InteractiveBezierGraph
+              bezier={userBezier}
+              targetBezier={target}
+              width={320}
+              height={220}
+              interactive={false}
+              label="Comparison"
+              color="var(--ae-yellow)"
+              showSpeed={false}
+            />
+          </div>
 
-          <div className="mb-8 flex gap-8">
-            <div className="text-center">
-              <p className="text-2xl font-bold">{score}%</p>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Score</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold">+{Math.round(score / 10) * 10}</p>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">XP</p>
+          {/* Values comparison */}
+          <div className="ae-panel p-3 mb-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <span className="ae-mono text-[9px] text-muted-foreground block mb-1">YOUR CURVE</span>
+                <span className="ae-mono text-[11px]" style={{ color: "hsl(var(--ae-yellow))" }}>
+                  ({userBezier.map(v => v.toFixed(2)).join(", ")})
+                </span>
+              </div>
+              <div>
+                <span className="ae-mono text-[9px] text-muted-foreground block mb-1">TARGET</span>
+                <span className="ae-mono text-[11px]" style={{ color: "hsl(var(--ae-green))" }}>
+                  ({target.map(v => v.toFixed(2)).join(", ")})
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="w-full space-y-3">
-            <Button
+          <div className="space-y-2">
+            <Button onClick={handleRetry} className="w-full rounded-lg py-5 text-sm font-medium gap-2">
+              <RotateCw className="h-4 w-4" /> Try Again
+            </Button>
+            <button
               onClick={() => navigate("/lessons")}
-              className="w-full rounded-xl bg-primary py-6 text-sm font-semibold text-primary-foreground"
+              className="w-full py-3 text-[11px] text-muted-foreground hover:text-foreground transition-colors"
             >
-              Continue Learning
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() => {
-                setSubmitted(false);
-                setUserDuration(0.5);
-                setUserEasing("linear");
-                setUserDelay(0);
-              }}
-              className="w-full rounded-xl py-6 text-sm"
-            >
-              Try Again
-            </Button>
+              Back to Lessons
+            </button>
           </div>
         </motion.div>
       )}

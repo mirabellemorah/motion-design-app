@@ -1,113 +1,116 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Flame, Star, Gem, BookOpen, BarChart3, Lightbulb } from "lucide-react";
-import { lessons, initialStats } from "@/data/lessons";
+import { BookOpen, Target, ChevronRight } from "lucide-react";
+import { lessons } from "@/data/lessons";
+import InteractiveBezierGraph from "@/components/InteractiveBezierGraph";
+import { useState } from "react";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const stats = initialStats;
+  const [demoBezier, setDemoBezier] = useState<[number, number, number, number]>([0.25, 0.1, 0.25, 1]);
+
+  const chapters = [
+    { num: 1, title: "Foundations", desc: "Understand graphs", lessons: lessons.filter(l => l.chapter === 1) },
+    { num: 2, title: "Core Curves", desc: "Ease in, out, in-out", lessons: lessons.filter(l => l.chapter === 2) },
+    { num: 3, title: "Advanced", desc: "Overshoot & custom", lessons: lessons.filter(l => l.chapter === 3) },
+  ];
 
   return (
-    <div className="min-h-screen bg-background px-5 pb-24 pt-12">
+    <div className="min-h-screen bg-background px-4 pb-24 pt-8">
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
-      >
-        <h1 className="text-display text-2xl font-bold">Motion Design Academy</h1>
-        <p className="text-sm text-muted-foreground">Master the art of animation</p>
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+        <div className="flex items-center gap-2 mb-1">
+          <div className="h-2 w-2 rounded-full" style={{ background: "hsl(var(--ae-yellow))" }} />
+          <span className="ae-mono text-[10px] text-muted-foreground">GRAPH EDITOR ACADEMY</span>
+        </div>
+        <h1 className="text-xl font-semibold tracking-tight">Master Bezier Curves</h1>
+        <p className="text-xs text-muted-foreground mt-1">The skill that separates amateur from professional motion.</p>
       </motion.div>
 
-      {/* Stats Row */}
+      {/* Interactive demo */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="mb-8 flex justify-around rounded-2xl glass-card p-4"
+        className="mb-6"
       >
-        {[
-          { icon: Star, label: "POINTS", value: stats.xp, color: "text-xp-gold" },
-          { icon: Flame, label: "STREAK", value: stats.streak, color: "text-destructive" },
-          { icon: Gem, label: "GEMS", value: stats.gems, color: "text-primary" },
-        ].map((stat, i) => (
-          <div key={i} className="flex flex-col items-center gap-1">
-            <stat.icon className={`h-4 w-4 ${stat.color}`} />
-            <span className="text-lg font-bold">{stat.value}</span>
-            <span className="text-[10px] font-medium tracking-wider text-muted-foreground">
-              {stat.label}
-            </span>
-          </div>
-        ))}
+        <InteractiveBezierGraph
+          bezier={demoBezier}
+          onChange={setDemoBezier}
+          width={320}
+          height={200}
+          label="Playground — Drag the handles"
+          showSpeed={false}
+        />
       </motion.div>
 
-      {/* Progress Card */}
+      {/* Quick actions */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="mb-8"
+        className="grid grid-cols-2 gap-2 mb-6"
       >
-        <div className="flex items-center justify-between">
-          <h2 className="text-display text-sm font-semibold">Your Progress</h2>
-          <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
-            0/{lessons.length}
-          </span>
-        </div>
-        <div className="mt-3 h-2 overflow-hidden rounded-full bg-muted">
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: "0%" }}
-            className="h-full rounded-full bg-primary"
-          />
-        </div>
-        <p className="mt-2 text-xs text-muted-foreground">
-          Start your journey in motion design!
-        </p>
+        <button
+          onClick={() => navigate("/lessons")}
+          className="ae-panel p-3 text-left hover:bg-accent/50 transition-colors"
+        >
+          <BookOpen className="h-4 w-4 text-primary mb-2" />
+          <p className="text-xs font-medium">Lessons</p>
+          <p className="text-[10px] text-muted-foreground">{lessons.length} chapters</p>
+        </button>
+        <button
+          onClick={() => navigate("/practice")}
+          className="ae-panel p-3 text-left hover:bg-accent/50 transition-colors"
+        >
+          <Target className="h-4 w-4 mb-2" style={{ color: "hsl(var(--ae-green))" }} />
+          <p className="text-xs font-medium">Practice</p>
+          <p className="text-[10px] text-muted-foreground">Match curves</p>
+        </button>
       </motion.div>
 
-      {/* Quick Actions */}
+      {/* Curriculum */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="mb-8 space-y-3"
       >
-        {[
-          { icon: BookOpen, label: "Browse Lessons", sub: "Learn all 12 principles", path: "/lessons" },
-          { icon: BarChart3, label: "View Progress", sub: "See your achievements", path: "/progress" },
-        ].map((action, i) => (
-          <button
-            key={i}
-            onClick={() => navigate(action.path)}
-            className="flex w-full items-center gap-4 rounded-2xl glass-card p-4 text-left transition-all active:scale-[0.98]"
-          >
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl gradient-lavender">
-              <action.icon className="h-5 w-5 text-primary" />
-            </div>
-            <div className="flex-1">
-              <p className="font-semibold">{action.label}</p>
-              <p className="text-xs text-muted-foreground">{action.sub}</p>
-            </div>
-            <span className="text-muted-foreground">›</span>
-          </button>
-        ))}
-      </motion.div>
-
-      {/* Tip of the Day */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="rounded-2xl gradient-sage p-5"
-      >
-        <div className="flex items-center gap-2 mb-2">
-          <Lightbulb className="h-4 w-4 text-accent-foreground" />
-          <h3 className="text-sm font-semibold">Tip of the Day</h3>
+        <h2 className="ae-label mb-3">Curriculum</h2>
+        <div className="space-y-3">
+          {chapters.map((ch, ci) => (
+            <motion.div
+              key={ch.num}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.35 + ci * 0.05 }}
+              className="ae-panel"
+            >
+              <div className="px-3 py-2 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="ae-mono text-[11px] font-semibold text-primary">CH.{ch.num}</div>
+                  <div>
+                    <p className="text-xs font-medium">{ch.title}</p>
+                    <p className="text-[10px] text-muted-foreground">{ch.desc}</p>
+                  </div>
+                </div>
+                <span className="ae-mono text-[10px] text-muted-foreground">{ch.lessons.length}</span>
+              </div>
+              <div className="border-t border-border">
+                {ch.lessons.map((lesson) => (
+                  <button
+                    key={lesson.id}
+                    onClick={() => navigate(`/lesson/${lesson.id}`)}
+                    className="flex w-full items-center gap-3 px-3 py-2 text-left hover:bg-accent/30 transition-colors border-b border-border/50 last:border-0"
+                  >
+                    <div className="h-1.5 w-1.5 rounded-full bg-muted-foreground/30" />
+                    <span className="flex-1 text-[11px]">{lesson.title}</span>
+                    <ChevronRight className="h-3 w-3 text-muted-foreground/50" />
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          ))}
         </div>
-        <p className="text-xs leading-relaxed text-foreground/70">
-          Most UI animations should be between 200-400ms. Any longer feels sluggish, any shorter feels jarring.
-        </p>
       </motion.div>
     </div>
   );

@@ -1,25 +1,23 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, BookOpen, BarChart3, Gamepad2 } from "lucide-react";
+import { Home, BookOpen, Target, BarChart3 } from "lucide-react";
 import { motion } from "framer-motion";
 
 const tabs = [
   { icon: Home, label: "Home", path: "/" },
   { icon: BookOpen, label: "Learn", path: "/lessons" },
-  { icon: Gamepad2, label: "Practice", path: "/practice" },
+  { icon: Target, label: "Practice", path: "/practice" },
   { icon: BarChart3, label: "Progress", path: "/progress" },
 ];
 
 const BottomNav = () => {
   const location = useLocation();
-
-  // Hide on welcome/onboarding
   if (location.pathname === "/welcome") return null;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-md safe-area-bottom">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-md">
       <div className="mx-auto flex max-w-lg items-center justify-around px-2 py-2">
         {tabs.map((tab) => {
-          const isActive = location.pathname === tab.path || 
+          const isActive = location.pathname === tab.path ||
             (tab.path === "/lessons" && location.pathname.startsWith("/lesson"));
           return (
             <Link
@@ -34,16 +32,8 @@ const BottomNav = () => {
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               )}
-              <tab.icon
-                className={`h-5 w-5 transition-colors ${
-                  isActive ? "text-primary" : "text-muted-foreground"
-                }`}
-              />
-              <span
-                className={`text-[10px] font-medium transition-colors ${
-                  isActive ? "text-primary" : "text-muted-foreground"
-                }`}
-              >
+              <tab.icon className={`h-5 w-5 transition-colors ${isActive ? "text-primary" : "text-muted-foreground"}`} />
+              <span className={`text-[10px] ae-mono transition-colors ${isActive ? "text-primary" : "text-muted-foreground"}`}>
                 {tab.label}
               </span>
             </Link>
