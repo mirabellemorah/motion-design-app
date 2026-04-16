@@ -43,15 +43,15 @@ const LessonDetailPage = () => {
         </button>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="ae-mono text-[10px] text-primary">CH.{lesson.chapter}</span>
-            <h1 className="text-base font-semibold truncate">{lesson.title}</h1>
+            <span className="text-[10px] font-medium text-primary uppercase tracking-wider">CH.{lesson.chapter}</span>
+            <h1 className="text-base font-semibold truncate text-foreground">{lesson.title}</h1>
           </div>
-          <p className="text-[11px] text-muted-foreground">{lesson.subtitle}</p>
+          <p className="text-xs text-muted-foreground">{lesson.subtitle}</p>
         </div>
       </motion.div>
 
       {/* Description */}
-      <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.05 }} className="mb-4 text-[12px] leading-relaxed text-muted-foreground">
+      <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.05 }} className="mb-4 text-xs leading-relaxed text-muted-foreground">
         {lesson.description}
       </motion.p>
 
@@ -62,23 +62,23 @@ const LessonDetailPage = () => {
           <span>Theory</span>
         </button>
         {showTheory && (
-          <div className="ae-panel p-3 space-y-2">
+          <div className="soft-card p-4 space-y-2">
             {lesson.theory.map((t, i) => (
               <div key={i} className="flex gap-2">
-                <div className="mt-1.5 h-1 w-1 rounded-full bg-primary flex-shrink-0" />
-                <p className="text-[11px] leading-relaxed text-foreground/80">{t}</p>
+                <div className="mt-1.5 h-1.5 w-1.5 rounded-full bg-primary flex-shrink-0" />
+                <p className="text-xs leading-relaxed text-foreground/80">{t}</p>
               </div>
             ))}
             <div className="mt-2 pt-2 border-t border-border">
-              <p className="text-[10px] ae-mono text-muted-foreground">
-                <span className="text-primary">AE:</span> {lesson.aeContext}
+              <p className="text-[10px] text-muted-foreground">
+                <span className="text-primary font-medium">AE:</span> {lesson.aeContext}
               </p>
             </div>
           </div>
         )}
       </motion.div>
 
-      {/* Interactive Graph with snap-to-grid */}
+      {/* Interactive Graph — dark AE panel */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="mb-4">
         <InteractiveBezierGraph
           bezier={bezier}
@@ -91,7 +91,7 @@ const LessonDetailPage = () => {
         />
       </motion.div>
 
-      {/* Speed Graph (dedicated) */}
+      {/* Speed Graph — dark AE panel */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }} className="mb-4">
         <SpeedGraph bezier={bezier} width={320} height={160} color="var(--ae-green)" label="Speed Graph — Velocity over time" />
       </motion.div>
@@ -101,7 +101,7 @@ const LessonDetailPage = () => {
         <AnimationPreview bezier={bezier} duration={duration} />
       </motion.div>
 
-      {/* Side-by-Side Comparison (open by default) */}
+      {/* Side-by-Side Comparison */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.22 }} className="mb-4">
         <button onClick={() => setShowDual(!showDual)} className="ae-label flex items-center gap-1 mb-2">
           <span>{showDual ? "▾" : "▸"}</span>
@@ -110,29 +110,29 @@ const LessonDetailPage = () => {
         {showDual && <DualGraphComparison bezier={bezier} width={320} />}
       </motion.div>
 
-      {/* Controls */}
-      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="mb-4 ae-panel">
-        <div className="ae-panel-header">
+      {/* Controls — light card */}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="mb-4 soft-card">
+        <div className="px-4 py-2.5 border-b border-border">
           <span className="ae-label">Controls</span>
         </div>
-        <div className="p-3 space-y-3">
+        <div className="p-4 space-y-4">
           <div>
-            <div className="flex items-center justify-between mb-1.5">
+            <div className="flex items-center justify-between mb-2">
               <span className="ae-label">Duration</span>
-              <span className="ae-mono text-[11px]" style={{ color: "hsl(var(--ae-yellow))" }}>{duration.toFixed(2)}s</span>
+              <span className="text-xs font-medium text-primary">{duration.toFixed(2)}s</span>
             </div>
             <Slider value={[duration]} onValueChange={([v]) => setDuration(v)} min={0.1} max={2} step={0.05} />
           </div>
           <div>
-            <span className="ae-label block mb-1.5">Presets</span>
-            <div className="flex flex-wrap gap-1">
+            <span className="ae-label block mb-2">Presets</span>
+            <div className="flex flex-wrap gap-1.5">
               {COMMON_PRESETS.map((p) => {
                 const isActive = p.bezier.every((v, i) => Math.abs(v - bezier[i]) < 0.01);
                 return (
                   <button
                     key={p.label}
                     onClick={() => setBezier([...p.bezier])}
-                    className={`rounded px-2 py-1 ae-mono text-[9px] border transition-all ${
+                    className={`rounded-lg px-2.5 py-1.5 text-[10px] font-medium border transition-all ${
                       isActive ? "border-primary bg-primary/10 text-primary" : "border-border bg-card text-muted-foreground hover:bg-accent"
                     }`}
                   >
@@ -145,23 +145,25 @@ const LessonDetailPage = () => {
         </div>
       </motion.div>
 
-      {/* Key Takeaways */}
+      {/* Key Takeaways — light card */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-4">
         <span className="ae-label block mb-2">Key Takeaways</span>
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           {lesson.keyPrinciples.map((p, i) => (
-            <div key={i} className="flex items-start gap-2 ae-panel px-3 py-2">
-              <div className="mt-1 h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ background: "hsl(var(--ae-yellow))" }} />
-              <p className="text-[11px] leading-relaxed text-foreground/80">{p}</p>
+            <div key={i} className="flex items-start gap-3 soft-card px-4 py-3">
+              <div className="mt-0.5 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <span className="text-[10px] font-semibold text-primary">{i + 1}</span>
+              </div>
+              <p className="text-xs leading-relaxed text-foreground/80">{p}</p>
             </div>
           ))}
         </div>
       </motion.div>
 
-      {/* Tip */}
-      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} className="mb-4 ae-panel p-3 border-l-2" style={{ borderLeftColor: "hsl(var(--ae-green))" }}>
-        <p className="ae-mono text-[10px] mb-1" style={{ color: "hsl(var(--ae-green))" }}>PRO TIP</p>
-        <p className="text-[11px] leading-relaxed text-foreground/70">{lesson.tip}</p>
+      {/* Tip — light card with accent border */}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} className="mb-4 soft-card p-4 border-l-4 border-l-primary">
+        <p className="text-[10px] font-semibold mb-1 text-primary uppercase tracking-wider">PRO TIP</p>
+        <p className="text-xs leading-relaxed text-foreground/70">{lesson.tip}</p>
       </motion.div>
 
       {/* Beginner Explainer Toggle */}
@@ -175,13 +177,13 @@ const LessonDetailPage = () => {
 
       {/* Navigation */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="space-y-2">
-        <Button onClick={() => navigate(`/practice/${lesson.id}`)} className="w-full rounded-lg py-5 text-sm font-medium">
+        <Button onClick={() => navigate(`/practice/${lesson.id}`)} className="w-full rounded-2xl py-5 text-sm font-semibold bg-primary hover:bg-primary/90">
           Practice This Curve →
         </Button>
         {nextLesson && (
           <button
             onClick={() => navigate(`/lesson/${nextLesson.id}`)}
-            className="w-full flex items-center justify-center gap-2 py-3 text-[11px] text-muted-foreground hover:text-foreground transition-colors"
+            className="w-full flex items-center justify-center gap-2 py-3 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             Next: {nextLesson.title} <ChevronRight className="h-3 w-3" />
           </button>

@@ -14,8 +14,8 @@ const BrandCurvesPage = () => {
           <ChevronLeft className="h-5 w-5" />
         </button>
         <div>
-          <h1 className="text-base font-semibold">Brand Curves & Theory</h1>
-          <p className="text-[11px] text-muted-foreground">How the best teams in the world use bezier curves</p>
+          <h1 className="text-base font-semibold text-foreground">Brand Curves & Theory</h1>
+          <p className="text-xs text-muted-foreground">How the best teams in the world use bezier curves</p>
         </div>
       </motion.div>
 

@@ -2,60 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    /* AE-inspired dark interface */
-    --background: 220 15% 10%;
-    --foreground: 220 10% 88%;
+    /* Cream/lavender light theme inspired by mockup */
+    --background: 40 33% 97%;
+    --foreground: 240 10% 15%;
 
-    --card: 220 15% 13%;
-    --card-foreground: 220 10% 88%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 15%;
 
-    --popover: 220 15% 13%;
-    --popover-foreground: 220 10% 88%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 15%;
 
-    --primary: 210 100% 56%;
+    --primary: 265 45% 72%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 15% 18%;
-    --secondary-foreground: 220 10% 75%;
+    --secondary: 265 20% 94%;
+    --secondary-foreground: 265 30% 40%;
 
-    --muted: 220 12% 17%;
-    --muted-foreground: 220 8% 50%;
+    --muted: 40 20% 94%;
+    --muted-foreground: 240 5% 50%;
 
-    --accent: 220 15% 22%;
-    --accent-foreground: 220 10% 88%;
+    --accent: 265 25% 93%;
+    --accent-foreground: 265 30% 30%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 12% 20%;
-    --input: 220 12% 20%;
-    --ring: 210 100% 56%;
+    --border: 265 15% 90%;
+    --input: 265 15% 90%;
+    --ring: 265 45% 72%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
-    --sidebar-background: 220 15% 10%;
-    --sidebar-foreground: 220 10% 88%;
-    --sidebar-primary: 210 100% 56%;
+    --sidebar-background: 40 33% 97%;
+    --sidebar-foreground: 240 10% 15%;
+    --sidebar-primary: 265 45% 72%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 15% 18%;
-    --sidebar-accent-foreground: 220 10% 88%;
-    --sidebar-border: 220 12% 20%;
-    --sidebar-ring: 210 100% 56%;
+    --sidebar-accent: 265 25% 93%;
+    --sidebar-accent-foreground: 265 30% 30%;
+    --sidebar-border: 265 15% 90%;
+    --sidebar-ring: 265 45% 72%;
 
-    /* AE graph colors */
+    /* AE graph colors — kept for technical panels */
     --ae-yellow: 48 100% 60%;
     --ae-green: 120 60% 50%;
     --ae-red: 0 80% 55%;
     --ae-blue: 210 100% 56%;
     --ae-purple: 270 60% 60%;
     --ae-orange: 30 100% 55%;
-    --ae-panel: 220 15% 11%;
+    --ae-panel-bg: 220 15% 10%;
     --ae-panel-header: 220 12% 15%;
+    --ae-panel-fg: 220 10% 88%;
     --ae-grid: 220 10% 16%;
+    --ae-border: 220 12% 20%;
     --ae-playhead: 210 100% 56%;
     --success: 120 60% 45%;
     --success-foreground: 0 0% 100%;
@@ -79,39 +81,54 @@
 }
 
 @layer utilities {
+  /* Dark AE-style panel for graphs only */
   .ae-panel {
-    @apply bg-card border border-border rounded-lg overflow-hidden;
+    background: hsl(var(--ae-panel-bg));
+    color: hsl(var(--ae-panel-fg));
+    border: 1px solid hsl(var(--ae-border));
+    @apply rounded-xl overflow-hidden;
   }
   .ae-panel-header {
     background: hsl(var(--ae-panel-header));
-    @apply px-3 py-1.5 border-b border-border flex items-center;
+    border-bottom: 1px solid hsl(var(--ae-border));
+    @apply px-3 py-1.5 flex items-center;
   }
   .ae-mono {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.02em;
   }
   .ae-label {
-    @apply text-[10px] uppercase tracking-widest text-muted-foreground;
-    font-family: 'JetBrains Mono', monospace;
+    @apply text-[10px] uppercase tracking-widest text-muted-foreground font-medium;
   }
+
+  /* Light cards for general UI */
+  .soft-card {
+    @apply bg-card rounded-2xl border border-border shadow-sm;
+  }
+  .soft-card-muted {
+    @apply bg-secondary rounded-2xl;
+  }
+
   .text-display {
     font-family: 'Inter', sans-serif;
     font-weight: 600;
   }
   .glass-card {
-    @apply bg-card/80 backdrop-blur-md border border-border/50 shadow-sm;
+    @apply bg-card/80 backdrop-blur-md border border-border/50 shadow-sm rounded-2xl;
   }
 }
 
-/* Custom scrollbar for AE feel */
+/* Custom scrollbar — subtle */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: hsl(var(--background));
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: hsl(var(--border));
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 /* Touch handling for graph interaction */
