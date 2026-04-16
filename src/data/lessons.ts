@@ -3,11 +3,14 @@ export interface CurvePreset {
   bezier: [number, number, number, number];
 }
 
+export type LessonTrack = "motion" | "principles";
+
 export interface Lesson {
   id: string;
   title: string;
   subtitle: string;
   chapter: number;
+  track: LessonTrack;
   description: string;
   theory: string[];
   aeContext: string;
