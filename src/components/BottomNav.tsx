@@ -34,7 +34,7 @@ const BottomNav = () => {
                 />
               )}
               <tab.icon className={`h-5 w-5 transition-colors ${isActive ? "text-primary" : "text-muted-foreground"}`} />
-              <span className={`text-[10px] ae-mono transition-colors ${isActive ? "text-primary" : "text-muted-foreground"}`}>
+              <span className={`text-[10px] font-medium transition-colors ${isActive ? "text-primary" : "text-muted-foreground"}`}>
                 {tab.label}
               </span>
             </Link>

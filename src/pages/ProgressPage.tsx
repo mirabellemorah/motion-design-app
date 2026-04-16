@@ -16,25 +16,20 @@ const ProgressPage = () => {
           <ChevronLeft className="h-5 w-5" />
         </button>
         <div>
-          <h1 className="text-lg font-semibold">Curve Reference</h1>
-          <p className="text-[11px] text-muted-foreground">Study common easing presets</p>
+          <h1 className="text-lg font-semibold text-foreground">Curve Reference</h1>
+          <p className="text-xs text-muted-foreground">Study common easing presets</p>
         </div>
       </motion.div>
 
       {/* Curve library */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="mb-4"
-      >
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-5">
         <span className="ae-label block mb-2">Preset Library</span>
         <div className="flex flex-wrap gap-1.5 mb-3">
           {COMMON_PRESETS.map((p, i) => (
             <button
               key={p.label}
               onClick={() => setSelectedPreset(i)}
-              className={`rounded px-2.5 py-1 ae-mono text-[10px] border transition-all ${
+              className={`rounded-lg px-3 py-1.5 text-xs font-medium border transition-all ${
                 selectedPreset === i
                   ? "border-primary bg-primary/10 text-primary"
                   : "border-border bg-card text-muted-foreground hover:bg-accent"
@@ -45,6 +40,7 @@ const ProgressPage = () => {
           ))}
         </div>
 
+        {/* Dark AE panel for graph */}
         <InteractiveBezierGraph
           bezier={COMMON_PRESETS[selectedPreset].bezier}
           width={320}
@@ -56,24 +52,20 @@ const ProgressPage = () => {
       </motion.div>
 
       {/* Lesson index */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
         <span className="ae-label block mb-2">All Lessons</span>
-        <div className="ae-panel">
+        <div className="soft-card overflow-hidden">
           {lessons.map((lesson, i) => (
             <button
               key={lesson.id}
               onClick={() => navigate(`/lesson/${lesson.id}`)}
-              className="flex w-full items-center gap-3 px-3 py-2.5 text-left hover:bg-accent/30 transition-colors border-b border-border/50 last:border-0"
+              className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-accent/30 transition-colors border-b border-border/50 last:border-0"
             >
-              <span className="ae-mono text-[10px] text-muted-foreground w-5">{String(i + 1).padStart(2, "0")}</span>
+              <span className="text-xs font-medium text-muted-foreground w-5">{String(i + 1).padStart(2, "0")}</span>
               <div className="flex-1">
-                <p className="text-[11px] font-medium">{lesson.title}</p>
+                <p className="text-xs font-medium text-foreground">{lesson.title}</p>
               </div>
-              <span className="ae-mono text-[9px] text-muted-foreground">CH.{lesson.chapter}</span>
+              <span className="text-[10px] text-muted-foreground">CH.{lesson.chapter}</span>
             </button>
           ))}
         </div>

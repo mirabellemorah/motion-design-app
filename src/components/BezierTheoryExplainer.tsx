@@ -101,10 +101,10 @@ const BezierTheoryExplainer = () => {
 
   return (
     <div className="space-y-2">
-      <div className="ae-panel-header rounded-t-lg">
+      <div className="px-4 py-2.5 soft-card-muted rounded-xl mb-2">
         <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full" style={{ background: "hsl(var(--ae-yellow))" }} />
-          <span className="ae-label">Complete Beginner's Guide</span>
+          <span className="text-base">📖</span>
+          <span className="ae-label text-foreground">Complete Beginner's Guide</span>
         </div>
       </div>
 
@@ -113,17 +113,17 @@ const BezierTheoryExplainer = () => {
         return (
           <motion.div
             key={i}
-            className="ae-panel overflow-hidden"
+            className="soft-card overflow-hidden"
             initial={false}
           >
             <button
               onClick={() => setOpenSection(isOpen ? null : i)}
-              className="w-full flex items-center gap-3 px-3 py-2.5 text-left hover:bg-accent/30 transition-colors"
+              className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-accent/30 transition-colors"
             >
               <span className="text-base">{section.emoji}</span>
-              <span className="flex-1 text-[12px] font-medium">{section.title}</span>
+              <span className="flex-1 text-sm font-medium text-foreground">{section.title}</span>
               <ChevronDown
-                className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${isOpen ? "rotate-180" : ""}`}
+                className={`h-4 w-4 text-muted-foreground transition-transform ${isOpen ? "rotate-180" : ""}`}
               />
             </button>
 
@@ -136,22 +136,19 @@ const BezierTheoryExplainer = () => {
                   transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
                   className="overflow-hidden"
                 >
-                  <div className="px-3 pb-3 space-y-2.5 border-t border-border pt-2.5">
+                  <div className="px-4 pb-4 space-y-3 border-t border-border pt-3">
                     {section.content.map((paragraph, pi) => (
-                      <p key={pi} className="text-[11px] leading-[1.7] text-foreground/75">
+                      <p key={pi} className="text-xs leading-relaxed text-foreground/70">
                         {paragraph}
                       </p>
                     ))}
 
                     {section.technicalNote && (
-                      <div
-                        className="mt-3 p-2.5 rounded border border-border"
-                        style={{ background: "hsl(var(--ae-panel-header))" }}
-                      >
-                        <p className="ae-mono text-[9px] mb-1" style={{ color: "hsl(var(--ae-blue))" }}>
+                      <div className="mt-3 ae-panel p-3 rounded-lg">
+                        <p className="text-[10px] font-semibold mb-1" style={{ color: "hsl(var(--ae-blue))" }}>
                           TECHNICAL NOTE
                         </p>
-                        <p className="ae-mono text-[10px] leading-[1.6] text-muted-foreground">
+                        <p className="text-[10px] leading-relaxed" style={{ color: "hsl(var(--ae-panel-fg) / 0.7)" }}>
                           {section.technicalNote}
                         </p>
                       </div>
