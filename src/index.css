@@ -88,9 +88,20 @@
     border: 1px solid hsl(var(--ae-border));
     @apply rounded-xl overflow-hidden;
   }
+  /* Inside a dark ae-panel, force text + border tokens to dark-panel variants
+     so light-theme muted text never sits on a dark background. */
+  .ae-panel .text-muted-foreground { color: hsl(var(--ae-panel-fg) / 0.6); }
+  .ae-panel .text-foreground { color: hsl(var(--ae-panel-fg)); }
+  .ae-panel .text-muted-foreground\/50 { color: hsl(var(--ae-panel-fg) / 0.35); }
+  .ae-panel .border-border { border-color: hsl(var(--ae-border)); }
+  .ae-panel .bg-card { background-color: hsl(var(--ae-panel-header)); }
+  .ae-panel .hover\:bg-accent:hover { background-color: hsl(var(--ae-border)); }
+  .ae-panel .hover\:text-foreground:hover { color: hsl(var(--ae-panel-fg)); }
+
   .ae-panel-header {
     background: hsl(var(--ae-panel-header));
     border-bottom: 1px solid hsl(var(--ae-border));
+    color: hsl(var(--ae-panel-fg));
     @apply px-3 py-1.5 flex items-center;
   }
   .ae-mono {
@@ -99,7 +110,11 @@
     letter-spacing: 0.02em;
   }
   .ae-label {
-    @apply text-[10px] uppercase tracking-widest text-muted-foreground font-medium;
+    @apply text-[10px] uppercase tracking-widest font-medium;
+    color: hsl(var(--muted-foreground));
+  }
+  .ae-panel .ae-label {
+    color: hsl(var(--ae-panel-fg) / 0.7);
   }
 
   /* Light cards for general UI */

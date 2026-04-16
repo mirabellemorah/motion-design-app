@@ -9,10 +9,11 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [demoBezier, setDemoBezier] = useState<[number, number, number, number]>([0.25, 0.1, 0.25, 1]);
 
-  const chapters = [
-    { num: 1, title: "Foundations", desc: "Understand graphs", lessons: lessons.filter(l => l.chapter === 1) },
-    { num: 2, title: "Core Curves", desc: "Ease in, out, in-out", lessons: lessons.filter(l => l.chapter === 2) },
-    { num: 3, title: "Advanced", desc: "Overshoot & custom", lessons: lessons.filter(l => l.chapter === 3) },
+  const motionLessons = lessons.filter(l => l.track === "motion");
+  const principlesLessons = lessons.filter(l => l.track === "principles");
+  const tracks = [
+    { id: "motion", emoji: "🎬", title: "Motion Design", desc: "Bezier curves & graph editor", lessons: motionLessons, accent: "bg-primary/15 text-primary" },
+    { id: "principles", emoji: "🎨", title: "Principles of Design", desc: "Hierarchy, color, typography", lessons: principlesLessons, accent: "bg-[hsl(var(--ae-yellow)/0.18)] text-[hsl(var(--ae-yellow))]" },
   ];
 
   return (
@@ -87,7 +88,7 @@ const HomePage = () => {
         </button>
       </motion.div>
 
-      {/* Curriculum */}
+      {/* Curriculum — both tracks */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -95,40 +96,31 @@ const HomePage = () => {
       >
         <h2 className="ae-label mb-3">Curriculum</h2>
         <div className="space-y-3">
-          {chapters.map((ch, ci) => (
-            <motion.div
-              key={ch.num}
+          {tracks.map((tr, ci) => (
+            <motion.button
+              key={tr.id}
+              onClick={() => navigate("/lessons")}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.25 + ci * 0.05 }}
-              className="soft-card overflow-hidden"
+              className="soft-card w-full text-left overflow-hidden hover:shadow-md transition-shadow"
             >
-              <div className="px-4 py-3 flex items-center justify-between">
+              <div className="px-4 py-3.5 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-lg bg-secondary flex items-center justify-center">
-                    <span className="text-xs font-semibold text-primary">{ch.num}</span>
+                  <div className={`h-10 w-10 rounded-xl flex items-center justify-center text-lg ${tr.accent}`}>
+                    {tr.emoji}
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-foreground">{ch.title}</p>
-                    <p className="text-xs text-muted-foreground">{ch.desc}</p>
+                    <p className="text-sm font-semibold text-foreground">{tr.title}</p>
+                    <p className="text-xs text-muted-foreground">{tr.desc}</p>
                   </div>
                 </div>
-                <span className="text-xs text-muted-foreground">{ch.lessons.length}</span>
+                <div className="flex items-center gap-1">
+                  <span className="text-xs text-muted-foreground">{tr.lessons.length}</span>
+                  <ChevronRight className="h-4 w-4 text-muted-foreground/40" />
+                </div>
               </div>
-              <div className="border-t border-border">
-                {ch.lessons.map((lesson) => (
-                  <button
-                    key={lesson.id}
-                    onClick={() => navigate(`/lesson/${lesson.id}`)}
-                    className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-accent/30 transition-colors border-b border-border/50 last:border-0"
-                  >
-                    <div className="h-1.5 w-1.5 rounded-full bg-primary/30" />
-                    <span className="flex-1 text-xs text-foreground">{lesson.title}</span>
-                    <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/40" />
-                  </button>
-                ))}
-              </div>
-            </motion.div>
+            </motion.button>
           ))}
         </div>
       </motion.div>
