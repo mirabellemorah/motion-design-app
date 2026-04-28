@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { BookOpen, Target, ChevronRight } from "lucide-react";
+import { BookOpen, Target, ChevronRight, Film, Palette, Sparkles, Flame } from "lucide-react";
 import { lessons } from "@/data/lessons";
 import InteractiveBezierGraph from "@/components/InteractiveBezierGraph";
 import { useState } from "react";
@@ -12,16 +12,25 @@ const HomePage = () => {
   const motionLessons = lessons.filter(l => l.track === "motion");
   const principlesLessons = lessons.filter(l => l.track === "principles");
   const tracks = [
-    { id: "motion", emoji: "🎬", title: "Motion Design", desc: "Bezier curves & graph editor", lessons: motionLessons, accent: "bg-primary/15 text-primary" },
-    { id: "principles", emoji: "🎨", title: "Principles of Design", desc: "Hierarchy, color, typography", lessons: principlesLessons, accent: "bg-[hsl(var(--ae-yellow)/0.18)] text-[hsl(var(--ae-yellow))]" },
+    { id: "motion", Icon: Film, title: "Motion Design", desc: "Bezier curves & graph editor", lessons: motionLessons, accent: "bg-primary/15 text-primary" },
+    { id: "principles", Icon: Palette, title: "Principles of Design", desc: "Hierarchy, color, typography", lessons: principlesLessons, accent: "bg-[hsl(var(--ae-yellow)/0.18)] text-[hsl(var(--ae-yellow))]" },
   ];
 
   return (
     <div className="min-h-screen bg-background px-4 pb-24 pt-8">
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-        <p className="text-sm text-muted-foreground mb-0.5">Good morning ✨</p>
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">Master Bezier Curves</h1>
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5 flex items-start justify-between">
+        <div>
+          <div className="flex items-center gap-1.5 mb-0.5">
+            <Sparkles className="h-3.5 w-3.5 text-primary" />
+            <p className="text-sm text-muted-foreground">Good morning</p>
+          </div>
+          <h1 className="text-xl font-semibold tracking-tight text-foreground">Master Bezier Curves</h1>
+        </div>
+        <div className="flex items-center gap-1.5 rounded-full bg-[hsl(var(--ae-orange)/0.12)] text-[hsl(var(--ae-orange))] px-2.5 py-1">
+          <Flame className="h-3.5 w-3.5" />
+          <span className="text-xs font-semibold">7</span>
+        </div>
       </motion.div>
 
       {/* Current progress card */}
@@ -29,16 +38,24 @@ const HomePage = () => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.05 }}
-        className="soft-card p-4 mb-5"
+        className="relative overflow-hidden rounded-2xl p-4 mb-5 text-primary-foreground"
+        style={{
+          background:
+            "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(265 55% 60%) 100%)",
+        }}
       >
-        <div className="flex items-center justify-between mb-2">
-          <span className="ae-label text-primary">CURRENT PROGRESS</span>
-          <button onClick={() => navigate("/progress")} className="text-xs text-primary font-medium">See all</button>
-        </div>
-        <p className="text-sm font-semibold text-foreground mb-1">Learning Value Graphs</p>
-        <p className="text-xs text-muted-foreground mb-3">2 of {lessons.length} lessons completed</p>
-        <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
-          <div className="h-full bg-primary rounded-full" style={{ width: `${(2 / lessons.length) * 100}%` }} />
+        <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10" />
+        <div className="absolute -right-4 top-10 h-16 w-16 rounded-full bg-white/10" />
+        <div className="relative">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] uppercase tracking-widest font-semibold opacity-90">Current Progress</span>
+            <button onClick={() => navigate("/progress")} className="text-[11px] font-medium opacity-90 hover:opacity-100">See all</button>
+          </div>
+          <p className="text-base font-semibold mb-0.5">Learning Value Graphs</p>
+          <p className="text-xs opacity-90 mb-3">2 of {lessons.length} lessons completed</p>
+          <div className="h-1.5 bg-white/20 rounded-full overflow-hidden">
+            <div className="h-full bg-white rounded-full" style={{ width: `${(2 / lessons.length) * 100}%` }} />
+          </div>
         </div>
       </motion.div>
 
@@ -107,8 +124,8 @@ const HomePage = () => {
             >
               <div className="px-4 py-3.5 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className={`h-10 w-10 rounded-xl flex items-center justify-center text-lg ${tr.accent}`}>
-                    {tr.emoji}
+                  <div className={`h-10 w-10 rounded-xl flex items-center justify-center ${tr.accent}`}>
+                    <tr.Icon className="h-5 w-5" />
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-foreground">{tr.title}</p>

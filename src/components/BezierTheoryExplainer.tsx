@@ -1,10 +1,21 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import {
+  ChevronDown,
+  BookOpen,
+  Target,
+  Hash,
+  Clock,
+  Ruler,
+  Gauge,
+  BarChart3,
+  Film,
+  type LucideIcon,
+} from "lucide-react";
 
 interface Section {
   title: string;
-  emoji: string;
+  Icon: LucideIcon;
   content: string[];
   technicalNote?: string;
 }
@@ -12,7 +23,7 @@ interface Section {
 const SECTIONS: Section[] = [
   {
     title: "What IS a Cubic Bezier?",
-    emoji: "🎯",
+    Icon: Target,
     content: [
       "Imagine you're drawing a line from point A to point B. A straight line goes at the exact same speed the whole time — like a robot walking. Boring!",
       "A cubic bezier is a MAGIC line that can curve. Instead of going straight, it bends and swoops. This is how we make animations feel alive — like a ball bouncing, or a door swinging open.",
@@ -23,7 +34,7 @@ const SECTIONS: Section[] = [
   },
   {
     title: "The Four Numbers Explained",
-    emoji: "🔢",
+    Icon: Hash,
     content: [
       "When you see something like cubic-bezier(0.25, 0.1, 0.25, 1.0), those four numbers are coordinates for two 'handles' — like little joysticks that control how the curve bends.",
       "The FIRST two numbers (0.25, 0.1) are the position of Handle 1. This handle controls HOW the animation STARTS. Think of it like grabbing the beginning of a rubber band and pulling it.",
@@ -35,7 +46,7 @@ const SECTIONS: Section[] = [
   },
   {
     title: "What Does the X-Axis (Time) Mean?",
-    emoji: "⏱️",
+    Icon: Clock,
     content: [
       "The bottom of the graph (going left to right) is TIME. Imagine it like a clock ticking from the start of your animation to the end.",
       "The left side is the very beginning — time = 0. This is the exact moment your animation starts. Like when you press 'play' on a video.",
@@ -47,7 +58,7 @@ const SECTIONS: Section[] = [
   },
   {
     title: "What Does the Y-Axis (Value) Mean?",
-    emoji: "📏",
+    Icon: Ruler,
     content: [
       "The side of the graph (going bottom to top) is the VALUE — how far your animation has progressed.",
       "The bottom (0%) means: 'I haven't moved at all yet.' If you're moving a box from left to right, bottom means the box is still at the starting position.",
@@ -60,7 +71,7 @@ const SECTIONS: Section[] = [
   },
   {
     title: "The Slope = Speed",
-    emoji: "🏎️",
+    Icon: Gauge,
     content: [
       "Here's the SECRET that separates beginners from pros: the steepness of the curve tells you the SPEED.",
       "If the curve is going UP steeply (like a cliff), the animation is moving FAST at that moment. Things are happening quickly!",
@@ -72,7 +83,7 @@ const SECTIONS: Section[] = [
   },
   {
     title: "The Speed Graph Explained",
-    emoji: "📊",
+    Icon: BarChart3,
     content: [
       "The Value Graph shows WHERE something is. The Speed Graph shows HOW FAST it's going. They're two ways of looking at the same animation!",
       "Imagine watching a car. The Value Graph is like a GPS map showing the car's position. The Speed Graph is like the speedometer showing how fast the car is driving.",
@@ -84,7 +95,7 @@ const SECTIONS: Section[] = [
   },
   {
     title: "What Do Seconds & Frames Mean?",
-    emoji: "🎬",
+    Icon: Film,
     content: [
       "Animations happen over time. We measure that time in SECONDS (like 0.3s) or FRAMES (like 7f at 24fps).",
       "In film and After Effects, there are usually 24 frames per second (fps). That means 24 tiny pictures flash by every second to create the illusion of movement.",
@@ -103,7 +114,7 @@ const BezierTheoryExplainer = () => {
     <div className="space-y-2">
       <div className="px-4 py-2.5 soft-card-muted rounded-xl mb-2">
         <div className="flex items-center gap-2">
-          <span className="text-base">📖</span>
+          <BookOpen className="h-4 w-4 text-primary" />
           <span className="ae-label text-foreground">Complete Beginner's Guide</span>
         </div>
       </div>
@@ -120,7 +131,7 @@ const BezierTheoryExplainer = () => {
               onClick={() => setOpenSection(isOpen ? null : i)}
               className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-accent/30 transition-colors"
             >
-              <span className="text-base">{section.emoji}</span>
+              <section.Icon className="h-4 w-4 text-primary flex-shrink-0" />
               <span className="flex-1 text-sm font-medium text-foreground">{section.title}</span>
               <ChevronDown
                 className={`h-4 w-4 text-muted-foreground transition-transform ${isOpen ? "rotate-180" : ""}`}

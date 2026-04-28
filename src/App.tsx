@@ -11,9 +11,9 @@ import LessonDetailPage from "@/pages/LessonDetailPage";
 import PracticePage from "@/pages/PracticePage";
 import ProgressPage from "@/pages/ProgressPage";
 import BrandCurvesPage from "@/pages/BrandCurvesPage";
-import CanvasPage from "@/pages/CanvasPage";
 import LeaderboardPage from "@/pages/LeaderboardPage";
 import CommunityPage from "@/pages/CommunityPage";
+import EarnPage from "@/pages/EarnPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,9 +34,9 @@ const App = () => (
             <Route path="/practice/:id" element={<PracticePage />} />
             <Route path="/progress" element={<ProgressPage />} />
             <Route path="/brands" element={<BrandCurvesPage />} />
-            <Route path="/canvas" element={<CanvasPage />} />
             <Route path="/leaderboard" element={<LeaderboardPage />} />
             <Route path="/community" element={<CommunityPage />} />
+            <Route path="/earn" element={<EarnPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <BottomNav />

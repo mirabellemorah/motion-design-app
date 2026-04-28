@@ -6,7 +6,7 @@ import { ChevronLeft, Heart, MessageCircle, Bookmark, Send } from "lucide-react"
 interface Post {
   id: string;
   author: string;
-  avatar: string;
+  hue: number;
   role: string;
   time: string;
   content: string;
@@ -21,7 +21,7 @@ const FEED: Post[] = [
   {
     id: "1",
     author: "Maya K.",
-    avatar: "🦊",
+    hue: 265,
     role: "Senior Motion Designer · Stripe",
     time: "2h",
     content: "Spent the morning tuning a button hover. The trick: tiny overshoot on scale, but kill it on opacity. Otherwise the fade feels wobbly.",
@@ -33,10 +33,10 @@ const FEED: Post[] = [
   {
     id: "2",
     author: "Tomás R.",
-    avatar: "🐧",
+    hue: 210,
     role: "Product Designer",
     time: "5h",
-    content: "Hot take: 'Easy Ease' (F9) is the Comic Sans of motion. Always customize the handles. Always.",
+    content: "Hot take: Easy Ease (F9) is the Comic Sans of motion. Always customize the handles. Always.",
     tag: "Hot Take",
     likes: 318,
     comments: 47,
@@ -44,7 +44,7 @@ const FEED: Post[] = [
   {
     id: "3",
     author: "Aiko S.",
-    avatar: "🐼",
+    hue: 340,
     role: "Animator · Pixar",
     time: "1d",
     content: "Anticipation isn't just for character animation. A 60ms pull-back before a modal opens makes it feel intentional, like the UI is breathing.",
@@ -56,10 +56,10 @@ const FEED: Post[] = [
   {
     id: "4",
     author: "Priya N.",
-    avatar: "🦋",
+    hue: 290,
     role: "Learning · Day 12",
     time: "1d",
-    content: "First time my Speed Graph 'clicked' today. The bell curve = ease in-out. Mind blown 🤯 Thanks to whoever made the speed graph lesson — it finally makes sense.",
+    content: "First time my Speed Graph clicked today. The bell curve = ease in-out. Mind blown. Thanks to whoever made the speed graph lesson — it finally makes sense.",
     tag: "Wins",
     likes: 96,
     comments: 14,
@@ -67,7 +67,7 @@ const FEED: Post[] = [
   {
     id: "5",
     author: "Leo B.",
-    avatar: "🦁",
+    hue: 30,
     role: "Brand Designer",
     time: "2d",
     content: "Studied Apple's keynote transitions for a week. They almost never use linear. Even the cursor moves on a curve. Detail = trust.",
@@ -78,6 +78,23 @@ const FEED: Post[] = [
 ];
 
 const TAGS = ["For You", "Wins", "Hot Take", "Principle", "Study", "Micro-interactions"];
+
+const initials = (name: string) =>
+  name === "You" ? "Y" : name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
+
+const Avatar = ({ name, hue, size = 36 }: { name: string; hue: number; size?: number }) => (
+  <div
+    className="rounded-full flex items-center justify-center font-semibold text-white flex-shrink-0"
+    style={{
+      width: size,
+      height: size,
+      background: `linear-gradient(135deg, hsl(${hue} 65% 65%), hsl(${hue} 55% 50%))`,
+      fontSize: size * 0.38,
+    }}
+  >
+    {initials(name)}
+  </div>
+);
 
 const MiniCurve = ({ b }: { b: [number, number, number, number] }) => {
   const w = 80, h = 50, p = 6;
@@ -118,7 +135,7 @@ const CommunityPage = () => {
       {
         id: Date.now().toString(),
         author: "You",
-        avatar: "🌟",
+        hue: 265,
         role: "Learning · Day 7",
         time: "now",
         content: draft.trim(),
@@ -149,7 +166,7 @@ const CommunityPage = () => {
         animate={{ opacity: 1, y: 0 }}
         className="soft-card p-3 mb-4 flex items-center gap-2"
       >
-        <span className="text-xl">🌟</span>
+        <Avatar name="You" hue={265} size={32} />
         <input
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
@@ -199,7 +216,7 @@ const CommunityPage = () => {
               className="soft-card p-4"
             >
               <div className="flex items-start gap-3 mb-2">
-                <span className="text-2xl flex-shrink-0">{p.avatar}</span>
+                <Avatar name={p.author} hue={p.hue} size={36} />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-baseline gap-2">
                     <p className="text-sm font-semibold text-foreground">{p.author}</p>
