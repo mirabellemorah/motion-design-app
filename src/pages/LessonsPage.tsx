@@ -12,6 +12,9 @@ import {
   Eye,
   LayoutGrid,
   Type,
+  Sparkles,
+  PlayCircle,
+  Wand2,
   type LucideIcon,
 } from "lucide-react";
 import { lessons, type LessonTrack } from "@/data/lessons";
@@ -26,6 +29,17 @@ const TRACKS: { id: LessonTrack; label: string; Icon: LucideIcon; tagline: strin
       { num: 1, title: "Foundations", Icon: Compass },
       { num: 2, title: "Core Curves", Icon: Crosshair },
       { num: 3, title: "Advanced Techniques", Icon: Zap },
+    ],
+  },
+  {
+    id: "animation-principles",
+    label: "12 Principles of Animation",
+    Icon: PlayCircle,
+    tagline: "Disney's foundational rules",
+    chapters: [
+      { num: 1, title: "Foundations of Motion", Icon: Compass },
+      { num: 2, title: "Mechanics & Timing", Icon: Crosshair },
+      { num: 3, title: "Polish & Personality", Icon: Wand2 },
     ],
   },
   {
@@ -55,12 +69,12 @@ const LessonsPage = () => {
         </button>
         <div>
           <h1 className="text-lg font-semibold text-foreground">Lessons</h1>
-          <p className="text-xs text-muted-foreground">{lessons.length} lessons across 2 tracks</p>
+          <p className="text-xs text-muted-foreground">{lessons.length} lessons across 3 tracks</p>
         </div>
       </motion.div>
 
       {/* Track switcher */}
-      <div className="flex gap-2 mb-5">
+      <div className="flex gap-2 mb-5 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-hide">
         {TRACKS.map((t) => {
           const isActive = track === t.id;
           const count = lessons.filter(l => l.track === t.id).length;
@@ -68,7 +82,7 @@ const LessonsPage = () => {
             <button
               key={t.id}
               onClick={() => setTrack(t.id)}
-              className={`flex-1 text-left px-3 py-2.5 rounded-2xl border transition-all ${
+              className={`flex-shrink-0 min-w-[180px] text-left px-3 py-2.5 rounded-2xl border transition-all ${
                 isActive
                   ? "border-primary bg-primary/10"
                   : "border-border bg-card hover:bg-accent/40"
@@ -76,11 +90,11 @@ const LessonsPage = () => {
             >
               <div className="flex items-center gap-2 mb-0.5">
                 <t.Icon className={`h-4 w-4 ${isActive ? "text-primary" : "text-muted-foreground"}`} />
-                <span className={`text-sm font-semibold ${isActive ? "text-primary" : "text-foreground"}`}>
+                <span className={`text-xs font-semibold ${isActive ? "text-primary" : "text-foreground"}`}>
                   {t.label}
                 </span>
               </div>
-              <p className="text-[11px] text-muted-foreground">{count} lessons · {t.tagline}</p>
+              <p className="text-[10px] text-muted-foreground">{count} lessons · {t.tagline}</p>
             </button>
           );
         })}

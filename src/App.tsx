@@ -14,6 +14,7 @@ import BrandCurvesPage from "@/pages/BrandCurvesPage";
 import LeaderboardPage from "@/pages/LeaderboardPage";
 import CommunityPage from "@/pages/CommunityPage";
 import EarnPage from "@/pages/EarnPage";
+import ProfilePage from "@/pages/ProfilePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ const App = () => (
             <Route path="/leaderboard" element={<LeaderboardPage />} />
             <Route path="/community" element={<CommunityPage />} />
             <Route path="/earn" element={<EarnPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <BottomNav />
