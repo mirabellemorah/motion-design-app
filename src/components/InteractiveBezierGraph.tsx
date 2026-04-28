@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
+import { Play, Square, Maximize2, Grid3x3 } from "lucide-react";
 
 interface InteractiveBezierGraphProps {
   bezier: [number, number, number, number];
@@ -14,6 +15,7 @@ interface InteractiveBezierGraphProps {
   color?: string;
   snapToGrid?: boolean;
   gridSnap?: number;
+  onZoom?: () => void;
 }
 
 const PADDING = 40;
@@ -81,6 +83,7 @@ const InteractiveBezierGraph = ({
   color = "var(--ae-yellow)",
   snapToGrid = false,
   gridSnap = 0.05,
+  onZoom,
 }: InteractiveBezierGraphProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [dragging, setDragging] = useState<null | 1 | 2>(null);
@@ -228,19 +231,30 @@ const InteractiveBezierGraph = ({
           {interactive && (
             <button
               onClick={() => setSnapEnabled(!snapEnabled)}
-              className={`px-2 py-0.5 rounded text-[9px] ae-mono transition-colors ${
+              className={`px-1.5 py-0.5 rounded text-[9px] ae-mono transition-colors inline-flex items-center gap-1 ${
                 snapEnabled ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              ⊞ SNAP
+              <Grid3x3 className="h-3 w-3" /> SNAP
             </button>
           )}
           <button
             onClick={playAnimation}
-            className="px-2 py-0.5 rounded text-[10px] ae-mono text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+            className="px-1.5 py-0.5 rounded text-[10px] ae-mono text-muted-foreground hover:text-foreground hover:bg-accent transition-colors inline-flex items-center gap-1"
+            aria-label={isPlaying ? "Stop" : "Play"}
           >
-            {isPlaying ? "■ STOP" : "▶ PLAY"}
+            {isPlaying ? <Square className="h-3 w-3" /> : <Play className="h-3 w-3" />}
+            {isPlaying ? "STOP" : "PLAY"}
           </button>
+          {onZoom && (
+            <button
+              onClick={onZoom}
+              className="px-1.5 py-0.5 rounded text-muted-foreground hover:text-foreground hover:bg-accent transition-colors inline-flex items-center"
+              aria-label="Enlarge"
+            >
+              <Maximize2 className="h-3 w-3" />
+            </button>
+          )}
           <span className="ae-mono text-[10px] text-muted-foreground">{bezierString}</span>
         </div>
       </div>

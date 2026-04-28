@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { Play, Square } from "lucide-react";
 
 interface AnimationPreviewProps {
   bezier: [number, number, number, number];
@@ -34,9 +35,11 @@ const AnimationPreview = ({ bezier, duration = 0.8, playing = false, label }: An
         <span className="ae-label">{label || "Preview"}</span>
         <button
           onClick={() => { setAutoPlay(!autoPlay); setKey(k => k + 1); }}
-          className="ae-mono text-[10px] text-muted-foreground hover:text-foreground transition-colors"
+          className="ae-mono text-[10px] text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
+          aria-label={autoPlay ? "Stop" : "Play"}
         >
-          {autoPlay ? "■ STOP" : "▶ PLAY"}
+          {autoPlay ? <Square className="h-3 w-3" /> : <Play className="h-3 w-3" />}
+          {autoPlay ? "STOP" : "PLAY"}
         </button>
       </div>
 
@@ -73,7 +76,7 @@ const AnimationPreview = ({ bezier, duration = 0.8, playing = false, label }: An
 
         {/* Frame counter */}
         <div className="absolute top-2 right-3 ae-mono text-[9px] text-muted-foreground/40">
-          {autoPlay ? "▶" : "■"} {Math.round(duration * 24)}f
+          {Math.round(duration * 24)}f
         </div>
       </div>
     </div>

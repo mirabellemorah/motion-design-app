@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { Play, Square } from "lucide-react";
 
 interface DualGraphComparisonProps {
   bezier: [number, number, number, number];
@@ -140,9 +141,11 @@ const DualGraphComparison = ({ bezier, width = 320 }: DualGraphComparisonProps) 
         </div>
         <button
           onClick={play}
-          className="px-2 py-0.5 rounded text-[10px] ae-mono text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+          className="px-2 py-0.5 rounded text-[10px] ae-mono text-muted-foreground hover:text-foreground hover:bg-accent transition-colors inline-flex items-center gap-1"
+          aria-label={playing ? "Stop sync" : "Sync play"}
         >
-          {playing ? "■ STOP" : "▶ SYNC PLAY"}
+          {playing ? <Square className="h-3 w-3" /> : <Play className="h-3 w-3" />}
+          {playing ? "STOP" : "SYNC PLAY"}
         </button>
       </div>
 
