@@ -770,7 +770,6 @@ export const lessons: Lesson[] = [
     creativePractice: "Pick three brands you love (any industry). For each, write down ONE word that describes how their motion should feel. Sketch a simple shape transition that embodies that word — no software, just paper.",
   },
 ];
-];
 
 export const initialStats: UserStats = {
   xp: 0,
