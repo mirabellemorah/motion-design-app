@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Sparkles } from "lucide-react";
 import InteractiveBezierGraph from "./InteractiveBezierGraph";
 
 interface BrandCurve {
