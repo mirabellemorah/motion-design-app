@@ -102,7 +102,7 @@ const BrandCurves = () => {
     <div className="space-y-4">
       <div className="px-4 py-2.5 soft-card-muted rounded-xl">
         <div className="flex items-center gap-2">
-          <span className="text-base">✨</span>
+          <Sparkles className="h-4 w-4 text-primary" />
           <span className="ae-label text-foreground">Brand Motion Libraries</span>
         </div>
       </div>
