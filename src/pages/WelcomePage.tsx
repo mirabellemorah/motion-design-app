@@ -9,7 +9,7 @@ const WelcomePage = () => {
   return (
     <div className="flex min-h-screen flex-col items-center justify-between bg-background px-6 py-12">
       <button onClick={() => navigate("/")} className="self-end text-[11px] text-muted-foreground font-medium tracking-wide">
-        SKIP →
+        SKIP
       </button>
 
       <div className="flex flex-1 flex-col items-center justify-center gap-8">

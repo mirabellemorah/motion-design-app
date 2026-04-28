@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate, useParams } from "react-router-dom";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
 import { lessons, COMMON_PRESETS } from "@/data/lessons";
 import InteractiveBezierGraph from "@/components/InteractiveBezierGraph";
 import SpeedGraph from "@/components/SpeedGraph";
@@ -168,9 +168,10 @@ const LessonDetailPage = () => {
 
       {/* Beginner Explainer Toggle */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.38 }} className="mb-5">
-        <button onClick={() => setShowExplainer(!showExplainer)} className="ae-label flex items-center gap-1 mb-2">
+        <button onClick={() => setShowExplainer(!showExplainer)} className="ae-label flex items-center gap-1.5 mb-2">
           <span>{showExplainer ? "▾" : "▸"}</span>
-          <span>📖 Complete Beginner's Guide to Bezier Curves</span>
+          <BookOpen className="h-3 w-3" />
+          <span>Complete Beginner's Guide to Bezier Curves</span>
         </button>
         {showExplainer && <BezierTheoryExplainer />}
       </motion.div>
