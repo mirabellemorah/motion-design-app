@@ -3,7 +3,14 @@ export interface CurvePreset {
   bezier: [number, number, number, number];
 }
 
-export type LessonTrack = "motion" | "principles";
+export type LessonTrack = "motion" | "principles" | "animation-principles";
+
+export interface QuizQuestion {
+  q: string;
+  options: string[];
+  correctIndex: number;
+  explanation?: string;
+}
 
 export interface Lesson {
   id: string;
@@ -18,6 +25,20 @@ export interface Lesson {
   targetBezier?: [number, number, number, number];
   tip: string;
   keyPrinciples: string[];
+  /** Creative, hands-on practice (not curve-based). Used for animation-principles + principles. */
+  creativePractice?: string;
+  /** Optional MCQ to check understanding (used by principles). */
+  quiz?: QuizQuestion;
+  /** Demo type for principles track — drives interactive widget instead of bezier graph. */
+  demo?:
+    | "contrast"
+    | "hierarchy"
+    | "color-wheel"
+    | "balance"
+    | "proximity"
+    | "alignment"
+    | "repetition"
+    | "typography";
 }
 
 export interface AnimationParams {
