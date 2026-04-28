@@ -5,24 +5,41 @@ import { ChevronLeft, Trophy, Flame, Crown, Medal } from "lucide-react";
 interface LeaderEntry {
   rank: number;
   name: string;
-  avatar: string;
+  hue: number;
   xp: number;
   streak: number;
   tier: "diamond" | "gold" | "silver" | "bronze";
 }
 
 const WEEKLY: LeaderEntry[] = [
-  { rank: 1, name: "Maya K.", avatar: "🦊", xp: 4820, streak: 42, tier: "diamond" },
-  { rank: 2, name: "Tomás R.", avatar: "🐧", xp: 4310, streak: 28, tier: "diamond" },
-  { rank: 3, name: "Aiko S.", avatar: "🐼", xp: 3995, streak: 19, tier: "gold" },
-  { rank: 4, name: "Leo B.", avatar: "🦁", xp: 3420, streak: 12, tier: "gold" },
-  { rank: 5, name: "You", avatar: "🌟", xp: 2890, streak: 7, tier: "silver" },
-  { rank: 6, name: "Priya N.", avatar: "🦋", xp: 2640, streak: 9, tier: "silver" },
-  { rank: 7, name: "Jin W.", avatar: "🐯", xp: 2310, streak: 4, tier: "bronze" },
-  { rank: 8, name: "Sara V.", avatar: "🦉", xp: 1980, streak: 6, tier: "bronze" },
-  { rank: 9, name: "Diego M.", avatar: "🐺", xp: 1740, streak: 3, tier: "bronze" },
-  { rank: 10, name: "Noor A.", avatar: "🐉", xp: 1530, streak: 2, tier: "bronze" },
+  { rank: 1, name: "Maya K.", hue: 265, xp: 4820, streak: 42, tier: "diamond" },
+  { rank: 2, name: "Tomás R.", hue: 210, xp: 4310, streak: 28, tier: "diamond" },
+  { rank: 3, name: "Aiko S.", hue: 340, xp: 3995, streak: 19, tier: "gold" },
+  { rank: 4, name: "Leo B.", hue: 30, xp: 3420, streak: 12, tier: "gold" },
+  { rank: 5, name: "You", hue: 265, xp: 2890, streak: 7, tier: "silver" },
+  { rank: 6, name: "Priya N.", hue: 290, xp: 2640, streak: 9, tier: "silver" },
+  { rank: 7, name: "Jin W.", hue: 15, xp: 2310, streak: 4, tier: "bronze" },
+  { rank: 8, name: "Sara V.", hue: 180, xp: 1980, streak: 6, tier: "bronze" },
+  { rank: 9, name: "Diego M.", hue: 240, xp: 1740, streak: 3, tier: "bronze" },
+  { rank: 10, name: "Noor A.", hue: 130, xp: 1530, streak: 2, tier: "bronze" },
 ];
+
+const initials = (name: string) =>
+  name === "You" ? "Y" : name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
+
+const Avatar = ({ name, hue, size = 36 }: { name: string; hue: number; size?: number }) => (
+  <div
+    className="rounded-full flex items-center justify-center font-semibold text-white flex-shrink-0"
+    style={{
+      width: size,
+      height: size,
+      background: `linear-gradient(135deg, hsl(${hue} 65% 65%), hsl(${hue} 55% 50%))`,
+      fontSize: size * 0.38,
+    }}
+  >
+    {initials(name)}
+  </div>
+);
 
 const tierStyles: Record<LeaderEntry["tier"], string> = {
   diamond: "bg-primary/15 text-primary",
@@ -76,7 +93,9 @@ const LeaderboardPage = () => {
           const heights = [88, 110, 76];
           return (
             <div key={p.rank} className="flex flex-col items-center justify-end">
-              <div className="text-2xl mb-1">{p.avatar}</div>
+              <div className="mb-1.5">
+                <Avatar name={p.name} hue={p.hue} size={place === 1 ? 44 : 36} />
+              </div>
               <p className="text-xs font-medium text-foreground truncate max-w-full">{p.name}</p>
               <p className="text-[10px] text-muted-foreground mb-1.5">{p.xp.toLocaleString()} XP</p>
               <div
@@ -111,7 +130,7 @@ const LeaderboardPage = () => {
               }`}
             >
               <span className="text-xs font-semibold text-muted-foreground w-5 text-center">{e.rank}</span>
-              <span className="text-xl">{e.avatar}</span>
+              <Avatar name={e.name} hue={e.hue} size={32} />
               <div className="flex-1 min-w-0">
                 <p className={`text-sm ${isYou ? "font-semibold text-primary" : "font-medium text-foreground"}`}>
                   {e.name}
