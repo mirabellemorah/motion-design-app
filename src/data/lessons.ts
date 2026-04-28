@@ -287,6 +287,13 @@ export const lessons: Lesson[] = [
       "Test in grayscale to check tonal contrast independently of color",
       "In motion: contrast in speed and direction draws the eye",
     ],
+    demo: "contrast",
+    quiz: {
+      q: "Which pairing has the STRONGEST visual contrast?",
+      options: ["Light gray text on white", "Black text on white", "Dark gray text on medium gray"],
+      correctIndex: 1,
+      explanation: "Maximum tonal difference (pure black on pure white) creates the strongest contrast.",
+    },
   },
   {
     id: "p-balance",
@@ -309,6 +316,16 @@ export const lessons: Lesson[] = [
       "Whitespace has visual weight too — empty space stabilizes busy areas",
       "Off-balance compositions feel unsettling on purpose (use sparingly)",
     ],
+    demo: "balance",
+    quiz: {
+      q: "Which is true about asymmetrical balance?",
+      options: [
+        "It can never feel stable",
+        "Different elements with equal visual weight create balance without mirroring",
+        "It requires identical elements on each side",
+      ],
+      correctIndex: 1,
+    },
   },
   {
     id: "p-hierarchy",
@@ -331,6 +348,12 @@ export const lessons: Lesson[] = [
       "Use a type scale (e.g. 12, 14, 18, 24, 32, 48) to enforce consistent levels",
       "Stagger animations 40–80ms apart to reinforce visual hierarchy in motion",
     ],
+    demo: "hierarchy",
+    quiz: {
+      q: "What is the FASTEST way to establish hierarchy?",
+      options: ["Adding more colors", "Size and weight contrast", "Adding borders to everything"],
+      correctIndex: 1,
+    },
   },
   {
     id: "p-repetition",
@@ -353,6 +376,16 @@ export const lessons: Lesson[] = [
       "Break repetition deliberately to highlight something special",
       "Consistent spacing (8pt grid) is the most underrated form of repetition",
     ],
+    demo: "repetition",
+    quiz: {
+      q: "Why use a consistent spacing scale (e.g. 8pt grid)?",
+      options: [
+        "It limits creativity",
+        "It creates rhythm and visual unity across the design",
+        "It makes designs look identical",
+      ],
+      correctIndex: 1,
+    },
   },
   {
     id: "p-alignment",
@@ -375,6 +408,12 @@ export const lessons: Lesson[] = [
       "Use a baseline grid for vertical rhythm in long-form content",
       "Optical adjustments (icons, italics) often need manual alignment tweaks",
     ],
+    demo: "alignment",
+    quiz: {
+      q: "Which alignment is generally STRONGEST for body content?",
+      options: ["Center alignment", "Edge alignment (left or right)", "Random alignment"],
+      correctIndex: 1,
+    },
   },
   {
     id: "p-proximity",
@@ -397,6 +436,16 @@ export const lessons: Lesson[] = [
       "Proximity overrides color and shape in signaling relationships",
       "When animating groups, move them together — separate motion breaks the perceived group",
     ],
+    demo: "proximity",
+    quiz: {
+      q: "If a label belongs to a value, the label should be:",
+      options: [
+        "Equally spaced from all values",
+        "Closer to its value than to other elements",
+        "Far from the value to give it room",
+      ],
+      correctIndex: 1,
+    },
   },
   {
     id: "p-color-theory",
@@ -419,6 +468,12 @@ export const lessons: Lesson[] = [
       "Cultural meaning matters: red = danger in West, luck in East",
       "Always test in dark mode — colors that pop on white can vibrate on black",
     ],
+    demo: "color-wheel",
+    quiz: {
+      q: "Two colors directly opposite on the color wheel are called:",
+      options: ["Analogous", "Complementary", "Triadic"],
+      correctIndex: 1,
+    },
   },
   {
     id: "p-typography",
@@ -441,6 +496,12 @@ export const lessons: Lesson[] = [
       "Use real text (not Lorem Ipsum) when designing — typography problems hide behind fake content",
       "Animate text in word-by-word or line-by-line, never letter-by-letter (unreadable)",
     ],
+    demo: "typography",
+    quiz: {
+      q: "What is the optimal line length for body reading?",
+      options: ["20–30 characters", "50–75 characters", "120+ characters"],
+      correctIndex: 1,
+    },
   },
 ];
 
