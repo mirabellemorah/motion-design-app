@@ -1,11 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, BookOpen, Trophy, Users, Layers } from "lucide-react";
+import { Home, BookOpen, Trophy, Users, Briefcase } from "lucide-react";
 import { motion } from "framer-motion";
 
 const tabs = [
   { icon: Home, label: "Home", path: "/" },
   { icon: BookOpen, label: "Learn", path: "/lessons" },
-  { icon: Layers, label: "Canvas", path: "/canvas" },
+  { icon: Briefcase, label: "Earn", path: "/earn" },
   { icon: Trophy, label: "Ranks", path: "/leaderboard" },
   { icon: Users, label: "Community", path: "/community" },
 ];
