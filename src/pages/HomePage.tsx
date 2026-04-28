@@ -1,19 +1,25 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { BookOpen, Target, ChevronRight, Film, Palette, Sparkles, Flame } from "lucide-react";
+import { BookOpen, Target, ChevronRight, Film, Palette, Sparkles, Flame, MapPin, Briefcase, ArrowUpRight, PlayCircle } from "lucide-react";
 import { lessons } from "@/data/lessons";
-import InteractiveBezierGraph from "@/components/InteractiveBezierGraph";
-import { useState } from "react";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const [demoBezier, setDemoBezier] = useState<[number, number, number, number]>([0.25, 0.1, 0.25, 1]);
 
   const motionLessons = lessons.filter(l => l.track === "motion");
   const principlesLessons = lessons.filter(l => l.track === "principles");
+  const animPrinciplesLessons = lessons.filter(l => l.track === "animation-principles");
   const tracks = [
     { id: "motion", Icon: Film, title: "Motion Design", desc: "Bezier curves & graph editor", lessons: motionLessons, accent: "bg-primary/15 text-primary" },
+    { id: "animation-principles", Icon: PlayCircle, title: "12 Animation Principles", desc: "Disney's foundational rules", lessons: animPrinciplesLessons, accent: "bg-[hsl(var(--ae-orange)/0.15)] text-[hsl(var(--ae-orange))]" },
     { id: "principles", Icon: Palette, title: "Principles of Design", desc: "Hierarchy, color, typography", lessons: principlesLessons, accent: "bg-[hsl(var(--ae-yellow)/0.18)] text-[hsl(var(--ae-yellow))]" },
+  ];
+
+  const opportunities = [
+    { role: "Motion Designer", company: "Linear", location: "Remote · Worldwide", tag: "Full-time", accent: "bg-primary/10 text-primary" },
+    { role: "Brand Animator", company: "Stripe", location: "San Francisco · Hybrid", tag: "Freelance", accent: "bg-[hsl(var(--ae-orange)/0.15)] text-[hsl(var(--ae-orange))]" },
+    { role: "Junior Motion Artist", company: "Notion", location: "Remote · EU", tag: "Contract", accent: "bg-[hsl(var(--ae-yellow)/0.18)] text-[hsl(var(--ae-yellow))]" },
+    { role: "Senior UI Animator", company: "Figma", location: "Remote · US", tag: "Full-time", accent: "bg-[hsl(var(--ae-green)/0.15)] text-[hsl(var(--ae-green))]" },
   ];
 
   return (
@@ -25,7 +31,7 @@ const HomePage = () => {
             <Sparkles className="h-3.5 w-3.5 text-primary" />
             <p className="text-sm text-muted-foreground">Good morning</p>
           </div>
-          <h1 className="text-xl font-semibold tracking-tight text-foreground">Master Bezier Curves</h1>
+          <h1 className="text-xl font-semibold tracking-tight text-foreground">Design like a pro</h1>
         </div>
         <div className="flex items-center gap-1.5 rounded-full bg-[hsl(var(--ae-orange)/0.12)] text-[hsl(var(--ae-orange))] px-2.5 py-1">
           <Flame className="h-3.5 w-3.5" />
@@ -59,21 +65,48 @@ const HomePage = () => {
         </div>
       </motion.div>
 
-      {/* Interactive demo — dark AE panel */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="mb-5"
-      >
-        <InteractiveBezierGraph
-          bezier={demoBezier}
-          onChange={setDemoBezier}
-          width={320}
-          height={200}
-          label="Playground — Drag the handles"
-          showSpeed={false}
-        />
+      {/* New Opportunities feed */}
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-5">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-1.5">
+            <Briefcase className="h-3.5 w-3.5 text-primary" />
+            <h2 className="text-sm font-semibold text-foreground">New Opportunities</h2>
+            <span className="text-[10px] font-semibold bg-[hsl(var(--ae-green)/0.15)] text-[hsl(var(--ae-green))] px-1.5 py-0.5 rounded-full">
+              {opportunities.length} fresh
+            </span>
+          </div>
+          <button onClick={() => navigate("/earn")} className="text-[11px] font-medium text-primary">See all</button>
+        </div>
+        <div className="space-y-2">
+          {opportunities.slice(0, 3).map((o, i) => (
+            <motion.button
+              key={o.role}
+              onClick={() => navigate("/earn")}
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.12 + i * 0.04 }}
+              className="w-full soft-card px-3.5 py-3 text-left hover:shadow-md transition-shadow flex items-center gap-3"
+            >
+              <div className={`h-10 w-10 rounded-xl flex items-center justify-center ${o.accent}`}>
+                <Briefcase className="h-4 w-4" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <p className="text-sm font-semibold text-foreground truncate">{o.role}</p>
+                  <span className={`text-[9px] uppercase tracking-wider font-semibold px-1.5 py-0.5 rounded-full ${o.accent}`}>
+                    {o.tag}
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground truncate">{o.company}</p>
+                <div className="flex items-center gap-1 mt-0.5">
+                  <MapPin className="h-2.5 w-2.5 text-muted-foreground/60" />
+                  <p className="text-[10px] text-muted-foreground/80 truncate">{o.location}</p>
+                </div>
+              </div>
+              <ArrowUpRight className="h-4 w-4 text-muted-foreground/40" />
+            </motion.button>
+          ))}
+        </div>
       </motion.div>
 
       {/* Quick actions */}
