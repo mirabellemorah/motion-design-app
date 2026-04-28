@@ -1,30 +1,42 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Film,
+  Palette,
+  Compass,
+  Crosshair,
+  Zap,
+  Eye,
+  LayoutGrid,
+  Type,
+  type LucideIcon,
+} from "lucide-react";
 import { lessons, type LessonTrack } from "@/data/lessons";
 
-const TRACKS: { id: LessonTrack; label: string; emoji: string; tagline: string; chapters: { num: number; title: string; icon: string }[] }[] = [
+const TRACKS: { id: LessonTrack; label: string; Icon: LucideIcon; tagline: string; chapters: { num: number; title: string; Icon: LucideIcon }[] }[] = [
   {
     id: "motion",
     label: "Motion Design",
-    emoji: "🎬",
+    Icon: Film,
     tagline: "Bezier curves & graph editor",
     chapters: [
-      { num: 1, title: "Foundations", icon: "📐" },
-      { num: 2, title: "Core Curves", icon: "🎯" },
-      { num: 3, title: "Advanced Techniques", icon: "⚡" },
+      { num: 1, title: "Foundations", Icon: Compass },
+      { num: 2, title: "Core Curves", Icon: Crosshair },
+      { num: 3, title: "Advanced Techniques", Icon: Zap },
     ],
   },
   {
     id: "principles",
     label: "Principles of Design",
-    emoji: "🎨",
+    Icon: Palette,
     tagline: "The fundamentals every designer needs",
     chapters: [
-      { num: 1, title: "Visual Foundations", icon: "👁️" },
-      { num: 2, title: "Structure & Unity", icon: "🧩" },
-      { num: 3, title: "Color & Type", icon: "🌈" },
+      { num: 1, title: "Visual Foundations", Icon: Eye },
+      { num: 2, title: "Structure & Unity", Icon: LayoutGrid },
+      { num: 3, title: "Color & Type", Icon: Type },
     ],
   },
 ];
@@ -63,7 +75,7 @@ const LessonsPage = () => {
               }`}
             >
               <div className="flex items-center gap-2 mb-0.5">
-                <span className="text-base">{t.emoji}</span>
+                <t.Icon className={`h-4 w-4 ${isActive ? "text-primary" : "text-muted-foreground"}`} />
                 <span className={`text-sm font-semibold ${isActive ? "text-primary" : "text-foreground"}`}>
                   {t.label}
                 </span>
@@ -89,7 +101,7 @@ const LessonsPage = () => {
             return (
               <div key={ch.num}>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-base">{ch.icon}</span>
+                  <ch.Icon className="h-3.5 w-3.5 text-primary" />
                   <span className="ae-label">Chapter {ch.num} — {ch.title}</span>
                 </div>
 
