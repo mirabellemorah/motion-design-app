@@ -793,6 +793,156 @@ export const lessons: Lesson[] = [
   },
 ];
 
+// ============= CUBIC BEZIER LAB (Motion Design Ch. 3) =============
+lessons.push({
+  id: "cubic-bezier-lab",
+  title: "Cubic Bezier Curves",
+  subtitle: "The math behind every easing curve",
+  chapter: 3,
+  track: "motion-design",
+  description:
+    "A cubic bezier curve is defined by 4 control points: P0 and P3 are anchored at (0,0) and (1,1). P1 and P2 are draggable handles that shape the curve — and therefore the feel of every animation.",
+  theory: [
+    "P0 (0,0) is start, P3 (1,1) is end — these never move.",
+    "P1 controls how the animation starts. P2 controls how it ends.",
+    "If P1 is near (0,0), the start is gentle (ease in). If P1 is far right, the start is sharp.",
+    "CSS: transition-timing-function: cubic-bezier(P1.x, P1.y, P2.x, P2.y).",
+    "After Effects: the same handles live on each keyframe in the Graph Editor.",
+  ],
+  aeContext:
+    "In AE, every keyframe in the Graph Editor IS a bezier point — the handles you drag map 1:1 to cubic-bezier() in CSS.",
+  defaultBezier: [0.25, 0.1, 0.25, 1],
+  tip: "Memorize 3 curves — ease-out (UI default), ease-in-out (smooth), and a slight overshoot. They cover 90% of motion needs.",
+  keyPrinciples: [
+    "Y values above 1 = overshoot. Negative Y = anticipation.",
+    "X values stay between 0 and 1 (time can't go backwards).",
+    "Symmetric P1/P2 = balanced ease. Asymmetric = expressive.",
+  ],
+  cubicBezierLab: true,
+  minutes: 12,
+});
+
+// ============= CAREER FOUNDATIONS — STUB TRACK =============
+const careerStubs: Array<Pick<Lesson, "id" | "title" | "subtitle" | "description"> & { chapter: number; minutes: number }> = [
+  { id: "c-portfolio", chapter: 1, minutes: 25, title: "Portfolio Building", subtitle: "Case studies that get you hired", description: "How to present work, write case studies, and structure a portfolio for studios, agencies, and startups." },
+  { id: "c-client-comms", chapter: 1, minutes: 18, title: "Client Communication", subtitle: "Proposals, feedback, and boundaries", description: "Writing proposals, handling feedback, setting expectations, and protecting your time as a freelancer." },
+  { id: "c-pricing", chapter: 1, minutes: 20, title: "Pricing Your Work", subtitle: "Day rates, project rates, value-based pricing", description: "Stop undercharging. Learn how creatives at every level price their work and avoid common traps." },
+  { id: "c-handoff", chapter: 2, minutes: 15, title: "File Handoff & Delivery", subtitle: "Exporting for web, video, print, social", description: "Naming conventions, formats, and delivery practices clients can actually use." },
+  { id: "c-critique", chapter: 2, minutes: 12, title: "Design Critique Literacy", subtitle: "Give and receive feedback like a pro", description: "How to articulate design decisions and get useful feedback instead of vague reactions." },
+  { id: "c-accessibility", chapter: 2, minutes: 18, title: "Accessibility in Design", subtitle: "Contrast, type, motion, inclusion", description: "Why accessibility matters commercially — and the small choices that get you most of the way." },
+  { id: "c-briefs", chapter: 2, minutes: 14, title: "Working with Briefs", subtitle: "Turn vague requests into great work", description: "How to interrogate a brief, ask the right questions, and translate it into creative direction." },
+  { id: "c-social", chapter: 3, minutes: 16, title: "Motion for Social Media", subtitle: "Platform-specific specs and looping", description: "Reels, TikTok, LinkedIn — formats, safe zones, and what actually performs." },
+  { id: "c-design-thinking", chapter: 3, minutes: 22, title: "Design Thinking Basics", subtitle: "Problem framing & business outcomes", description: "Empathy, ideation, and how design decisions connect to business value." },
+  { id: "c-tools", chapter: 3, minutes: 20, title: "Tools Beyond the Basics", subtitle: "Figma, AE expressions, Lottie, Spline", description: "Advanced features and when to reach for which tool — including 3D and motion-for-web pipelines." },
+];
+careerStubs.forEach((c) => {
+  lessons.push({
+    ...c,
+    track: "career",
+    theory: ["Coming soon — full lesson in development.", "Save this track to be notified when it goes live.", "Tap the Daily Challenge for related practice in the meantime."],
+    aeContext: "Workshop modules will include downloadable templates, live examples, and short video walkthroughs.",
+    defaultBezier: [0.4, 0, 0.2, 1],
+    tip: "Career skills compound faster than tool skills. Start small — one improvement per project.",
+    keyPrinciples: ["Practical, not theoretical", "Real templates and examples", "Built around junior-designer reality"],
+    stub: true,
+  });
+});
+
+// ============= ATTACH ANIMATION DEMO TYPES + RICH QUIZ EXPLANATIONS =============
+const animDemoMap: Record<string, NonNullable<Lesson["animDemo"]>> = {
+  "ap-squash-stretch": "squash-stretch",
+  "ap-anticipation": "anticipation",
+  "ap-staging": "staging",
+  "ap-straight-pose": "straight-pose",
+  "ap-follow-through": "follow-through",
+  "ap-slow-in-out": "slow-in-out",
+  "ap-arc": "arc",
+  "ap-secondary": "secondary",
+  "ap-timing": "timing",
+  "ap-exaggeration": "exaggeration",
+  "ap-solid-drawing": "solid-drawing",
+  "ap-appeal": "appeal",
+};
+lessons.forEach((l) => {
+  if (animDemoMap[l.id]) l.animDemo = animDemoMap[l.id];
+});
+
+// Add per-option explanations to existing principles quizzes (used by retry flow).
+const quizExplanations: Record<string, string[]> = {
+  "p-contrast": [
+    "Light gray on white is the LOWEST contrast option — body text would be hard to read.",
+    "Correct — pure black on pure white is the maximum tonal difference.",
+    "Mid-tones on mid-tones blend together and offer almost no separation.",
+  ],
+  "p-balance": [
+    "Asymmetrical compositions absolutely can feel stable — that's the whole point.",
+    "Correct — equal visual weight (size, color, density) creates balance without mirroring.",
+    "That describes symmetrical, not asymmetrical, balance.",
+  ],
+  "p-hierarchy": [
+    "More colors usually adds noise without clarifying order.",
+    "Correct — size and weight are the fastest, clearest signal of hierarchy.",
+    "Borders create separation but not order or priority.",
+  ],
+  "p-repetition": [
+    "Constraints actually free creativity by removing low-value decisions.",
+    "Correct — repeated spacing creates visual rhythm and ties layouts together.",
+    "A consistent grid gives unity but plenty of room for unique layouts inside it.",
+  ],
+  "p-alignment": [
+    "Center alignment is harder to scan for long body content — edges anchor the eye.",
+    "Correct — left/right edges give the eye a strong anchor for body text.",
+    "Random alignment is exhausting to read and signals carelessness.",
+  ],
+  "p-proximity": [
+    "Equal spacing destroys the relationship signal proximity creates.",
+    "Correct — closer spacing visually pairs the label with its value.",
+    "Far spacing communicates separation, not relationship.",
+  ],
+  "p-color-theory": [
+    "Analogous colors sit NEXT to each other on the wheel, not opposite.",
+    "Correct — opposites on the wheel are complementary (and create maximum contrast).",
+    "Triadic colors are evenly spaced (every 120°), not opposite.",
+  ],
+  "p-typography": [
+    "Too short — the eye spends more time line-jumping than reading.",
+    "Correct — 50–75 characters per line is the proven sweet spot for sustained reading.",
+    "Too long — the eye loses the next line and reading speed drops.",
+  ],
+};
+lessons.forEach((l) => {
+  if (l.quiz && quizExplanations[l.id]) {
+    l.quiz.optionExplanations = quizExplanations[l.id];
+  }
+});
+
+// ============= DAILY CHALLENGES =============
+export interface DailyChallenge {
+  title: string;
+  prompt: string;
+  difficulty: "Beginner" | "Intermediate" | "Advanced";
+  minutes: number;
+}
+const CHALLENGES: DailyChallenge[] = [
+  { title: "60-Frame Bouncing Ball", difficulty: "Beginner", minutes: 15, prompt: "Animate a bouncing ball for 60 frames using only squash, stretch, and ease — no graph editing." },
+  { title: "Button Micro-interaction", difficulty: "Intermediate", minutes: 20, prompt: "Design a button hover, press, and success state. Each transition under 250ms with one signature curve." },
+  { title: "Logo Reveal in 3 Seconds", difficulty: "Advanced", minutes: 30, prompt: "Storyboard a 3-second logo reveal that uses anticipation, staging, and a single overshoot. Sketch only." },
+  { title: "Match the Curve", difficulty: "Beginner", minutes: 10, prompt: "Open Practice and beat your highest score on any lesson — Platinum tier earns 2x today." },
+  { title: "Critique Yourself", difficulty: "Intermediate", minutes: 15, prompt: "Pick your most recent project. Write 3 things working and 3 things to fix — without being mean." },
+  { title: "Type Hierarchy Drill", difficulty: "Beginner", minutes: 12, prompt: "Set a card with headline, subtitle, body, and meta. Use only ONE font family and weight to differentiate." },
+  { title: "Color Palette in 5 Minutes", difficulty: "Intermediate", minutes: 5, prompt: "Pick a hue you never use. Build tints + shades + 1 complementary accent. Save the palette." },
+];
+export const todayChallenge = (): DailyChallenge => {
+  const day = Math.floor(Date.now() / 86400000);
+  return CHALLENGES[day % CHALLENGES.length];
+};
+export const secondsUntilTomorrow = (): number => {
+  const now = new Date();
+  const tom = new Date(now);
+  tom.setHours(24, 0, 0, 0);
+  return Math.round((tom.getTime() - now.getTime()) / 1000);
+};
+
 export const initialStats: UserStats = {
   xp: 0,
   level: 1,
