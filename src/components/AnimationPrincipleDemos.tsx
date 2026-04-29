@@ -438,11 +438,11 @@ const SolidDrawingDemo = () => {
 /* ---------------- 12. Appeal ---------------- */
 const AppealDemo = () => {
   const [variant, setVariant] = useState<"calm" | "playful" | "bold">("playful");
-  const cfg = {
+  const cfg: Record<"calm" | "playful" | "bold", { color: string; scale: number[]; dur: number; label: string }> = {
     calm: { color: "hsl(var(--primary))", scale: [1, 1.03, 1], dur: 2.4, label: "Apple-like calm" },
     playful: { color: "hsl(var(--ae-orange))", scale: [1, 1.18, 0.95, 1.05, 1], dur: 1.4, label: "Duolingo-like bounce" },
     bold: { color: "hsl(var(--ae-yellow))", scale: [1, 1.3, 1], dur: 0.6, label: "Snappy, confident" },
-  } as const;
+  };
   const c = cfg[variant];
   return (
     <Shell hint="Same shape, three personalities. Appeal = consistent motion voice.">
