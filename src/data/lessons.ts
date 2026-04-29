@@ -3,13 +3,15 @@ export interface CurvePreset {
   bezier: [number, number, number, number];
 }
 
-export type LessonTrack = "motion" | "principles" | "animation-principles";
+export type LessonTrack = "motion-design" | "principles" | "career";
 
 export interface QuizQuestion {
   q: string;
   options: string[];
   correctIndex: number;
   explanation?: string;
+  /** Per-option explanations shown when that option is picked. */
+  optionExplanations?: string[];
 }
 
 export interface Lesson {
@@ -39,6 +41,26 @@ export interface Lesson {
     | "alignment"
     | "repetition"
     | "typography";
+  /** Demo type for the 12 Animation Principles — interactive scene instead of graph. */
+  animDemo?:
+    | "squash-stretch"
+    | "anticipation"
+    | "follow-through"
+    | "slow-in-out"
+    | "arc"
+    | "staging"
+    | "secondary"
+    | "timing"
+    | "exaggeration"
+    | "solid-drawing"
+    | "appeal"
+    | "straight-pose";
+  /** Cubic bezier playground lesson — interactive editor with live preview. */
+  cubicBezierLab?: boolean;
+  /** Estimated read/work minutes (used in cards). */
+  minutes?: number;
+  /** Career-track stub flag — renders coming-soon copy. */
+  stub?: boolean;
 }
 
 export interface AnimationParams {
