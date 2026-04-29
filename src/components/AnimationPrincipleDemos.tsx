@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { motion, useAnimation } from "framer-motion";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import { Slider } from "@/components/ui/slider";
 import { Play, RotateCw } from "lucide-react";
 import type { Lesson } from "@/data/lessons";
