@@ -1,18 +1,21 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { BookOpen, Target, ChevronRight, Film, Palette, Sparkles, Flame, MapPin, Briefcase, ArrowUpRight, PlayCircle } from "lucide-react";
+import { BookOpen, Target, ChevronRight, Film, Palette, Sparkles, Flame, MapPin, Briefcase, ArrowUpRight, Zap } from "lucide-react";
 import { lessons } from "@/data/lessons";
+import { useUserProgress } from "@/hooks/useUserProgress";
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const { state, level } = useUserProgress();
+  const completedCount = Object.keys(state.completed).length;
 
-  const motionLessons = lessons.filter(l => l.track === "motion");
+  const motionLessons = lessons.filter(l => l.track === "motion-design");
   const principlesLessons = lessons.filter(l => l.track === "principles");
-  const animPrinciplesLessons = lessons.filter(l => l.track === "animation-principles");
+  const careerLessons = lessons.filter(l => l.track === "career");
   const tracks = [
-    { id: "motion", Icon: Film, title: "Motion Design", desc: "Bezier curves & graph editor", lessons: motionLessons, accent: "bg-primary/15 text-primary" },
-    { id: "animation-principles", Icon: PlayCircle, title: "12 Animation Principles", desc: "Disney's foundational rules", lessons: animPrinciplesLessons, accent: "bg-[hsl(var(--ae-orange)/0.15)] text-[hsl(var(--ae-orange))]" },
+    { id: "motion-design", Icon: Film, title: "Principles of Motion Design", desc: "Foundations · 12 Principles · Easing", lessons: motionLessons, accent: "bg-primary/15 text-primary" },
     { id: "principles", Icon: Palette, title: "Principles of Design", desc: "Hierarchy, color, typography", lessons: principlesLessons, accent: "bg-[hsl(var(--ae-yellow)/0.18)] text-[hsl(var(--ae-yellow))]" },
+    { id: "career", Icon: Briefcase, title: "Career Foundations", desc: "Portfolios, pricing, communication", lessons: careerLessons, accent: "bg-[hsl(var(--ae-green)/0.15)] text-[hsl(var(--ae-green))]" },
   ];
 
   const opportunities = [
@@ -35,7 +38,7 @@ const HomePage = () => {
         </div>
         <div className="flex items-center gap-1.5 rounded-full bg-[hsl(var(--ae-orange)/0.12)] text-[hsl(var(--ae-orange))] px-2.5 py-1">
           <Flame className="h-3.5 w-3.5" />
-          <span className="text-xs font-semibold">7</span>
+          <span className="text-xs font-semibold">{state.streak}</span>
         </div>
       </motion.div>
 
@@ -55,12 +58,16 @@ const HomePage = () => {
         <div className="relative">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[10px] uppercase tracking-widest font-semibold opacity-90">Current Progress</span>
-            <button onClick={() => navigate("/progress")} className="text-[11px] font-medium opacity-90 hover:opacity-100">See all</button>
+            <button onClick={() => navigate("/lessons")} className="text-[11px] font-medium opacity-90 hover:opacity-100">Resume →</button>
           </div>
-          <p className="text-base font-semibold mb-0.5">Learning Value Graphs</p>
-          <p className="text-xs opacity-90 mb-3">2 of {lessons.length} lessons completed</p>
+          <p className="text-base font-semibold mb-0.5">
+            {state.lastLessonId ? lessons.find(l => l.id === state.lastLessonId)?.title ?? "Start learning" : "Start learning"}
+          </p>
+          <p className="text-xs opacity-90 mb-3">
+            {completedCount} of {lessons.length} lessons · Lvl {level} · {state.xp} XP
+          </p>
           <div className="h-1.5 bg-white/20 rounded-full overflow-hidden">
-            <div className="h-full bg-white rounded-full" style={{ width: `${(2 / lessons.length) * 100}%` }} />
+            <div className="h-full bg-white rounded-full" style={{ width: `${(completedCount / lessons.length) * 100}%` }} />
           </div>
         </div>
       </motion.div>
