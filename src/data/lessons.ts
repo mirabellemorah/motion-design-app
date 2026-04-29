@@ -3,13 +3,15 @@ export interface CurvePreset {
   bezier: [number, number, number, number];
 }
 
-export type LessonTrack = "motion" | "principles" | "animation-principles";
+export type LessonTrack = "motion-design" | "principles" | "career";
 
 export interface QuizQuestion {
   q: string;
   options: string[];
   correctIndex: number;
   explanation?: string;
+  /** Per-option explanations shown when that option is picked. */
+  optionExplanations?: string[];
 }
 
 export interface Lesson {
@@ -39,6 +41,26 @@ export interface Lesson {
     | "alignment"
     | "repetition"
     | "typography";
+  /** Demo type for the 12 Animation Principles — interactive scene instead of graph. */
+  animDemo?:
+    | "squash-stretch"
+    | "anticipation"
+    | "follow-through"
+    | "slow-in-out"
+    | "arc"
+    | "staging"
+    | "secondary"
+    | "timing"
+    | "exaggeration"
+    | "solid-drawing"
+    | "appeal"
+    | "straight-pose";
+  /** Cubic bezier playground lesson — interactive editor with live preview. */
+  cubicBezierLab?: boolean;
+  /** Estimated read/work minutes (used in cards). */
+  minutes?: number;
+  /** Career-track stub flag — renders coming-soon copy. */
+  stub?: boolean;
 }
 
 export interface AnimationParams {
@@ -88,7 +110,7 @@ export const lessons: Lesson[] = [
     title: "What Is the Graph Editor?",
     subtitle: "Your most powerful animation tool",
     chapter: 1,
-    track: "motion",
+    track: "motion-design",
     description: "The Graph Editor is where professional animators spend 80% of their time. It's the difference between amateur and professional motion.",
     theory: [
       "In After Effects, every animated property has a graph behind it.",
@@ -110,7 +132,7 @@ export const lessons: Lesson[] = [
     title: "Reading the Value Graph",
     subtitle: "Understand position over time",
     chapter: 1,
-    track: "motion",
+    track: "motion-design",
     description: "The Value Graph shows the actual property value at each point in time. When you see the curve go up, the value increases. When it flattens, the object slows down.",
     theory: [
       "The Value Graph plots the actual value of a property (e.g., X position) against time.",
@@ -132,7 +154,7 @@ export const lessons: Lesson[] = [
     title: "Reading the Speed Graph",
     subtitle: "Understand velocity over time",
     chapter: 1,
-    track: "motion",
+    track: "motion-design",
     description: "The Speed Graph shows how fast a property is changing at each moment. A peak means maximum velocity. Zero means the object is stopped.",
     theory: [
       "The Speed Graph shows velocity (rate of change) — not position.",
@@ -153,8 +175,8 @@ export const lessons: Lesson[] = [
     id: "ease-in",
     title: "Ease In: Slow Start",
     subtitle: "Objects that accelerate from rest",
-    chapter: 2,
-    track: "motion",
+    chapter: 3,
+    track: "motion-design",
     description: "Ease In starts slow and finishes fast. Use it for objects leaving the screen or falling under gravity. The curve is flat at the start (slow) and steep at the end (fast).",
     theory: [
       "Ease In mimics objects overcoming inertia — they start slow and accelerate.",
@@ -176,8 +198,8 @@ export const lessons: Lesson[] = [
     id: "ease-out",
     title: "Ease Out: Slow End",
     subtitle: "Objects that decelerate to rest",
-    chapter: 2,
-    track: "motion",
+    chapter: 3,
+    track: "motion-design",
     description: "Ease Out starts fast and finishes slow. This is the MOST important easing for UI animation. Use it for anything appearing or arriving on screen.",
     theory: [
       "Ease Out mimics objects coming to rest — they arrive fast and gently decelerate.",
@@ -199,8 +221,8 @@ export const lessons: Lesson[] = [
     id: "ease-in-out",
     title: "Ease In-Out: The S-Curve",
     subtitle: "Smooth acceleration and deceleration",
-    chapter: 2,
-    track: "motion",
+    chapter: 3,
+    track: "motion-design",
     description: "Ease In-Out combines both: slow start, fast middle, slow end. It's the most natural-feeling motion and the default in most professional animation.",
     theory: [
       "Ease In-Out creates an S-shaped curve on the Value Graph.",
@@ -223,7 +245,7 @@ export const lessons: Lesson[] = [
     title: "Overshoot & Settle",
     subtitle: "Going past the target and bouncing back",
     chapter: 3,
-    track: "motion",
+    track: "motion-design",
     description: "Overshoot means the value goes BEYOND the final position, then settles back. On the graph, the curve goes above the endpoint. This adds energy and life.",
     theory: [
       "On the Value Graph, overshoot means the curve exceeds the final value then returns.",
@@ -246,7 +268,7 @@ export const lessons: Lesson[] = [
     title: "Crafting Custom Curves",
     subtitle: "Developing your motion signature",
     chapter: 3,
-    track: "motion",
+    track: "motion-design",
     description: "Professional motion designers develop signature curves. Nike's motion is snappy with short ease-in and long ease-out. Apple's is smooth and controlled. Learn to craft your own.",
     theory: [
       "Every brand has a motion personality expressed through their curves.",
@@ -509,8 +531,8 @@ export const lessons: Lesson[] = [
     id: "ap-squash-stretch",
     title: "Squash and Stretch",
     subtitle: "Weight, mass, and elasticity",
-    chapter: 1,
-    track: "animation-principles",
+    chapter: 2,
+    track: "motion-design",
     description: "Squash and stretch gives objects the illusion of weight and flexibility. A bouncing ball flattens on impact and stretches as it falls — that deformation is what sells the physics.",
     theory: [
       "Volume must be preserved: as an object stretches in one axis, it contracts in the other.",
@@ -531,8 +553,8 @@ export const lessons: Lesson[] = [
     id: "ap-anticipation",
     title: "Anticipation",
     subtitle: "Prepare the audience for the action",
-    chapter: 1,
-    track: "animation-principles",
+    chapter: 2,
+    track: "motion-design",
     description: "Anticipation is the wind-up before the pitch — a small opposite movement that signals what's about to happen. Without it, actions feel sudden and unreadable.",
     theory: [
       "Before any major action, an opposite micro-movement primes the viewer.",
@@ -553,8 +575,8 @@ export const lessons: Lesson[] = [
     id: "ap-staging",
     title: "Staging",
     subtitle: "Direct the audience's attention",
-    chapter: 1,
-    track: "animation-principles",
+    chapter: 2,
+    track: "motion-design",
     description: "Staging is the art of presenting an idea so it's unmistakably clear. Pose, framing, lighting, and timing all combine to focus the eye on what matters.",
     theory: [
       "Silhouette test: if your pose reads as a black silhouette, the action is clear.",
@@ -576,7 +598,7 @@ export const lessons: Lesson[] = [
     title: "Straight Ahead vs Pose to Pose",
     subtitle: "Two ways to plan motion",
     chapter: 2,
-    track: "animation-principles",
+    track: "motion-design",
     description: "Straight ahead = draw frame by frame, discovering as you go. Pose to pose = plan key poses first, then fill in. Each has trade-offs; pros use both.",
     theory: [
       "Straight ahead: spontaneous, fluid, great for fire/water/chaos. Risks losing scale and timing.",
@@ -598,7 +620,7 @@ export const lessons: Lesson[] = [
     title: "Follow Through & Overlapping Action",
     subtitle: "Different parts arrive at different times",
     chapter: 2,
-    track: "animation-principles",
+    track: "motion-design",
     description: "When a body stops, its loose parts (hair, coat, antenna) keep going. When a body moves, different parts lead and trail. This is what makes motion feel organic.",
     theory: [
       "Follow through: secondary parts continue past the stopping point and settle.",
@@ -620,7 +642,7 @@ export const lessons: Lesson[] = [
     title: "Slow In and Slow Out",
     subtitle: "The most fundamental ease",
     chapter: 2,
-    track: "animation-principles",
+    track: "motion-design",
     description: "Real objects rarely start or stop at full speed — they accelerate from rest and decelerate to a stop. This is the foundation of every easing curve in motion design.",
     theory: [
       "Animation feels lifelike when there are MORE drawings near the start and end of an action and FEWER in the middle.",
@@ -642,7 +664,7 @@ export const lessons: Lesson[] = [
     title: "Arc",
     subtitle: "Natural motion follows curves",
     chapter: 2,
-    track: "animation-principles",
+    track: "motion-design",
     description: "Almost nothing in nature moves in a perfectly straight line. Limbs swing in arcs, thrown objects follow parabolas, heads turn along curves. Straight-line motion looks mechanical.",
     theory: [
       "Joints rotate, so limbs naturally trace arcs. A waving hand traces a curve, not a zig-zag.",
@@ -663,8 +685,8 @@ export const lessons: Lesson[] = [
     id: "ap-secondary",
     title: "Secondary Action",
     subtitle: "Supporting motion that adds richness",
-    chapter: 3,
-    track: "animation-principles",
+    chapter: 2,
+    track: "motion-design",
     description: "Secondary action is a supporting movement that reinforces the main action without distracting from it. A character walks (primary) and swings their arms (secondary).",
     theory: [
       "Secondary actions add depth and personality but should never overpower the main action.",
@@ -685,8 +707,8 @@ export const lessons: Lesson[] = [
     id: "ap-timing",
     title: "Timing",
     subtitle: "How long things take = what they mean",
-    chapter: 3,
-    track: "animation-principles",
+    chapter: 2,
+    track: "motion-design",
     description: "Timing is the number of frames an action takes. Fast = light, energetic, urgent. Slow = heavy, deliberate, dramatic. Timing IS emotion.",
     theory: [
       "Same arc, different timing → completely different meaning.",
@@ -707,8 +729,8 @@ export const lessons: Lesson[] = [
     id: "ap-exaggeration",
     title: "Exaggeration",
     subtitle: "Push past reality for impact",
-    chapter: 3,
-    track: "animation-principles",
+    chapter: 2,
+    track: "motion-design",
     description: "Pure realism in animation often feels flat. Exaggeration pushes poses, expressions, and motion past what's literal — keeping it believable but more impactful.",
     theory: [
       "Caricature: emphasize the essential, drop the rest.",
@@ -729,8 +751,8 @@ export const lessons: Lesson[] = [
     id: "ap-solid-drawing",
     title: "Solid Drawing",
     subtitle: "Volume, weight, and 3D thinking",
-    chapter: 3,
-    track: "animation-principles",
+    chapter: 2,
+    track: "motion-design",
     description: "Even in 2D animation, characters should feel like they exist in 3D space — with weight, volume, and consistent proportions. In motion design, this means honoring perspective and depth.",
     theory: [
       "Think in volumes (cubes, cylinders, spheres) — not flat shapes.",
@@ -751,8 +773,8 @@ export const lessons: Lesson[] = [
     id: "ap-appeal",
     title: "Appeal",
     subtitle: "The intangible quality of charm",
-    chapter: 3,
-    track: "animation-principles",
+    chapter: 2,
+    track: "motion-design",
     description: "Appeal is the personality, charm, and magnetism of a character or design. It's what makes audiences WANT to watch. Hard to define — easy to feel.",
     theory: [
       "Appeal isn't 'cute' — it's clear, well-designed, interesting, and emotionally resonant.",
@@ -770,6 +792,156 @@ export const lessons: Lesson[] = [
     creativePractice: "Pick three brands you love (any industry). For each, write down ONE word that describes how their motion should feel. Sketch a simple shape transition that embodies that word — no software, just paper.",
   },
 ];
+
+// ============= CUBIC BEZIER LAB (Motion Design Ch. 3) =============
+lessons.push({
+  id: "cubic-bezier-lab",
+  title: "Cubic Bezier Curves",
+  subtitle: "The math behind every easing curve",
+  chapter: 3,
+  track: "motion-design",
+  description:
+    "A cubic bezier curve is defined by 4 control points: P0 and P3 are anchored at (0,0) and (1,1). P1 and P2 are draggable handles that shape the curve — and therefore the feel of every animation.",
+  theory: [
+    "P0 (0,0) is start, P3 (1,1) is end — these never move.",
+    "P1 controls how the animation starts. P2 controls how it ends.",
+    "If P1 is near (0,0), the start is gentle (ease in). If P1 is far right, the start is sharp.",
+    "CSS: transition-timing-function: cubic-bezier(P1.x, P1.y, P2.x, P2.y).",
+    "After Effects: the same handles live on each keyframe in the Graph Editor.",
+  ],
+  aeContext:
+    "In AE, every keyframe in the Graph Editor IS a bezier point — the handles you drag map 1:1 to cubic-bezier() in CSS.",
+  defaultBezier: [0.25, 0.1, 0.25, 1],
+  tip: "Memorize 3 curves — ease-out (UI default), ease-in-out (smooth), and a slight overshoot. They cover 90% of motion needs.",
+  keyPrinciples: [
+    "Y values above 1 = overshoot. Negative Y = anticipation.",
+    "X values stay between 0 and 1 (time can't go backwards).",
+    "Symmetric P1/P2 = balanced ease. Asymmetric = expressive.",
+  ],
+  cubicBezierLab: true,
+  minutes: 12,
+});
+
+// ============= CAREER FOUNDATIONS — STUB TRACK =============
+const careerStubs: Array<Pick<Lesson, "id" | "title" | "subtitle" | "description"> & { chapter: number; minutes: number }> = [
+  { id: "c-portfolio", chapter: 1, minutes: 25, title: "Portfolio Building", subtitle: "Case studies that get you hired", description: "How to present work, write case studies, and structure a portfolio for studios, agencies, and startups." },
+  { id: "c-client-comms", chapter: 1, minutes: 18, title: "Client Communication", subtitle: "Proposals, feedback, and boundaries", description: "Writing proposals, handling feedback, setting expectations, and protecting your time as a freelancer." },
+  { id: "c-pricing", chapter: 1, minutes: 20, title: "Pricing Your Work", subtitle: "Day rates, project rates, value-based pricing", description: "Stop undercharging. Learn how creatives at every level price their work and avoid common traps." },
+  { id: "c-handoff", chapter: 2, minutes: 15, title: "File Handoff & Delivery", subtitle: "Exporting for web, video, print, social", description: "Naming conventions, formats, and delivery practices clients can actually use." },
+  { id: "c-critique", chapter: 2, minutes: 12, title: "Design Critique Literacy", subtitle: "Give and receive feedback like a pro", description: "How to articulate design decisions and get useful feedback instead of vague reactions." },
+  { id: "c-accessibility", chapter: 2, minutes: 18, title: "Accessibility in Design", subtitle: "Contrast, type, motion, inclusion", description: "Why accessibility matters commercially — and the small choices that get you most of the way." },
+  { id: "c-briefs", chapter: 2, minutes: 14, title: "Working with Briefs", subtitle: "Turn vague requests into great work", description: "How to interrogate a brief, ask the right questions, and translate it into creative direction." },
+  { id: "c-social", chapter: 3, minutes: 16, title: "Motion for Social Media", subtitle: "Platform-specific specs and looping", description: "Reels, TikTok, LinkedIn — formats, safe zones, and what actually performs." },
+  { id: "c-design-thinking", chapter: 3, minutes: 22, title: "Design Thinking Basics", subtitle: "Problem framing & business outcomes", description: "Empathy, ideation, and how design decisions connect to business value." },
+  { id: "c-tools", chapter: 3, minutes: 20, title: "Tools Beyond the Basics", subtitle: "Figma, AE expressions, Lottie, Spline", description: "Advanced features and when to reach for which tool — including 3D and motion-for-web pipelines." },
+];
+careerStubs.forEach((c) => {
+  lessons.push({
+    ...c,
+    track: "career",
+    theory: ["Coming soon — full lesson in development.", "Save this track to be notified when it goes live.", "Tap the Daily Challenge for related practice in the meantime."],
+    aeContext: "Workshop modules will include downloadable templates, live examples, and short video walkthroughs.",
+    defaultBezier: [0.4, 0, 0.2, 1],
+    tip: "Career skills compound faster than tool skills. Start small — one improvement per project.",
+    keyPrinciples: ["Practical, not theoretical", "Real templates and examples", "Built around junior-designer reality"],
+    stub: true,
+  });
+});
+
+// ============= ATTACH ANIMATION DEMO TYPES + RICH QUIZ EXPLANATIONS =============
+const animDemoMap: Record<string, NonNullable<Lesson["animDemo"]>> = {
+  "ap-squash-stretch": "squash-stretch",
+  "ap-anticipation": "anticipation",
+  "ap-staging": "staging",
+  "ap-straight-pose": "straight-pose",
+  "ap-follow-through": "follow-through",
+  "ap-slow-in-out": "slow-in-out",
+  "ap-arc": "arc",
+  "ap-secondary": "secondary",
+  "ap-timing": "timing",
+  "ap-exaggeration": "exaggeration",
+  "ap-solid-drawing": "solid-drawing",
+  "ap-appeal": "appeal",
+};
+lessons.forEach((l) => {
+  if (animDemoMap[l.id]) l.animDemo = animDemoMap[l.id];
+});
+
+// Add per-option explanations to existing principles quizzes (used by retry flow).
+const quizExplanations: Record<string, string[]> = {
+  "p-contrast": [
+    "Light gray on white is the LOWEST contrast option — body text would be hard to read.",
+    "Correct — pure black on pure white is the maximum tonal difference.",
+    "Mid-tones on mid-tones blend together and offer almost no separation.",
+  ],
+  "p-balance": [
+    "Asymmetrical compositions absolutely can feel stable — that's the whole point.",
+    "Correct — equal visual weight (size, color, density) creates balance without mirroring.",
+    "That describes symmetrical, not asymmetrical, balance.",
+  ],
+  "p-hierarchy": [
+    "More colors usually adds noise without clarifying order.",
+    "Correct — size and weight are the fastest, clearest signal of hierarchy.",
+    "Borders create separation but not order or priority.",
+  ],
+  "p-repetition": [
+    "Constraints actually free creativity by removing low-value decisions.",
+    "Correct — repeated spacing creates visual rhythm and ties layouts together.",
+    "A consistent grid gives unity but plenty of room for unique layouts inside it.",
+  ],
+  "p-alignment": [
+    "Center alignment is harder to scan for long body content — edges anchor the eye.",
+    "Correct — left/right edges give the eye a strong anchor for body text.",
+    "Random alignment is exhausting to read and signals carelessness.",
+  ],
+  "p-proximity": [
+    "Equal spacing destroys the relationship signal proximity creates.",
+    "Correct — closer spacing visually pairs the label with its value.",
+    "Far spacing communicates separation, not relationship.",
+  ],
+  "p-color-theory": [
+    "Analogous colors sit NEXT to each other on the wheel, not opposite.",
+    "Correct — opposites on the wheel are complementary (and create maximum contrast).",
+    "Triadic colors are evenly spaced (every 120°), not opposite.",
+  ],
+  "p-typography": [
+    "Too short — the eye spends more time line-jumping than reading.",
+    "Correct — 50–75 characters per line is the proven sweet spot for sustained reading.",
+    "Too long — the eye loses the next line and reading speed drops.",
+  ],
+};
+lessons.forEach((l) => {
+  if (l.quiz && quizExplanations[l.id]) {
+    l.quiz.optionExplanations = quizExplanations[l.id];
+  }
+});
+
+// ============= DAILY CHALLENGES =============
+export interface DailyChallenge {
+  title: string;
+  prompt: string;
+  difficulty: "Beginner" | "Intermediate" | "Advanced";
+  minutes: number;
+}
+const CHALLENGES: DailyChallenge[] = [
+  { title: "60-Frame Bouncing Ball", difficulty: "Beginner", minutes: 15, prompt: "Animate a bouncing ball for 60 frames using only squash, stretch, and ease — no graph editing." },
+  { title: "Button Micro-interaction", difficulty: "Intermediate", minutes: 20, prompt: "Design a button hover, press, and success state. Each transition under 250ms with one signature curve." },
+  { title: "Logo Reveal in 3 Seconds", difficulty: "Advanced", minutes: 30, prompt: "Storyboard a 3-second logo reveal that uses anticipation, staging, and a single overshoot. Sketch only." },
+  { title: "Match the Curve", difficulty: "Beginner", minutes: 10, prompt: "Open Practice and beat your highest score on any lesson — Platinum tier earns 2x today." },
+  { title: "Critique Yourself", difficulty: "Intermediate", minutes: 15, prompt: "Pick your most recent project. Write 3 things working and 3 things to fix — without being mean." },
+  { title: "Type Hierarchy Drill", difficulty: "Beginner", minutes: 12, prompt: "Set a card with headline, subtitle, body, and meta. Use only ONE font family and weight to differentiate." },
+  { title: "Color Palette in 5 Minutes", difficulty: "Intermediate", minutes: 5, prompt: "Pick a hue you never use. Build tints + shades + 1 complementary accent. Save the palette." },
+];
+export const todayChallenge = (): DailyChallenge => {
+  const day = Math.floor(Date.now() / 86400000);
+  return CHALLENGES[day % CHALLENGES.length];
+};
+export const secondsUntilTomorrow = (): number => {
+  const now = new Date();
+  const tom = new Date(now);
+  tom.setHours(24, 0, 0, 0);
+  return Math.round((tom.getTime() - now.getTime()) / 1000);
+};
 
 export const initialStats: UserStats = {
   xp: 0,
