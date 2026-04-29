@@ -110,7 +110,7 @@ export const lessons: Lesson[] = [
     title: "What Is the Graph Editor?",
     subtitle: "Your most powerful animation tool",
     chapter: 1,
-    track: "motion",
+    track: "motion-design",
     description: "The Graph Editor is where professional animators spend 80% of their time. It's the difference between amateur and professional motion.",
     theory: [
       "In After Effects, every animated property has a graph behind it.",
@@ -132,7 +132,7 @@ export const lessons: Lesson[] = [
     title: "Reading the Value Graph",
     subtitle: "Understand position over time",
     chapter: 1,
-    track: "motion",
+    track: "motion-design",
     description: "The Value Graph shows the actual property value at each point in time. When you see the curve go up, the value increases. When it flattens, the object slows down.",
     theory: [
       "The Value Graph plots the actual value of a property (e.g., X position) against time.",
@@ -154,7 +154,7 @@ export const lessons: Lesson[] = [
     title: "Reading the Speed Graph",
     subtitle: "Understand velocity over time",
     chapter: 1,
-    track: "motion",
+    track: "motion-design",
     description: "The Speed Graph shows how fast a property is changing at each moment. A peak means maximum velocity. Zero means the object is stopped.",
     theory: [
       "The Speed Graph shows velocity (rate of change) — not position.",
@@ -175,8 +175,8 @@ export const lessons: Lesson[] = [
     id: "ease-in",
     title: "Ease In: Slow Start",
     subtitle: "Objects that accelerate from rest",
-    chapter: 2,
-    track: "motion",
+    chapter: 3,
+    track: "motion-design",
     description: "Ease In starts slow and finishes fast. Use it for objects leaving the screen or falling under gravity. The curve is flat at the start (slow) and steep at the end (fast).",
     theory: [
       "Ease In mimics objects overcoming inertia — they start slow and accelerate.",
@@ -198,8 +198,8 @@ export const lessons: Lesson[] = [
     id: "ease-out",
     title: "Ease Out: Slow End",
     subtitle: "Objects that decelerate to rest",
-    chapter: 2,
-    track: "motion",
+    chapter: 3,
+    track: "motion-design",
     description: "Ease Out starts fast and finishes slow. This is the MOST important easing for UI animation. Use it for anything appearing or arriving on screen.",
     theory: [
       "Ease Out mimics objects coming to rest — they arrive fast and gently decelerate.",
@@ -221,8 +221,8 @@ export const lessons: Lesson[] = [
     id: "ease-in-out",
     title: "Ease In-Out: The S-Curve",
     subtitle: "Smooth acceleration and deceleration",
-    chapter: 2,
-    track: "motion",
+    chapter: 3,
+    track: "motion-design",
     description: "Ease In-Out combines both: slow start, fast middle, slow end. It's the most natural-feeling motion and the default in most professional animation.",
     theory: [
       "Ease In-Out creates an S-shaped curve on the Value Graph.",
@@ -245,7 +245,7 @@ export const lessons: Lesson[] = [
     title: "Overshoot & Settle",
     subtitle: "Going past the target and bouncing back",
     chapter: 3,
-    track: "motion",
+    track: "motion-design",
     description: "Overshoot means the value goes BEYOND the final position, then settles back. On the graph, the curve goes above the endpoint. This adds energy and life.",
     theory: [
       "On the Value Graph, overshoot means the curve exceeds the final value then returns.",
@@ -268,7 +268,7 @@ export const lessons: Lesson[] = [
     title: "Crafting Custom Curves",
     subtitle: "Developing your motion signature",
     chapter: 3,
-    track: "motion",
+    track: "motion-design",
     description: "Professional motion designers develop signature curves. Nike's motion is snappy with short ease-in and long ease-out. Apple's is smooth and controlled. Learn to craft your own.",
     theory: [
       "Every brand has a motion personality expressed through their curves.",
@@ -531,8 +531,8 @@ export const lessons: Lesson[] = [
     id: "ap-squash-stretch",
     title: "Squash and Stretch",
     subtitle: "Weight, mass, and elasticity",
-    chapter: 1,
-    track: "animation-principles",
+    chapter: 2,
+    track: "motion-design",
     description: "Squash and stretch gives objects the illusion of weight and flexibility. A bouncing ball flattens on impact and stretches as it falls — that deformation is what sells the physics.",
     theory: [
       "Volume must be preserved: as an object stretches in one axis, it contracts in the other.",
@@ -553,8 +553,8 @@ export const lessons: Lesson[] = [
     id: "ap-anticipation",
     title: "Anticipation",
     subtitle: "Prepare the audience for the action",
-    chapter: 1,
-    track: "animation-principles",
+    chapter: 2,
+    track: "motion-design",
     description: "Anticipation is the wind-up before the pitch — a small opposite movement that signals what's about to happen. Without it, actions feel sudden and unreadable.",
     theory: [
       "Before any major action, an opposite micro-movement primes the viewer.",
@@ -575,8 +575,8 @@ export const lessons: Lesson[] = [
     id: "ap-staging",
     title: "Staging",
     subtitle: "Direct the audience's attention",
-    chapter: 1,
-    track: "animation-principles",
+    chapter: 2,
+    track: "motion-design",
     description: "Staging is the art of presenting an idea so it's unmistakably clear. Pose, framing, lighting, and timing all combine to focus the eye on what matters.",
     theory: [
       "Silhouette test: if your pose reads as a black silhouette, the action is clear.",
@@ -598,7 +598,7 @@ export const lessons: Lesson[] = [
     title: "Straight Ahead vs Pose to Pose",
     subtitle: "Two ways to plan motion",
     chapter: 2,
-    track: "animation-principles",
+    track: "motion-design",
     description: "Straight ahead = draw frame by frame, discovering as you go. Pose to pose = plan key poses first, then fill in. Each has trade-offs; pros use both.",
     theory: [
       "Straight ahead: spontaneous, fluid, great for fire/water/chaos. Risks losing scale and timing.",
@@ -620,7 +620,7 @@ export const lessons: Lesson[] = [
     title: "Follow Through & Overlapping Action",
     subtitle: "Different parts arrive at different times",
     chapter: 2,
-    track: "animation-principles",
+    track: "motion-design",
     description: "When a body stops, its loose parts (hair, coat, antenna) keep going. When a body moves, different parts lead and trail. This is what makes motion feel organic.",
     theory: [
       "Follow through: secondary parts continue past the stopping point and settle.",
@@ -642,7 +642,7 @@ export const lessons: Lesson[] = [
     title: "Slow In and Slow Out",
     subtitle: "The most fundamental ease",
     chapter: 2,
-    track: "animation-principles",
+    track: "motion-design",
     description: "Real objects rarely start or stop at full speed — they accelerate from rest and decelerate to a stop. This is the foundation of every easing curve in motion design.",
     theory: [
       "Animation feels lifelike when there are MORE drawings near the start and end of an action and FEWER in the middle.",
@@ -664,7 +664,7 @@ export const lessons: Lesson[] = [
     title: "Arc",
     subtitle: "Natural motion follows curves",
     chapter: 2,
-    track: "animation-principles",
+    track: "motion-design",
     description: "Almost nothing in nature moves in a perfectly straight line. Limbs swing in arcs, thrown objects follow parabolas, heads turn along curves. Straight-line motion looks mechanical.",
     theory: [
       "Joints rotate, so limbs naturally trace arcs. A waving hand traces a curve, not a zig-zag.",
@@ -685,8 +685,8 @@ export const lessons: Lesson[] = [
     id: "ap-secondary",
     title: "Secondary Action",
     subtitle: "Supporting motion that adds richness",
-    chapter: 3,
-    track: "animation-principles",
+    chapter: 2,
+    track: "motion-design",
     description: "Secondary action is a supporting movement that reinforces the main action without distracting from it. A character walks (primary) and swings their arms (secondary).",
     theory: [
       "Secondary actions add depth and personality but should never overpower the main action.",
@@ -707,8 +707,8 @@ export const lessons: Lesson[] = [
     id: "ap-timing",
     title: "Timing",
     subtitle: "How long things take = what they mean",
-    chapter: 3,
-    track: "animation-principles",
+    chapter: 2,
+    track: "motion-design",
     description: "Timing is the number of frames an action takes. Fast = light, energetic, urgent. Slow = heavy, deliberate, dramatic. Timing IS emotion.",
     theory: [
       "Same arc, different timing → completely different meaning.",
@@ -729,8 +729,8 @@ export const lessons: Lesson[] = [
     id: "ap-exaggeration",
     title: "Exaggeration",
     subtitle: "Push past reality for impact",
-    chapter: 3,
-    track: "animation-principles",
+    chapter: 2,
+    track: "motion-design",
     description: "Pure realism in animation often feels flat. Exaggeration pushes poses, expressions, and motion past what's literal — keeping it believable but more impactful.",
     theory: [
       "Caricature: emphasize the essential, drop the rest.",
@@ -751,8 +751,8 @@ export const lessons: Lesson[] = [
     id: "ap-solid-drawing",
     title: "Solid Drawing",
     subtitle: "Volume, weight, and 3D thinking",
-    chapter: 3,
-    track: "animation-principles",
+    chapter: 2,
+    track: "motion-design",
     description: "Even in 2D animation, characters should feel like they exist in 3D space — with weight, volume, and consistent proportions. In motion design, this means honoring perspective and depth.",
     theory: [
       "Think in volumes (cubes, cylinders, spheres) — not flat shapes.",
@@ -773,8 +773,8 @@ export const lessons: Lesson[] = [
     id: "ap-appeal",
     title: "Appeal",
     subtitle: "The intangible quality of charm",
-    chapter: 3,
-    track: "animation-principles",
+    chapter: 2,
+    track: "motion-design",
     description: "Appeal is the personality, charm, and magnetism of a character or design. It's what makes audiences WANT to watch. Hard to define — easy to feel.",
     theory: [
       "Appeal isn't 'cute' — it's clear, well-designed, interesting, and emotionally resonant.",
