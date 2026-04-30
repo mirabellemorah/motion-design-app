@@ -129,8 +129,8 @@ const EarnPage = () => {
         </div>
       ) : (
         <>
-      {featured && (
       {/* Featured */}
+      {featured && (
       <motion.button
         onClick={() => setActiveJob(featured)}
         initial={{ opacity: 0, y: 10 }}
