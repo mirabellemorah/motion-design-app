@@ -16,7 +16,7 @@ const BottomNav = () => {
   if (location.pathname === "/welcome") return null;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-md">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-md">
       <div className="mx-auto flex max-w-lg items-center justify-around px-0.5 py-2">
         {tabs.map((tab) => {
           const isActive = location.pathname === tab.path ||
