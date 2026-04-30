@@ -14,6 +14,7 @@ import {
 import { useState } from "react";
 import type { Job } from "@/data/jobs";
 import { toast } from "sonner";
+import { useSavedJobs } from "@/hooks/useSavedJobs";
 
 interface Props {
   job: Job | null;
@@ -21,8 +22,9 @@ interface Props {
 }
 
 const JobDetailSheet = ({ job, onClose }: Props) => {
-  const [saved, setSaved] = useState(false);
+  const { isSaved, toggle } = useSavedJobs();
   const [applied, setApplied] = useState(false);
+  const saved = job ? isSaved(job.id) : false;
 
   return (
     <AnimatePresence>
@@ -40,7 +42,7 @@ const JobDetailSheet = ({ job, onClose }: Props) => {
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 32, stiffness: 320 }}
-            className="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-lg rounded-t-3xl bg-background shadow-2xl max-h-[92vh] overflow-y-auto"
+            className="fixed inset-x-0 bottom-0 z-50 mx-auto max-w-lg rounded-t-3xl bg-background shadow-2xl max-h-[92vh] overflow-y-auto flex flex-col"
           >
             {/* Drag handle */}
             <div className="sticky top-0 z-10 bg-background pt-2 pb-1 flex justify-center">
@@ -169,12 +171,16 @@ const JobDetailSheet = ({ job, onClose }: Props) => {
               </section>
             </div>
 
-            {/* Sticky CTA */}
-            <div className="sticky bottom-0 bg-background/95 backdrop-blur border-t border-border px-5 py-3 flex items-center gap-2">
+            {/* Sticky CTA — sits above the global bottom nav (h-16 + safe-area) */}
+            <div
+              className="sticky bg-background/95 backdrop-blur border-t border-border px-5 py-3 flex items-center gap-2"
+              style={{ bottom: "calc(4rem + env(safe-area-inset-bottom))" }}
+            >
               <button
                 onClick={() => {
-                  setSaved(!saved);
-                  toast(saved ? "Removed from saved" : "Saved to your list");
+                  if (!job) return;
+                  const nowSaved = toggle(job.id);
+                  toast(nowSaved ? "Saved to your list" : "Removed from saved");
                 }}
                 className={`h-11 w-11 rounded-xl border flex items-center justify-center transition-colors ${
                   saved
