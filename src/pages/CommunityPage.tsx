@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Heart, MessageCircle, Bookmark, Send } from "lucide-react";
+import { ChevronLeft, Heart, MessageCircle, Bookmark, Send, Briefcase, MapPin, DollarSign, Sparkles } from "lucide-react";
+import { jobs as ALL_JOBS, type Job } from "@/data/jobs";
+import JobDetailSheet from "@/components/JobDetailSheet";
 
 interface Post {
   id: string;
@@ -79,6 +81,42 @@ const FEED: Post[] = [
 
 const TAGS = ["For You", "Wins", "Hot Take", "Principle", "Study", "Micro-interactions"];
 
+interface CommunityJob {
+  jobId: string;
+  referrer: string;
+  referrerRole: string;
+  hue: number;
+  note: string;
+  posted: string;
+}
+
+const COMMUNITY_JOBS: CommunityJob[] = [
+  {
+    jobId: "j1",
+    referrer: "Maya K.",
+    referrerRole: "Senior Motion Designer · Stripe",
+    hue: 265,
+    note: "My team is hiring. DM me before applying — I'll route your portfolio directly to the hiring manager.",
+    posted: "1d",
+  },
+  {
+    jobId: "j4",
+    referrer: "Leo B.",
+    referrerRole: "Brand Designer",
+    hue: 30,
+    note: "Worked with Acme last year — clean briefs, fast pay, friendly art director. Recommended for first freelance gig.",
+    posted: "2d",
+  },
+  {
+    jobId: "j5",
+    referrer: "Priya N.",
+    referrerRole: "Learning · Day 12",
+    hue: 290,
+    note: "Notion's junior role looks legit — they list a real mentor and a path to mid. Saving for when I'm ready.",
+    posted: "3d",
+  },
+];
+
 const initials = (name: string) =>
   name === "You" ? "Y" : name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
 
@@ -117,9 +155,11 @@ const MiniCurve = ({ b }: { b: [number, number, number, number] }) => {
 
 const CommunityPage = () => {
   const navigate = useNavigate();
+  const [tab, setTab] = useState<"feed" | "jobs">("feed");
   const [activeTag, setActiveTag] = useState("For You");
   const [posts, setPosts] = useState(FEED);
   const [draft, setDraft] = useState("");
+  const [activeJob, setActiveJob] = useState<Job | null>(null);
 
   const toggleLike = (id: string) => {
     setPosts(posts.map(p =>
@@ -160,6 +200,25 @@ const CommunityPage = () => {
         </div>
       </motion.div>
 
+      {/* Sub-tabs */}
+      <div className="grid grid-cols-2 gap-1 p-1 mb-4 rounded-xl bg-secondary">
+        {(["feed", "jobs"] as const).map((t) => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            className={`rounded-lg py-2 text-xs font-semibold capitalize transition-all ${
+              tab === t
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {t === "feed" ? "Feed" : "Jobs board"}
+          </button>
+        ))}
+      </div>
+
+      {tab === "feed" && (
+        <>
       {/* Composer */}
       <motion.div
         initial={{ opacity: 0, y: 8 }}
@@ -264,6 +323,88 @@ const CommunityPage = () => {
             </motion.div>
           ))}
       </div>
+        </>
+      )}
+
+      {tab === "jobs" && (
+        <div className="space-y-3">
+          <div className="soft-card p-3 flex items-center gap-2.5">
+            <div className="h-8 w-8 rounded-lg bg-primary/15 text-primary flex items-center justify-center flex-shrink-0">
+              <Sparkles className="h-4 w-4" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-semibold text-foreground">Referred by community</p>
+              <p className="text-[11px] text-muted-foreground">Roles vouched for by other designers here</p>
+            </div>
+          </div>
+
+          {COMMUNITY_JOBS.map((cj, i) => {
+            const job = ALL_JOBS.find((j) => j.id === cj.jobId);
+            if (!job) return null;
+            return (
+              <motion.div
+                key={cj.jobId}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 + i * 0.05 }}
+                className="soft-card p-4"
+              >
+                <div className="flex items-start gap-3 mb-3">
+                  <Avatar name={cj.referrer} hue={cj.hue} size={36} />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-baseline gap-2">
+                      <p className="text-sm font-semibold text-foreground">{cj.referrer}</p>
+                      <span className="text-[10px] text-muted-foreground">· {cj.posted}</span>
+                    </div>
+                    <p className="text-[11px] text-muted-foreground truncate">{cj.referrerRole}</p>
+                  </div>
+                  <span className="text-[10px] font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                    Referral
+                  </span>
+                </div>
+
+                <p className="text-sm text-foreground/80 leading-relaxed mb-3 italic">
+                  "{cj.note}"
+                </p>
+
+                <button
+                  onClick={() => setActiveJob(job)}
+                  className="w-full text-left rounded-xl border border-border p-3 hover:border-primary/40 hover:bg-accent/40 transition-all"
+                >
+                  <div className="flex items-start gap-3 mb-2">
+                    <div className="h-9 w-9 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0">
+                      <Briefcase className="h-4 w-4 text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-foreground truncate">{job.role}</p>
+                      <p className="text-[11px] text-muted-foreground">
+                        {job.company} · {job.type}
+                      </p>
+                    </div>
+                    <span className="text-[10px] font-semibold text-primary">{job.match}%</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                      <DollarSign className="h-3 w-3" />
+                      <span>{job.pay}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <MapPin className="h-3 w-3" />
+                      <span className="truncate">{job.location}</span>
+                    </div>
+                  </div>
+                </button>
+              </motion.div>
+            );
+          })}
+
+          <p className="text-[10px] text-center text-muted-foreground/60 pt-2">
+            Want to refer a role? Tap the compose icon in Feed.
+          </p>
+        </div>
+      )}
+
+      <JobDetailSheet job={activeJob} onClose={() => setActiveJob(null)} />
     </div>
   );
 };
