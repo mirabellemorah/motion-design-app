@@ -152,3 +152,10 @@
   -webkit-user-select: none;
   user-select: none;
 }
+
+/* Desktop: bottom nav is hidden, so reclaim the pb-24 reserved for it. */
+@media (min-width: 1024px) {
+  .pb-24 {
+    padding-bottom: 3rem;
+  }
+}
