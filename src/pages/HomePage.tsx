@@ -28,13 +28,10 @@ const HomePage = () => {
   return (
     <div className="min-h-screen bg-background px-4 pb-24 pt-8">
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5 flex items-start justify-between">
-        <div>
-          <div className="flex items-center gap-1.5 mb-0.5">
-            <Sparkles className="h-3.5 w-3.5 text-primary" />
-            <p className="text-sm text-muted-foreground">Good morning</p>
-          </div>
-          <h1 className="text-xl font-semibold tracking-tight text-foreground">Design like a pro</h1>
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5 flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
+          <Sparkles className="h-4 w-4 text-primary" />
+          <p className="text-base font-medium text-foreground">Good morning</p>
         </div>
         <div className="flex items-center gap-1.5 rounded-full bg-[hsl(var(--ae-orange)/0.12)] text-[hsl(var(--ae-orange))] px-2.5 py-1">
           <Flame className="h-3.5 w-3.5" />
