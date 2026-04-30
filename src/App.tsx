@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
+import DesktopSidebar from "@/components/DesktopSidebar";
 import WelcomePage from "@/pages/WelcomePage";
 import HomePage from "@/pages/HomePage";
 import LessonsPage from "@/pages/LessonsPage";
@@ -25,8 +26,11 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <div className="mx-auto max-w-lg min-h-screen">
-          <Routes>
+        <div className="min-h-screen lg:flex">
+          <DesktopSidebar />
+          <main className="flex-1 lg:ml-64 min-w-0">
+            <div className="mx-auto w-full max-w-lg lg:max-w-5xl lg:px-6">
+              <Routes>
             <Route path="/welcome" element={<WelcomePage />} />
             <Route path="/" element={<HomePage />} />
             <Route path="/lessons" element={<LessonsPage />} />
@@ -40,7 +44,9 @@ const App = () => (
             <Route path="/earn" element={<EarnPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="*" element={<NotFound />} />
-          </Routes>
+              </Routes>
+            </div>
+          </main>
           <BottomNav />
         </div>
       </BrowserRouter>
