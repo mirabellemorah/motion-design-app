@@ -153,9 +153,30 @@
   user-select: none;
 }
 
-/* Desktop: bottom nav is hidden, so reclaim the pb-24 reserved for it. */
+/* Sticky CTA inside JobDetailSheet — sits above the mobile bottom nav,
+   flush to bottom on desktop where there is no bottom nav. */
+.job-sheet-cta {
+  bottom: calc(4rem + env(safe-area-inset-bottom));
+}
+
+/* Desktop overrides: no bottom nav, so reclaim the pb-24 buffer
+   used on mobile pages and drop the CTA offset. */
 @media (min-width: 1024px) {
   .pb-24 {
     padding-bottom: 3rem;
+  }
+  .job-sheet-cta {
+    bottom: 0;
+  }
+}
+
+/* Make the JobDetailSheet itself wider on desktop */
+@media (min-width: 1024px) {
+  .job-detail-sheet {
+    max-width: 32rem !important;
+    border-radius: 1.5rem !important;
+    inset-inline: auto !important;
+    right: 1.5rem !important;
+    bottom: 1.5rem !important;
   }
 }
