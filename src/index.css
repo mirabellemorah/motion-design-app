@@ -170,13 +170,3 @@
   }
 }
 
-/* Make the JobDetailSheet itself wider on desktop */
-@media (min-width: 1024px) {
-  .job-detail-sheet {
-    max-width: 32rem !important;
-    border-radius: 1.5rem !important;
-    inset-inline: auto !important;
-    right: 1.5rem !important;
-    bottom: 1.5rem !important;
-  }
-}
