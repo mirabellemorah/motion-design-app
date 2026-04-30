@@ -15,12 +15,28 @@ import {
 } from "lucide-react";
 import { jobs as JOBS, type Job } from "@/data/jobs";
 import JobDetailSheet from "@/components/JobDetailSheet";
+import { useSavedJobs } from "@/hooks/useSavedJobs";
+
+const FILTERS = ["All", "Remote", "Full-time", "Contract", "Freelance"] as const;
+type Filter = (typeof FILTERS)[number];
 
 const EarnPage = () => {
   const navigate = useNavigate();
   const [activeJob, setActiveJob] = useState<Job | null>(null);
-  const featured = JOBS.find((j) => j.featured)!;
-  const rest = JOBS.filter((j) => !j.featured);
+  const [tab, setTab] = useState<"browse" | "saved">("browse");
+  const [filter, setFilter] = useState<Filter>("All");
+  const { saved, isSaved, toggle } = useSavedJobs();
+
+  const matchesFilter = (j: Job) => {
+    if (filter === "All") return true;
+    if (filter === "Remote") return j.remote;
+    return j.type === filter;
+  };
+
+  const visible = JOBS.filter(matchesFilter);
+  const featured = visible.find((j) => j.featured) ?? visible[0];
+  const rest = visible.filter((j) => j.id !== featured?.id);
+  const savedJobs = JOBS.filter((j) => saved.includes(j.id));
 
   return (
     <div className="min-h-screen bg-background px-4 pb-24 pt-8">
@@ -39,6 +55,25 @@ const EarnPage = () => {
         </div>
       </motion.div>
 
+      {/* Sub-tabs */}
+      <div className="grid grid-cols-2 gap-1 p-1 mb-4 rounded-xl bg-secondary">
+        {(["browse", "saved"] as const).map((t) => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            className={`rounded-lg py-2 text-xs font-semibold capitalize transition-all flex items-center justify-center gap-1.5 ${
+              tab === t
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {t === "browse" ? "Browse" : `Saved${saved.length ? ` · ${saved.length}` : ""}`}
+          </button>
+        ))}
+      </div>
+
+      {tab === "browse" && (
+        <>
       {/* Stats banner */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -67,11 +102,12 @@ const EarnPage = () => {
 
       {/* Quick filters */}
       <div className="flex gap-1.5 overflow-x-auto pb-2 mb-3 -mx-1 px-1">
-        {["All", "Remote", "Full-time", "Contract", "Freelance"].map((f, i) => (
+        {FILTERS.map((f) => (
           <button
             key={f}
+            onClick={() => setFilter(f)}
             className={`flex-shrink-0 rounded-full px-3 py-1.5 text-xs font-medium border transition-all ${
-              i === 0
+              filter === f
                 ? "border-primary bg-primary/15 text-primary"
                 : "border-border bg-card text-muted-foreground hover:bg-accent"
             }`}
@@ -81,6 +117,19 @@ const EarnPage = () => {
         ))}
       </div>
 
+      {visible.length === 0 ? (
+        <div className="soft-card p-8 text-center">
+          <p className="text-sm text-muted-foreground">No roles match this filter.</p>
+          <button
+            onClick={() => setFilter("All")}
+            className="mt-3 text-xs font-semibold text-primary"
+          >
+            Clear filter
+          </button>
+        </div>
+      ) : (
+        <>
+      {featured && (
       {/* Featured */}
       <motion.button
         onClick={() => setActiveJob(featured)}
@@ -133,13 +182,16 @@ const EarnPage = () => {
           </div>
         </div>
       </motion.button>
+      )}
 
       {/* List */}
+      {rest.length > 0 && (
+      <>
       <div className="flex items-center justify-between mb-3">
         <span className="ae-label">More opportunities</span>
         <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
           <TrendingUp className="h-3 w-3" />
-          <span>{JOBS.length} active</span>
+          <span>{visible.length} active</span>
         </div>
       </div>
 
@@ -163,8 +215,26 @@ const EarnPage = () => {
                   {j.company} · {j.type}
                 </p>
               </div>
-              <span className="text-muted-foreground">
-                <Bookmark className="h-4 w-4" />
+              <span
+                role="button"
+                tabIndex={0}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggle(j.id);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggle(j.id);
+                  }
+                }}
+                className={`p-1 -m-1 rounded transition-colors ${
+                  isSaved(j.id) ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                }`}
+                aria-label={isSaved(j.id) ? "Unsave" : "Save"}
+              >
+                <Bookmark className={`h-4 w-4 ${isSaved(j.id) ? "fill-current" : ""}`} />
               </span>
             </div>
 
@@ -202,10 +272,81 @@ const EarnPage = () => {
           </motion.button>
         ))}
       </div>
+      </>
+      )}
+        </>
+      )}
 
       <p className="text-[10px] text-center text-muted-foreground/60 mt-6">
         Mock listings — connect your portfolio to apply
       </p>
+        </>
+      )}
+
+      {tab === "saved" && (
+        <div className="space-y-2.5">
+          {savedJobs.length === 0 ? (
+            <div className="soft-card p-8 text-center">
+              <Bookmark className="h-6 w-6 text-muted-foreground mx-auto mb-2" />
+              <p className="text-sm font-semibold text-foreground mb-1">No saved roles yet</p>
+              <p className="text-xs text-muted-foreground mb-4">
+                Tap the bookmark on any role to save it here.
+              </p>
+              <button
+                onClick={() => setTab("browse")}
+                className="rounded-xl px-4 py-2 text-xs font-semibold bg-primary text-primary-foreground"
+              >
+                Browse roles
+              </button>
+            </div>
+          ) : (
+            savedJobs.map((j, i) => (
+              <motion.button
+                key={j.id}
+                onClick={() => setActiveJob(j)}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.04 * i }}
+                className="w-full text-left soft-card p-4 hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-start gap-3 mb-2">
+                  <div className="h-10 w-10 rounded-xl bg-secondary flex items-center justify-center flex-shrink-0">
+                    <Briefcase className="h-4 w-4 text-primary" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-foreground truncate">{j.role}</p>
+                    <p className="text-[11px] text-muted-foreground">
+                      {j.company} · {j.type}
+                    </p>
+                  </div>
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggle(j.id);
+                    }}
+                    className="p-1 -m-1 text-primary"
+                    aria-label="Unsave"
+                  >
+                    <Bookmark className="h-4 w-4 fill-current" />
+                  </span>
+                </div>
+                <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
+                  <div className="flex items-center gap-1">
+                    <DollarSign className="h-3 w-3" />
+                    <span>{j.pay}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <MapPin className="h-3 w-3" />
+                    <span className="truncate">{j.location}</span>
+                  </div>
+                </div>
+              </motion.button>
+            ))
+          )}
+        </div>
+      )}
 
       <JobDetailSheet job={activeJob} onClose={() => setActiveJob(null)} />
     </div>
