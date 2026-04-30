@@ -172,10 +172,7 @@ const JobDetailSheet = ({ job, onClose }: Props) => {
             </div>
 
             {/* Sticky CTA — sits above the global bottom nav (h-16 + safe-area) */}
-            <div
-              className="sticky bg-background/95 backdrop-blur border-t border-border px-5 py-3 flex items-center gap-2 lg:bottom-0"
-              style={{ bottom: "calc(4rem + env(safe-area-inset-bottom))" }}
-            >
+            <div className="sticky job-sheet-cta bg-background/95 backdrop-blur border-t border-border px-5 py-3 flex items-center gap-2">
               <button
                 onClick={() => {
                   if (!job) return;
