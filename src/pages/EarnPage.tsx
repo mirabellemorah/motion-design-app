@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {
@@ -12,87 +13,12 @@ import {
   Zap,
   TrendingUp,
 } from "lucide-react";
-
-interface Job {
-  id: string;
-  role: string;
-  company: string;
-  type: "Full-time" | "Contract" | "Freelance" | "Part-time";
-  location: string;
-  remote: boolean;
-  pay: string;
-  posted: string;
-  tags: string[];
-  match: number;
-  featured?: boolean;
-}
-
-const JOBS: Job[] = [
-  {
-    id: "j1",
-    role: "Senior Motion Designer",
-    company: "Stripe",
-    type: "Full-time",
-    location: "Remote · Worldwide",
-    remote: true,
-    pay: "$140k – $180k",
-    posted: "2d",
-    tags: ["After Effects", "Lottie", "UI Motion"],
-    match: 94,
-    featured: true,
-  },
-  {
-    id: "j2",
-    role: "Brand Animator",
-    company: "Linear",
-    type: "Contract",
-    location: "Remote · EU",
-    remote: true,
-    pay: "$80 – $120 / hr",
-    posted: "4d",
-    tags: ["Motion", "Branding"],
-    match: 88,
-  },
-  {
-    id: "j3",
-    role: "Product Designer (Motion)",
-    company: "Arc Browser",
-    type: "Full-time",
-    location: "New York, NY",
-    remote: false,
-    pay: "$160k – $210k",
-    posted: "1w",
-    tags: ["Figma", "Prototyping", "Micro-interactions"],
-    match: 81,
-  },
-  {
-    id: "j4",
-    role: "Freelance Logo Reveal",
-    company: "Acme Studio",
-    type: "Freelance",
-    location: "Remote",
-    remote: true,
-    pay: "$2,500 fixed",
-    posted: "1d",
-    tags: ["Logo", "After Effects", "1 week"],
-    match: 76,
-  },
-  {
-    id: "j5",
-    role: "Junior Motion Designer",
-    company: "Notion",
-    type: "Full-time",
-    location: "San Francisco, CA",
-    remote: false,
-    pay: "$95k – $120k",
-    posted: "3d",
-    tags: ["Entry level", "Mentorship"],
-    match: 72,
-  },
-];
+import { jobs as JOBS, type Job } from "@/data/jobs";
+import JobDetailSheet from "@/components/JobDetailSheet";
 
 const EarnPage = () => {
   const navigate = useNavigate();
+  const [activeJob, setActiveJob] = useState<Job | null>(null);
   const featured = JOBS.find((j) => j.featured)!;
   const rest = JOBS.filter((j) => !j.featured);
 
@@ -156,11 +82,12 @@ const EarnPage = () => {
       </div>
 
       {/* Featured */}
-      <motion.div
+      <motion.button
+        onClick={() => setActiveJob(featured)}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.05 }}
-        className="soft-card overflow-hidden mb-5 border-2 border-primary/30"
+        className="w-full text-left soft-card overflow-hidden mb-5 border-2 border-primary/30 hover:shadow-md transition-shadow"
       >
         <div className="px-4 py-2 bg-primary/10 flex items-center gap-1.5">
           <Zap className="h-3 w-3 text-primary" />
@@ -201,11 +128,11 @@ const EarnPage = () => {
               </span>
             ))}
           </div>
-          <button className="w-full rounded-xl py-2.5 text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
-            Apply now
-          </button>
+          <div className="w-full rounded-xl py-2.5 text-center text-xs font-semibold bg-primary text-primary-foreground">
+            View role
+          </div>
         </div>
-      </motion.div>
+      </motion.button>
 
       {/* List */}
       <div className="flex items-center justify-between mb-3">
@@ -218,12 +145,13 @@ const EarnPage = () => {
 
       <div className="space-y-2.5">
         {rest.map((j, i) => (
-          <motion.div
+          <motion.button
             key={j.id}
+            onClick={() => setActiveJob(j)}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.08 + i * 0.04 }}
-            className="soft-card p-4 hover:shadow-md transition-shadow"
+            className="w-full text-left soft-card p-4 hover:shadow-md transition-shadow"
           >
             <div className="flex items-start gap-3 mb-2">
               <div className="h-10 w-10 rounded-xl bg-secondary flex items-center justify-center flex-shrink-0">
@@ -235,9 +163,9 @@ const EarnPage = () => {
                   {j.company} · {j.type}
                 </p>
               </div>
-              <button className="text-muted-foreground hover:text-foreground">
+              <span className="text-muted-foreground">
                 <Bookmark className="h-4 w-4" />
-              </button>
+              </span>
             </div>
 
             <div className="flex items-center gap-3 text-[11px] text-muted-foreground mb-2.5">
@@ -271,13 +199,15 @@ const EarnPage = () => {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </motion.button>
         ))}
       </div>
 
       <p className="text-[10px] text-center text-muted-foreground/60 mt-6">
         Mock listings — connect your portfolio to apply
       </p>
+
+      <JobDetailSheet job={activeJob} onClose={() => setActiveJob(null)} />
     </div>
   );
 };
