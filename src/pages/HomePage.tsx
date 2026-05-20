@@ -103,7 +103,7 @@ const HomePage = () => {
           className="bento-tile bento-ink col-span-12 lg:col-span-4 row-span-5 p-6 lg:p-7 flex flex-col"
         >
           <div className="flex justify-between items-start mb-5">
-            <h3 className="text-lime text-xl lg:text-2xl font-black leading-tight uppercase tracking-tight">
+            <h3 className="text-lime text-lg lg:text-xl font-black leading-tight uppercase tracking-tight">
               New
               <br />
               Opportunities
