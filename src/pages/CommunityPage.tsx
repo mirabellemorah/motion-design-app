@@ -189,24 +189,35 @@ const CommunityPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background px-4 pb-24 pt-8">
-      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="mb-5 flex items-center gap-3">
-        <button onClick={() => navigate("/")} className="text-muted-foreground">
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-        <div>
-          <h1 className="text-lg font-semibold text-foreground">Community</h1>
-          <p className="text-xs text-muted-foreground">Notes from designers learning motion</p>
-        </div>
+    <div className="min-h-screen bg-background px-4 pb-24 pt-6 lg:px-8 lg:pt-8">
+      {/* Back */}
+      <motion.button
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        onClick={() => navigate("/")}
+        className="mb-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <ChevronLeft className="h-4 w-4" /> Home
+      </motion.button>
+
+      {/* Bold header */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bento-tile bento-violet p-6 mb-4"
+      >
+        <span className="sticker sticker-lime mb-3 inline-block">Community</span>
+        <h1 className="text-display-xl text-3xl text-white mb-1">DESIGNER NOTES</h1>
+        <p className="text-white/40 text-xs font-bold uppercase tracking-widest">Ideas, wins & hot takes from the community</p>
       </motion.div>
 
       {/* Sub-tabs */}
-      <div className="grid grid-cols-2 gap-1 p-1 mb-4 rounded-xl bg-secondary">
+      <div className="grid grid-cols-2 gap-1 p-1 mb-4 rounded-2xl bg-secondary border-2 border-border">
         {(["feed", "jobs"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`rounded-lg py-2 text-xs font-semibold capitalize transition-all ${
+            className={`rounded-xl py-2 text-xs font-black uppercase tracking-wide transition-all ${
               tab === t
                 ? "bg-background text-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground"

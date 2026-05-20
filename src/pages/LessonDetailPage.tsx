@@ -11,6 +11,7 @@ import BezierTheoryExplainer from "@/components/BezierTheoryExplainer";
 import PrincipleDemo from "@/components/PrincipleDemos";
 import AnimationPrincipleDemo from "@/components/AnimationPrincipleDemos";
 import CubicBezierLab from "@/components/CubicBezierLab";
+import LiveAnimationDemo from "@/components/LiveAnimationDemo";
 import QuizCard from "@/components/QuizCard";
 import CurveZoomModal from "@/components/CurveZoomModal";
 import { Button } from "@/components/ui/button";
@@ -193,6 +194,23 @@ const LessonDetailPage = () => {
           <AnimationPrincipleDemo demo={lesson.animDemo} />
         </motion.div>
       )}
+
+      {/* ═══ LIVE ANIMATION DEMO — present on every lesson ═══ */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.17 }}
+        className="mb-4"
+      >
+        <div className="mb-2 flex items-center gap-2">
+          <span className="sticker sticker-violet">Interactive</span>
+          <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">Tweak it live</span>
+        </div>
+        <LiveAnimationDemo
+          initialBezier={bezier}
+          showPresets={true}
+        />
+      </motion.div>
 
       {/* Creative practice */}
       {lesson.creativePractice && (
