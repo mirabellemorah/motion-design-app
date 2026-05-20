@@ -37,9 +37,9 @@ const TRACKS: {
 }[] = [
   {
     id: "motion-design",
-    label: "Principles of Motion Design",
+    label: "Motion Design",
     Icon: Film,
-    tagline: "Foundations · 12 Principles · Timing & Easing",
+    tagline: "Foundations · 12 Principles · Easing",
     chapters: [
       { num: 1, title: "Foundations of Motion", Icon: Compass },
       { num: 2, title: "The 12 Principles of Animation", Icon: PlayCircle },
@@ -48,7 +48,7 @@ const TRACKS: {
   },
   {
     id: "principles",
-    label: "Principles of Design",
+    label: "Design Principles",
     Icon: Palette,
     tagline: "Visual fundamentals every designer needs",
     chapters: [
@@ -59,7 +59,7 @@ const TRACKS: {
   },
   {
     id: "career",
-    label: "Career Foundations",
+    label: "Career",
     Icon: Briefcase,
     tagline: "The skills design school skipped",
     chapters: [
@@ -70,7 +70,7 @@ const TRACKS: {
   },
 ];
 
-/* ---------- Daily Challenge hero ---------- */
+/* ---------- Daily Challenge — bold violet cover ---------- */
 const DailyChallengeCard = () => {
   const navigate = useNavigate();
   const challenge = useMemo(() => todayChallenge(), []);
@@ -87,69 +87,63 @@ const DailyChallengeCard = () => {
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative overflow-hidden rounded-3xl p-5 mb-5 text-primary-foreground"
-      style={{ background: "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(265 60% 55%) 100%)" }}
+      className="bento-tile bento-violet p-6 mb-5 group"
     >
-      {/* Shimmer */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%)",
-        }}
-        animate={{ x: ["-100%", "100%"] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-      />
-      <div className="absolute -right-10 -top-10 h-36 w-36 rounded-full bg-white/10" />
-      <div className="relative">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-[10px] uppercase tracking-widest font-semibold opacity-90 inline-flex items-center gap-1">
-            <Sparkles className="h-3 w-3" /> Daily Challenge
-          </span>
-          <span className="text-[10px] font-mono opacity-80">
-            {String(h).padStart(2, "0")}:{String(m).padStart(2, "0")}:{String(s).padStart(2, "0")}
-          </span>
+      <div className="relative z-10 flex items-center justify-between mb-4">
+        <span className="sticker sticker-lime inline-flex items-center gap-1">
+          <Sparkles className="h-3 w-3" /> Daily Challenge
+        </span>
+        <span className="text-[10px] font-mono opacity-80">
+          {String(h).padStart(2, "0")}:{String(m).padStart(2, "0")}:{String(s).padStart(2, "0")}
+        </span>
+      </div>
+      <h2 className="relative z-10 text-display-xl text-3xl lg:text-4xl mb-2 max-w-[80%]">
+        {challenge.title.toUpperCase()}
+      </h2>
+      <p className="relative z-10 text-xs opacity-90 mb-4 leading-relaxed max-w-md">
+        {challenge.prompt}
+      </p>
+      <div className="relative z-10 flex flex-wrap items-center gap-2 mb-5">
+        <span className="sticker bg-white/20 text-white">{challenge.difficulty}</span>
+        <span className="sticker bg-white/20 text-white inline-flex items-center gap-1">
+          <Clock className="h-2.5 w-2.5" /> {challenge.minutes} min
+        </span>
+        <span className="sticker sticker-lime inline-flex items-center gap-1">
+          <Flame className="h-2.5 w-2.5" /> +50 XP
+        </span>
+      </div>
+      {dailyDone ? (
+        <div className="relative z-10 w-full rounded-2xl bg-white/20 py-3.5 text-sm font-extrabold text-center inline-flex items-center justify-center gap-2">
+          <CheckCircle2 className="h-4 w-4" /> Completed today
         </div>
-        <p className="text-lg font-semibold mb-1 leading-tight">{challenge.title}</p>
-        <p className="text-xs opacity-90 mb-3 leading-relaxed">{challenge.prompt}</p>
-        <div className="flex items-center gap-2 mb-4">
-          <span className="text-[10px] font-semibold bg-white/20 px-2 py-0.5 rounded-full">
-            {challenge.difficulty}
-          </span>
-          <span className="text-[10px] font-semibold bg-white/20 px-2 py-0.5 rounded-full inline-flex items-center gap-1">
-            <Clock className="h-2.5 w-2.5" /> {challenge.minutes} min
-          </span>
-          <span className="text-[10px] font-semibold bg-[hsl(var(--ae-yellow))] text-foreground px-2 py-0.5 rounded-full inline-flex items-center gap-1">
-            <Flame className="h-2.5 w-2.5" /> +50 XP
-          </span>
-        </div>
-        {dailyDone ? (
-          <div className="w-full rounded-2xl bg-white/20 py-3 text-sm font-semibold text-center inline-flex items-center justify-center gap-2">
-            <CheckCircle2 className="h-4 w-4" /> Completed today
-          </div>
-        ) : (
-          <button
-            onClick={() => {
-              completeDailyChallenge();
-              navigate("/practice");
-            }}
-            className="w-full rounded-2xl bg-white text-primary py-3 text-sm font-semibold hover:bg-white/95 transition-colors"
-          >
-            Start Challenge →
-          </button>
-        )}
+      ) : (
+        <button
+          onClick={() => {
+            completeDailyChallenge();
+            navigate("/practice");
+          }}
+          className="relative z-10 w-full rounded-2xl bg-lime text-lime-foreground py-3.5 text-sm font-black uppercase tracking-tight hover:bg-white transition-colors"
+        >
+          Start Challenge →
+        </button>
+      )}
+      {/* Decorative sticker */}
+      <div className="absolute -right-4 -top-4 bg-lime text-lime-foreground w-20 h-20 rounded-full flex items-center justify-center rotate-12 group-hover:rotate-0 transition-transform shadow-lg z-0">
+        <span className="font-black text-center text-[10px] leading-tight">
+          NEW<br />TODAY
+        </span>
       </div>
     </motion.div>
   );
 };
 
 /* ---------- Resources sub-tab ---------- */
-const CATEGORY_COLOR: Record<Resource["category"], string> = {
-  Tutorial: "bg-primary/15 text-primary",
-  Article: "bg-[hsl(var(--ae-yellow)/0.2)] text-[hsl(45_70%_35%)]",
-  Tool: "bg-[hsl(var(--ae-green)/0.18)] text-[hsl(var(--ae-green))]",
-  Inspiration: "bg-[hsl(var(--ae-orange)/0.18)] text-[hsl(var(--ae-orange))]",
-  YouTube: "bg-destructive/10 text-destructive",
+const CATEGORY_STYLE: Record<Resource["category"], string> = {
+  Tutorial: "sticker-violet",
+  Article: "sticker-lime",
+  Tool: "sticker-ink",
+  Inspiration: "bg-[hsl(var(--ae-orange))] text-white",
+  YouTube: "bg-destructive text-destructive-foreground",
 };
 
 const ResourcesView = () => {
@@ -163,10 +157,10 @@ const ResourcesView = () => {
           <button
             key={c}
             onClick={() => setCat(c)}
-            className={`flex-shrink-0 rounded-full px-3 py-1.5 text-xs font-medium border transition-all ${
+            className={`flex-shrink-0 rounded-full px-3.5 py-1.5 text-[11px] font-black uppercase tracking-wider border-2 transition-all ${
               cat === c
-                ? "border-primary bg-primary/15 text-primary"
-                : "border-border bg-card text-muted-foreground hover:bg-accent"
+                ? "border-ink bg-ink text-ink-foreground"
+                : "border-border bg-card text-muted-foreground hover:border-ink"
             }`}
           >
             {c}
@@ -183,21 +177,17 @@ const ResourcesView = () => {
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.03 }}
-            className="block soft-card p-4 hover:shadow-md transition-shadow"
+            className="block bento-tile bento-cream border-2 border-border p-4 hover:border-ink transition-colors"
           >
             <div className="flex items-start gap-3">
               <div className="h-10 w-10 rounded-xl bg-secondary flex items-center justify-center flex-shrink-0">
                 <Library className="h-4 w-4 text-primary" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-0.5">
-                  <p className="text-sm font-semibold text-foreground truncate">{r.title}</p>
-                </div>
+                <p className="text-sm font-bold text-foreground truncate mb-0.5">{r.title}</p>
                 <p className="text-[11px] text-muted-foreground mb-2">{r.source}</p>
                 <p className="text-xs text-foreground/70 leading-relaxed mb-2">{r.blurb}</p>
-                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${CATEGORY_COLOR[r.category]}`}>
-                  {r.category}
-                </span>
+                <span className={`sticker ${CATEGORY_STYLE[r.category]}`}>{r.category}</span>
               </div>
               <ExternalLink className="h-4 w-4 text-muted-foreground/40 flex-shrink-0" />
             </div>
@@ -217,7 +207,6 @@ const LessonsPage = () => {
   const active = TRACKS.find((t) => t.id === track)!;
   const trackLessons = lessons.filter((l) => l.track === track);
 
-  // Scroll to last lesson on mount.
   const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (state.lastLessonId) {
@@ -229,33 +218,46 @@ const LessonsPage = () => {
   }, [state.lastLessonId, track]);
 
   return (
-    <div className="min-h-screen bg-background px-4 pb-24 pt-8">
-      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="mb-5 flex items-center gap-3">
-        <button onClick={() => navigate("/")} className="text-muted-foreground">
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-        <div className="flex-1">
-          <h1 className="text-lg font-semibold text-foreground">Learn</h1>
-          <p className="text-xs text-muted-foreground">
-            {Object.keys(state.completed).length} / {lessons.length} lessons · {state.xp} XP
-          </p>
+    <div className="min-h-screen bg-background px-4 pb-24 pt-6 lg:px-8 lg:pt-10">
+      {/* Bold header */}
+      <motion.div
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-6 flex items-end justify-between gap-4"
+      >
+        <div className="flex items-end gap-2 min-w-0">
+          <button
+            onClick={() => navigate("/")}
+            className="text-muted-foreground hover:text-foreground transition-colors mb-2 lg:hidden"
+            aria-label="Back"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <div className="min-w-0">
+            <p className="text-[11px] font-bold uppercase tracking-widest text-primary mb-1">
+              {Object.keys(state.completed).length} / {lessons.length} done · {state.xp} XP
+            </p>
+            <h1 className="text-display-xl text-3xl lg:text-5xl text-foreground">
+              LEARN<span className="text-primary">.</span>
+            </h1>
+          </div>
         </div>
-        <div className="flex items-center gap-1 rounded-full bg-[hsl(var(--ae-orange)/0.12)] text-[hsl(var(--ae-orange))] px-2.5 py-1">
-          <Flame className="h-3.5 w-3.5" />
-          <span className="text-xs font-semibold">{state.streak}</span>
+        <div className="flex items-center gap-1.5 rounded-full bg-ink text-ink-foreground px-3 py-1.5 shrink-0">
+          <Flame className="h-3.5 w-3.5 text-lime" />
+          <span className="text-xs font-extrabold">{state.streak}</span>
         </div>
       </motion.div>
 
       <DailyChallengeCard />
 
-      {/* Sub-tabs */}
-      <div className="flex gap-1 p-1 bg-secondary rounded-full mb-5">
+      {/* Sub-tabs — chunky pill */}
+      <div className="flex gap-1 p-1 bg-ink rounded-full mb-5 w-fit">
         {(["lessons", "resources"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`flex-1 rounded-full py-2 text-xs font-semibold capitalize transition-colors inline-flex items-center justify-center gap-1.5 ${
-              tab === t ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"
+            className={`rounded-full px-5 py-2 text-[11px] font-black uppercase tracking-wider transition-colors inline-flex items-center justify-center gap-1.5 ${
+              tab === t ? "bg-lime text-lime-foreground" : "text-white/60 hover:text-white"
             }`}
           >
             {t === "lessons" ? <BookOpen className="h-3.5 w-3.5" /> : <Library className="h-3.5 w-3.5" />}
@@ -271,43 +273,61 @@ const LessonsPage = () => {
           </motion.div>
         ) : (
           <motion.div key="lessons" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-            {/* Track switcher */}
-            <div className="flex gap-2 mb-5 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-hide">
-              {TRACKS.map((t) => {
+            {/* Track switcher — bold cover tiles */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+              {TRACKS.map((t, idx) => {
                 const isActive = track === t.id;
                 const count = lessons.filter((l) => l.track === t.id).length;
+                const activeStyle =
+                  idx === 0 ? "bento-violet" : idx === 1 ? "bento-lime" : "bento-ink";
+                const styles = isActive
+                  ? activeStyle
+                  : "bento-cream border-2 border-border hover:border-ink";
+                const muted = isActive
+                  ? idx === 1
+                    ? "text-ink/70"
+                    : "text-white/70"
+                  : "text-muted-foreground";
+                const iconBg = isActive
+                  ? idx === 1
+                    ? "bg-ink text-lime"
+                    : "bg-white/15 text-current"
+                  : "bg-primary/15 text-primary";
                 return (
                   <button
                     key={t.id}
                     onClick={() => setTrack(t.id)}
-                    className={`flex-shrink-0 min-w-[200px] text-left px-3 py-2.5 rounded-2xl border transition-all ${
-                      isActive ? "border-primary bg-primary/10" : "border-border bg-card hover:bg-accent/40"
-                    }`}
+                    className={`bento-tile text-left p-4 transition-all ${styles}`}
                   >
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <t.Icon className={`h-4 w-4 ${isActive ? "text-primary" : "text-muted-foreground"}`} />
-                      <span className={`text-xs font-semibold ${isActive ? "text-primary" : "text-foreground"}`}>
-                        {t.label}
-                      </span>
+                    <div className="flex items-start justify-between mb-3">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${iconBg}`}>
+                        <t.Icon className="h-5 w-5" strokeWidth={2.5} />
+                      </div>
+                      <span className={`font-black text-lg ${muted}`}>{count}</span>
                     </div>
-                    <p className="text-[10px] text-muted-foreground">{count} lessons · {t.tagline}</p>
+                    <p className="text-sm font-black leading-tight tracking-tight uppercase mb-1">
+                      {t.label}
+                    </p>
+                    <p className={`text-[10px] ${muted}`}>{t.tagline}</p>
                   </button>
                 );
               })}
             </div>
 
-            <div ref={scrollRef} className="space-y-4">
+            <div ref={scrollRef} className="space-y-5">
               {active.chapters.map((ch) => {
                 const chLessons = trackLessons.filter((l) => l.chapter === ch.num);
                 if (chLessons.length === 0) return null;
                 return (
                   <div key={ch.num}>
-                    <div className="flex items-center gap-2 mb-2">
-                      <ch.Icon className="h-3.5 w-3.5 text-primary" />
-                      <span className="ae-label">Chapter {ch.num} — {ch.title}</span>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="sticker sticker-ink">CH {String(ch.num).padStart(2, "0")}</span>
+                      <h3 className="text-base font-black tracking-tight uppercase text-foreground">
+                        {ch.title}
+                      </h3>
                     </div>
 
-                    <div className="soft-card overflow-hidden">
+                    <div className="bento-tile bento-cream border-2 border-border overflow-hidden">
                       {chLessons.map((lesson, i) => {
                         const done = isCompleted(lesson.id);
                         return (
@@ -315,28 +335,26 @@ const LessonsPage = () => {
                             key={lesson.id}
                             id={`lesson-row-${lesson.id}`}
                             onClick={() => navigate(`/lesson/${lesson.id}`)}
-                            className="flex w-full items-center gap-3 px-4 py-3.5 text-left hover:bg-accent/30 transition-colors border-b border-border/50 last:border-0"
+                            className="flex w-full items-center gap-3 px-4 py-3.5 text-left hover:bg-secondary/60 transition-colors border-b border-border/60 last:border-0"
                           >
                             <div className="flex-shrink-0">
                               {done ? (
-                                <div className="h-7 w-7 rounded-full bg-[hsl(var(--success))] flex items-center justify-center">
-                                  <CheckCircle2 className="h-4 w-4 text-[hsl(var(--success-foreground))]" />
+                                <div className="h-8 w-8 rounded-full bg-lime flex items-center justify-center">
+                                  <CheckCircle2 className="h-4 w-4 text-lime-foreground" strokeWidth={3} />
                                 </div>
                               ) : (
-                                <div className="h-7 w-7 rounded-full border-2 border-border flex items-center justify-center">
-                                  <span className="text-[10px] font-medium text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
+                                <div className="h-8 w-8 rounded-full border-2 border-ink/20 flex items-center justify-center">
+                                  <span className="text-[10px] font-black text-foreground">{String(i + 1).padStart(2, "0")}</span>
                                 </div>
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-1.5">
-                                <p className={`text-sm font-medium truncate ${done ? "text-muted-foreground line-through" : "text-foreground"}`}>
+                                <p className={`text-sm font-bold truncate ${done ? "text-muted-foreground line-through" : "text-foreground"}`}>
                                   {lesson.title}
                                 </p>
                                 {lesson.stub && (
-                                  <span className="text-[9px] font-semibold bg-[hsl(var(--ae-yellow)/0.2)] text-[hsl(45_70%_35%)] px-1.5 py-0.5 rounded-full">
-                                    SOON
-                                  </span>
+                                  <span className="sticker sticker-lime text-[9px] px-1.5 py-0.5">SOON</span>
                                 )}
                               </div>
                               <p className="text-xs text-muted-foreground truncate">{lesson.subtitle}</p>
