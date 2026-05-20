@@ -1,6 +1,15 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { BookOpen, Target, ChevronRight, Film, Palette, Sparkles, Flame, MapPin, Briefcase, ArrowUpRight, Zap } from "lucide-react";
+import {
+  BookOpen,
+  Target,
+  ArrowUpRight,
+  Flame,
+  Briefcase,
+  ChevronRight,
+  Film,
+  Palette,
+} from "lucide-react";
 import { lessons } from "@/data/lessons";
 import { useUserProgress } from "@/hooks/useUserProgress";
 
@@ -8,176 +17,223 @@ const HomePage = () => {
   const navigate = useNavigate();
   const { state, level } = useUserProgress();
   const completedCount = Object.keys(state.completed).length;
+  const progressPct = Math.round((completedCount / lessons.length) * 100) || 0;
 
-  const motionLessons = lessons.filter(l => l.track === "motion-design");
-  const principlesLessons = lessons.filter(l => l.track === "principles");
-  const careerLessons = lessons.filter(l => l.track === "career");
-  const tracks = [
-    { id: "motion-design", Icon: Film, title: "Principles of Motion Design", desc: "Foundations · 12 Principles · Easing", lessons: motionLessons, accent: "bg-primary/15 text-primary" },
-    { id: "principles", Icon: Palette, title: "Principles of Design", desc: "Hierarchy, color, typography", lessons: principlesLessons, accent: "bg-[hsl(var(--ae-yellow)/0.18)] text-[hsl(var(--ae-yellow))]" },
-    { id: "career", Icon: Briefcase, title: "Career Foundations", desc: "Portfolios, pricing, communication", lessons: careerLessons, accent: "bg-[hsl(var(--ae-green)/0.15)] text-[hsl(var(--ae-green))]" },
-  ];
+  const currentLesson =
+    (state.lastLessonId && lessons.find((l) => l.id === state.lastLessonId)) || lessons[0];
 
   const opportunities = [
-    { role: "Motion Designer", company: "Linear", location: "Remote · Worldwide", tag: "Full-time", accent: "bg-primary/10 text-primary" },
-    { role: "Brand Animator", company: "Stripe", location: "San Francisco · Hybrid", tag: "Freelance", accent: "bg-[hsl(var(--ae-orange)/0.15)] text-[hsl(var(--ae-orange))]" },
-    { role: "Junior Motion Artist", company: "Notion", location: "Remote · EU", tag: "Contract", accent: "bg-[hsl(var(--ae-yellow)/0.18)] text-[hsl(var(--ae-yellow))]" },
-    { role: "Senior UI Animator", company: "Figma", location: "Remote · US", tag: "Full-time", accent: "bg-[hsl(var(--ae-green)/0.15)] text-[hsl(var(--ae-green))]" },
+    { role: "Motion Designer", company: "Linear", tag: "Full-time" },
+    { role: "Brand Animator", company: "Stripe", tag: "Freelance" },
+    { role: "Junior Motion Artist", company: "Notion", tag: "Contract" },
+  ];
+
+  const tracks = [
+    { id: "motion-design", Icon: Film, title: "Principles of Motion", desc: "Foundations · Easing", count: lessons.filter((l) => l.track === "motion-design").length },
+    { id: "principles", Icon: Palette, title: "Principles of Design", desc: "Hierarchy · Color · Type", count: lessons.filter((l) => l.track === "principles").length },
+    { id: "career", Icon: Briefcase, title: "Career Foundations", desc: "Portfolio · Pricing", count: lessons.filter((l) => l.track === "career").length },
   ];
 
   return (
-    <div className="min-h-screen bg-background px-4 pb-24 pt-8">
-      {/* Header */}
-      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5 flex items-center justify-between">
-        <div className="flex items-center gap-1.5">
-          <Sparkles className="h-4 w-4 text-primary" />
-          <p className="text-base font-medium text-foreground">Good morning</p>
-        </div>
-        <div className="flex items-center gap-1.5 rounded-full bg-[hsl(var(--ae-orange)/0.12)] text-[hsl(var(--ae-orange))] px-2.5 py-1">
-          <Flame className="h-3.5 w-3.5" />
-          <span className="text-xs font-semibold">{state.streak}</span>
-        </div>
-      </motion.div>
-
-      {/* Current progress card */}
+    <div className="min-h-screen bg-background px-4 pb-24 pt-6 lg:px-8 lg:pt-10">
+      {/* Top header */}
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.05 }}
-        className="relative overflow-hidden rounded-2xl p-4 mb-5 text-primary-foreground"
-        style={{
-          background:
-            "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(265 55% 60%) 100%)",
-        }}
+        className="mb-6 flex items-end justify-between gap-4"
       >
-        <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10" />
-        <div className="absolute -right-4 top-10 h-16 w-16 rounded-full bg-white/10" />
-        <div className="relative">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] uppercase tracking-widest font-semibold opacity-90">Current Progress</span>
-            <button onClick={() => navigate("/lessons")} className="text-[11px] font-medium opacity-90 hover:opacity-100">Resume →</button>
-          </div>
-          <p className="text-base font-semibold mb-0.5">
-            {state.lastLessonId ? lessons.find(l => l.id === state.lastLessonId)?.title ?? "Start learning" : "Start learning"}
+        <div>
+          <p className="text-[11px] font-bold uppercase tracking-widest text-primary mb-1">
+            Monday morning
           </p>
-          <p className="text-xs opacity-90 mb-3">
-            {completedCount} of {lessons.length} lessons · Lvl {level} · {state.xp} XP
-          </p>
-          <div className="h-1.5 bg-white/20 rounded-full overflow-hidden">
-            <div className="h-full bg-white rounded-full" style={{ width: `${(completedCount / lessons.length) * 100}%` }} />
-          </div>
+          <h1 className="text-display-xl text-3xl lg:text-5xl text-foreground">
+            Good morning,
+            <br className="hidden sm:block" /> <span className="text-primary">designer</span>.
+          </h1>
+        </div>
+        <div className="flex items-center gap-1.5 rounded-full bg-ink text-ink-foreground px-3 py-1.5 shrink-0">
+          <Flame className="h-3.5 w-3.5 text-lime" />
+          <span className="text-xs font-extrabold">{state.streak}</span>
         </div>
       </motion.div>
 
-      {/* New Opportunities feed */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-5">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-1.5">
-            <Briefcase className="h-3.5 w-3.5 text-primary" />
-            <h2 className="text-sm font-semibold text-foreground">New Opportunities</h2>
-            <span className="text-[10px] font-semibold bg-[hsl(var(--ae-green)/0.15)] text-[hsl(var(--ae-green))] px-1.5 py-0.5 rounded-full">
-              {opportunities.length} fresh
+      {/* Bento grid */}
+      <div className="grid grid-cols-12 auto-rows-[8rem] gap-3 lg:gap-4">
+        {/* Current Progress cover — large */}
+        <motion.button
+          onClick={() => navigate(`/lessons/${currentLesson.id}`)}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+          className="bento-tile bento-violet col-span-12 lg:col-span-8 row-span-3 p-6 lg:p-8 text-left flex flex-col justify-between hover:shadow-xl transition-shadow group"
+        >
+          <div className="relative z-10">
+            <span className="sticker sticker-lime">In Progress</span>
+            <h2 className="text-display-xl text-4xl lg:text-6xl mt-4 lg:mt-6">
+              {currentLesson.title.toUpperCase()}
+            </h2>
+            <p className="text-sm opacity-80 mt-2 max-w-md">
+              {completedCount} of {lessons.length} lessons · Lvl {level} · {state.xp} XP
+            </p>
+          </div>
+          <div className="relative z-10 flex items-center gap-3 mt-6">
+            <div className="h-2.5 flex-1 max-w-xs bg-white/20 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-lime rounded-full transition-all"
+                style={{ width: `${progressPct}%` }}
+              />
+            </div>
+            <span className="font-black text-lg">{progressPct}%</span>
+          </div>
+          {/* Sticker */}
+          <div className="absolute -right-4 -top-4 lg:-right-6 lg:-top-6 bg-lime text-lime-foreground w-24 h-24 lg:w-32 lg:h-32 rounded-full flex items-center justify-center rotate-12 group-hover:rotate-0 transition-transform shadow-lg">
+            <span className="font-black text-center text-xs lg:text-sm leading-tight">
+              KEEP
+              <br />
+              GOING
             </span>
           </div>
-          <button onClick={() => navigate("/earn")} className="text-[11px] font-medium text-primary">See all</button>
-        </div>
-        <div className="space-y-2">
-          {opportunities.slice(0, 3).map((o, i) => (
-            <motion.button
-              key={o.role}
+        </motion.button>
+
+        {/* New Opportunities — tall dark */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bento-tile bento-ink col-span-12 lg:col-span-4 row-span-5 p-6 lg:p-7 flex flex-col"
+        >
+          <div className="flex justify-between items-start mb-5">
+            <h3 className="text-lime text-lg lg:text-xl font-black leading-tight uppercase tracking-tight">
+              New
+              <br />
+              Opportunities
+            </h3>
+            <button
               onClick={() => navigate("/earn")}
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.12 + i * 0.04 }}
-              className="w-full soft-card px-3.5 py-3 text-left hover:shadow-md transition-shadow flex items-center gap-3"
+              className="w-9 h-9 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-lime transition-colors"
+              aria-label="See all"
             >
-              <div className={`h-10 w-10 rounded-xl flex items-center justify-center ${o.accent}`}>
-                <Briefcase className="h-4 w-4" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <p className="text-sm font-semibold text-foreground truncate">{o.role}</p>
-                  <span className={`text-[9px] uppercase tracking-wider font-semibold px-1.5 py-0.5 rounded-full ${o.accent}`}>
-                    {o.tag}
-                  </span>
-                </div>
-                <p className="text-xs text-muted-foreground truncate">{o.company}</p>
-                <div className="flex items-center gap-1 mt-0.5">
-                  <MapPin className="h-2.5 w-2.5 text-muted-foreground/60" />
-                  <p className="text-[10px] text-muted-foreground/80 truncate">{o.location}</p>
-                </div>
-              </div>
-              <ArrowUpRight className="h-4 w-4 text-muted-foreground/40" />
-            </motion.button>
-          ))}
-        </div>
-      </motion.div>
+              <ArrowUpRight className="h-4 w-4" strokeWidth={3} />
+            </button>
+          </div>
 
-      {/* Quick actions */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.15 }}
-        className="grid grid-cols-2 gap-3 mb-6"
-      >
-        <button
+          <div className="space-y-3 flex-1">
+            {opportunities.map((o) => (
+              <button
+                key={o.role}
+                onClick={() => navigate("/earn")}
+                className="w-full bg-white/5 hover:bg-white/10 transition-colors p-4 rounded-2xl border border-white/10 text-left"
+              >
+                <p className="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-0.5">
+                  {o.company}
+                </p>
+                <p className="text-white font-bold text-sm mb-2">{o.role}</p>
+                <span
+                  className={`inline-block px-2 py-0.5 text-[9px] font-black uppercase rounded ${
+                    o.tag === "Full-time"
+                      ? "bg-lime text-lime-foreground"
+                      : "bg-primary text-primary-foreground"
+                  }`}
+                >
+                  {o.tag}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={() => navigate("/earn")}
+            className="mt-5 w-full bg-lime text-lime-foreground py-3.5 rounded-2xl font-black uppercase tracking-tight text-sm hover:bg-white transition-colors"
+          >
+            View all jobs
+          </button>
+        </motion.div>
+
+        {/* Lessons tile — lime */}
+        <motion.button
           onClick={() => navigate("/lessons")}
-          className="soft-card p-4 text-left hover:shadow-md transition-shadow"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="bento-tile bento-lime col-span-6 lg:col-span-4 row-span-2 p-5 lg:p-6 text-left flex flex-col justify-between hover:shadow-xl transition-shadow"
         >
-          <div className="h-10 w-10 rounded-xl bg-secondary flex items-center justify-center mb-3">
-            <BookOpen className="h-5 w-5 text-primary" />
+          <div className="flex justify-between items-start">
+            <div className="w-11 h-11 bg-ink rounded-xl flex items-center justify-center text-lime">
+              <BookOpen className="h-5 w-5" strokeWidth={2.5} />
+            </div>
+            <span className="text-ink/40 font-black text-xl">{lessons.length}</span>
           </div>
-          <p className="text-sm font-medium text-foreground">Lessons</p>
-          <p className="text-xs text-muted-foreground">{lessons.length} chapters</p>
-        </button>
-        <button
-          onClick={() => navigate("/practice")}
-          className="soft-card p-4 text-left hover:shadow-md transition-shadow"
-        >
-          <div className="h-10 w-10 rounded-xl bg-secondary flex items-center justify-center mb-3">
-            <Target className="h-5 w-5 text-primary" />
-          </div>
-          <p className="text-sm font-medium text-foreground">Practice</p>
-          <p className="text-xs text-muted-foreground">Match curves</p>
-        </button>
-      </motion.div>
+          <h3 className="text-ink text-2xl lg:text-3xl font-black leading-none tracking-tighter">
+            DAILY
+            <br />
+            LESSONS
+          </h3>
+        </motion.button>
 
-      {/* Curriculum — both tracks */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <h2 className="ae-label mb-3">Curriculum</h2>
-        <div className="space-y-3">
-          {tracks.map((tr, ci) => (
-            <motion.button
-              key={tr.id}
+        {/* Practice tile — outlined */}
+        <motion.button
+          onClick={() => navigate("/practice")}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bento-tile bento-cream col-span-6 lg:col-span-4 row-span-2 p-5 lg:p-6 text-left flex flex-col justify-between border-2 border-primary hover:shadow-xl transition-shadow"
+        >
+          <div className="flex justify-between items-start">
+            <div className="w-11 h-11 bg-primary rounded-xl flex items-center justify-center text-primary-foreground">
+              <Target className="h-5 w-5" strokeWidth={2.5} />
+            </div>
+            <span className="text-primary font-black text-xl">04</span>
+          </div>
+          <h3 className="text-primary text-2xl lg:text-3xl font-black leading-none tracking-tighter">
+            SKILL
+            <br />
+            PRACTICE
+          </h3>
+        </motion.button>
+
+        {/* Curriculum strip */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="bento-tile bento-cream col-span-12 lg:col-span-8 row-span-2 p-5 lg:p-6 border border-border"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <h4 className="text-base lg:text-lg font-black tracking-tight uppercase">
+              Curriculum
+            </h4>
+            <button
               onClick={() => navigate("/lessons")}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.25 + ci * 0.05 }}
-              className="soft-card w-full text-left overflow-hidden hover:shadow-md transition-shadow"
+              className="text-xs font-bold text-primary hover:underline"
             >
-              <div className="px-4 py-3.5 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className={`h-10 w-10 rounded-xl flex items-center justify-center ${tr.accent}`}>
-                    <tr.Icon className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-foreground">{tr.title}</p>
-                    <p className="text-xs text-muted-foreground">{tr.desc}</p>
-                  </div>
+              View all
+            </button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            {tracks.map((tr) => (
+              <button
+                key={tr.id}
+                onClick={() => navigate("/lessons")}
+                className="flex items-center gap-3 p-3 rounded-2xl bg-secondary/60 hover:bg-secondary transition-colors text-left"
+              >
+                <div className="w-9 h-9 rounded-xl bg-primary/15 text-primary flex items-center justify-center shrink-0">
+                  <tr.Icon className="h-4 w-4" />
                 </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-xs text-muted-foreground">{tr.lessons.length}</span>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground/40" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-extrabold text-foreground truncate">
+                    {tr.title}
+                  </p>
+                  <p className="text-[10px] text-muted-foreground truncate">{tr.desc}</p>
                 </div>
-              </div>
-            </motion.button>
-          ))}
-        </div>
-      </motion.div>
+                <div className="flex items-center gap-0.5 text-muted-foreground">
+                  <span className="text-[10px] font-bold">{tr.count}</span>
+                  <ChevronRight className="h-3 w-3" />
+                </div>
+              </button>
+            ))}
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 };
