@@ -62,31 +62,53 @@ const LessonDetailPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background px-4 pb-24 pt-8">
-      {/* Header */}
-      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="mb-4 flex items-center gap-3">
-        <button onClick={() => navigate("/lessons")} className="text-muted-foreground">
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-medium text-primary uppercase tracking-wider">CH.{lesson.chapter}</span>
-            <h1 className="text-base font-semibold truncate text-foreground">{lesson.title}</h1>
-            {done && <CheckCircle2 className="h-4 w-4 text-[hsl(var(--success))] flex-shrink-0" />}
-          </div>
-          <p className="text-xs text-muted-foreground">{lesson.subtitle}</p>
-        </div>
-      </motion.div>
+    <div className="min-h-screen bg-background px-4 pb-24 pt-6 lg:px-8 lg:pt-8">
+      {/* Back */}
+      <motion.button
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        onClick={() => navigate("/lessons")}
+        className="mb-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <ChevronLeft className="h-4 w-4" /> All Lessons
+      </motion.button>
 
-      {/* Description */}
-      <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.05 }} className="mb-4 text-xs leading-relaxed text-muted-foreground">
-        {lesson.description}
-      </motion.p>
+      {/* Bold cover header */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        className={`bento-tile ${done ? "bento-lime" : "bento-ink"} p-6 lg:p-8 mb-5`}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <span className={`sticker ${done ? "sticker-ink" : "sticker-lime"}`}>
+            CH {String(lesson.chapter).padStart(2, "0")}
+          </span>
+          {done && (
+            <span className="sticker sticker-ink inline-flex items-center gap-1">
+              <CheckCircle2 className="h-3 w-3" /> Done
+            </span>
+          )}
+          {lesson.stub && !done && (
+            <span className="sticker sticker-lime inline-flex items-center gap-1">
+              <Construction className="h-3 w-3" /> Coming Soon
+            </span>
+          )}
+        </div>
+        <h1 className="text-display-xl text-3xl lg:text-5xl mb-2">
+          {lesson.title.toUpperCase()}
+        </h1>
+        <p className={`text-sm font-medium ${done ? "text-ink/70" : "text-white/70"} mb-3`}>
+          {lesson.subtitle}
+        </p>
+        <p className={`text-xs leading-relaxed ${done ? "text-ink/80" : "text-white/80"}`}>
+          {lesson.description}
+        </p>
+      </motion.div>
 
       {/* Stub banner */}
       {isStub && (
-        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-4 soft-card p-4 border-l-4 border-l-[hsl(var(--ae-yellow))]">
-          <p className="text-[10px] font-semibold mb-1 text-[hsl(45_70%_35%)] uppercase tracking-wider inline-flex items-center gap-1">
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-4 bento-tile bento-cream border-2 border-lime p-4">
+          <p className="sticker sticker-lime mb-2 inline-flex items-center gap-1">
             <Construction className="h-3 w-3" /> Coming Soon
           </p>
           <p className="text-xs leading-relaxed text-foreground/80">
@@ -97,12 +119,11 @@ const LessonDetailPage = () => {
 
       {/* Theory toggle */}
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-4">
-        <button onClick={() => setShowTheory(!showTheory)} className="ae-label flex items-center gap-1 mb-2">
-          <span>{showTheory ? "▾" : "▸"}</span>
-          <span>Theory</span>
+        <button onClick={() => setShowTheory(!showTheory)} className="flex items-center gap-2 mb-2">
+          <span className="sticker sticker-ink">{showTheory ? "▾" : "▸"} Theory</span>
         </button>
         {showTheory && (
-          <div className="soft-card p-4 space-y-2">
+          <div className="bento-tile bento-cream border-2 border-border p-4 space-y-2">
             {lesson.theory.map((t, i) => (
               <div key={i} className="flex gap-2">
                 <div className="mt-1.5 h-1.5 w-1.5 rounded-full bg-primary flex-shrink-0" />
@@ -175,11 +196,11 @@ const LessonDetailPage = () => {
 
       {/* Creative practice */}
       {lesson.creativePractice && (
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-4 soft-card p-4 border-l-4 border-l-[hsl(var(--ae-orange))]">
-          <p className="text-[10px] font-semibold mb-1.5 text-[hsl(var(--ae-orange))] uppercase tracking-wider flex items-center gap-1">
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-4 bento-tile bento-lime p-5">
+          <p className="sticker sticker-ink mb-2 inline-flex items-center gap-1">
             <Sparkles className="h-3 w-3" /> Creative Practice
           </p>
-          <p className="text-xs leading-relaxed text-foreground/80">{lesson.creativePractice}</p>
+          <p className="text-xs leading-relaxed text-ink/80">{lesson.creativePractice}</p>
         </motion.div>
       )}
 
@@ -234,12 +255,12 @@ const LessonDetailPage = () => {
 
       {/* Key Takeaways */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-4">
-        <span className="ae-label block mb-2">Key Takeaways</span>
+        <div className="mb-3"><span className="sticker sticker-ink">Key Takeaways</span></div>
         <div className="space-y-2">
           {lesson.keyPrinciples.map((p, i) => (
-            <div key={i} className="flex items-start gap-3 soft-card px-4 py-3">
-              <div className="mt-0.5 h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <span className="text-[10px] font-semibold text-primary">{i + 1}</span>
+            <div key={i} className="flex items-start gap-3 bento-tile bento-cream border-2 border-border px-4 py-3">
+              <div className="mt-0.5 h-6 w-6 rounded-full bg-lime flex items-center justify-center flex-shrink-0">
+                <span className="text-[10px] font-black text-lime-foreground">{i + 1}</span>
               </div>
               <p className="text-xs leading-relaxed text-foreground/80">{p}</p>
             </div>
@@ -248,9 +269,9 @@ const LessonDetailPage = () => {
       </motion.div>
 
       {/* Tip */}
-      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} className="mb-4 soft-card p-4 border-l-4 border-l-primary">
-        <p className="text-[10px] font-semibold mb-1 text-primary uppercase tracking-wider">PRO TIP</p>
-        <p className="text-xs leading-relaxed text-foreground/70">{lesson.tip}</p>
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} className="mb-4 bento-tile bento-violet p-5">
+        <p className="sticker sticker-lime mb-2 inline-block">PRO TIP</p>
+        <p className="text-xs leading-relaxed text-white/90">{lesson.tip}</p>
       </motion.div>
 
       {/* Beginner Explainer — motion-graph lessons */}
@@ -268,27 +289,27 @@ const LessonDetailPage = () => {
       {/* Navigation + complete CTA */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="space-y-2">
         {isMotionGraph && !lesson.cubicBezierLab && (
-          <Button onClick={() => navigate(`/practice/${lesson.id}`)} className="w-full rounded-2xl py-5 text-sm font-semibold bg-primary hover:bg-primary/90">
+          <button onClick={() => navigate(`/practice/${lesson.id}`)} className="w-full rounded-2xl py-4 text-sm font-black uppercase tracking-tight bg-ink text-ink-foreground hover:opacity-90 transition-opacity">
             Practice This Curve →
-          </Button>
+          </button>
         )}
         {isStub ? (
           <button
             onClick={markDone}
             disabled={done}
-            className="w-full rounded-2xl py-3.5 text-sm font-semibold border border-border bg-card text-foreground hover:bg-accent disabled:opacity-60 inline-flex items-center justify-center gap-2"
+            className="w-full rounded-2xl py-4 text-sm font-black uppercase tracking-tight border-2 border-ink bg-card text-foreground hover:bg-secondary disabled:opacity-60 inline-flex items-center justify-center gap-2"
           >
-            {done ? <><CheckCircle2 className="h-4 w-4 text-[hsl(var(--success))]" /> Saved as interested</> : <><Lock className="h-4 w-4" /> Mark interested</>}
+            {done ? <><CheckCircle2 className="h-4 w-4 text-lime-foreground" /> Saved as interested</> : <><Lock className="h-4 w-4" /> Mark interested</>}
           </button>
         ) : !done && !lesson.quiz ? (
-          <Button onClick={markDone} className="w-full rounded-2xl py-5 text-sm font-semibold bg-[hsl(var(--success))] hover:bg-[hsl(var(--success))]/90 text-[hsl(var(--success-foreground))]">
-            <CheckCircle2 className="h-4 w-4" /> Mark Lesson Complete · +25 XP
-          </Button>
+          <button onClick={markDone} className="w-full rounded-2xl py-4 text-sm font-black uppercase tracking-tight bg-lime text-lime-foreground hover:bg-white transition-colors inline-flex items-center justify-center gap-2">
+            <CheckCircle2 className="h-4 w-4" strokeWidth={3} /> Complete · +25 XP
+          </button>
         ) : null}
         {nextLesson && (
           <button
             onClick={() => navigate(`/lesson/${nextLesson.id}`)}
-            className="w-full flex items-center justify-center gap-2 py-3 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            className="w-full flex items-center justify-center gap-2 py-3 text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
           >
             Next: {nextLesson.title} <ChevronRight className="h-3 w-3" />
           </button>
