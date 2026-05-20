@@ -11,19 +11,30 @@ const ProgressPage = () => {
 
   return (
     <div className="min-h-screen bg-background px-4 pb-24 pt-8">
-      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="mb-6 flex items-center gap-3">
-        <button onClick={() => navigate("/")} className="text-muted-foreground">
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-        <div>
-          <h1 className="text-lg font-semibold text-foreground">Curve Reference</h1>
-          <p className="text-xs text-muted-foreground">Study common easing presets</p>
-        </div>
+      {/* Back */}
+      <motion.button
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        onClick={() => navigate("/")}
+        className="mb-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <ChevronLeft className="h-4 w-4" /> Home
+      </motion.button>
+
+      {/* Bold header */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bento-tile bento-lime p-6 mb-4"
+      >
+        <span className="sticker sticker-ink mb-3 inline-block">Reference</span>
+        <h1 className="text-display-xl text-3xl text-ink mb-1">CURVE LIBRARY</h1>
+        <p className="text-ink/60 text-xs font-bold uppercase tracking-widest">Study common easing presets</p>
       </motion.div>
 
       {/* Curve library */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-5">
-        <span className="ae-label block mb-2">Preset Library</span>
+        <span className="sticker sticker-ink mb-2 inline-block">Preset Library</span>
         <div className="flex flex-wrap gap-1.5 mb-3">
           {COMMON_PRESETS.map((p, i) => (
             <button
@@ -53,19 +64,19 @@ const ProgressPage = () => {
 
       {/* Lesson index */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-        <span className="ae-label block mb-2">All Lessons</span>
-        <div className="soft-card overflow-hidden">
+        <span className="sticker sticker-ink mb-2 inline-block">All Lessons</span>
+        <div className="bento-tile bento-cream border-2 border-border overflow-hidden p-0">
           {lessons.map((lesson, i) => (
             <button
               key={lesson.id}
               onClick={() => navigate(`/lesson/${lesson.id}`)}
               className="flex w-full items-center gap-3 px-4 py-3 text-left hover:bg-accent/30 transition-colors border-b border-border/50 last:border-0"
             >
-              <span className="text-xs font-medium text-muted-foreground w-5">{String(i + 1).padStart(2, "0")}</span>
+              <span className="text-xs font-black text-muted-foreground w-6">{String(i + 1).padStart(2, "0")}</span>
               <div className="flex-1">
-                <p className="text-xs font-medium text-foreground">{lesson.title}</p>
+                <p className="text-xs font-bold text-foreground">{lesson.title}</p>
               </div>
-              <span className="text-[10px] text-muted-foreground">CH.{lesson.chapter}</span>
+              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">CH.{lesson.chapter}</span>
             </button>
           ))}
         </div>

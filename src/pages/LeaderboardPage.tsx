@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Trophy, Flame, Crown, Medal } from "lucide-react";
+import { ChevronLeft, Trophy, Flame, Crown, Medal, Zap } from "lucide-react";
 
 interface LeaderEntry {
   rank: number;
@@ -29,7 +29,7 @@ const initials = (name: string) =>
 
 const Avatar = ({ name, hue, size = 36 }: { name: string; hue: number; size?: number }) => (
   <div
-    className="rounded-full flex items-center justify-center font-semibold text-white flex-shrink-0"
+    className="rounded-full flex items-center justify-center font-black text-white flex-shrink-0 border-2 border-white/20"
     style={{
       width: size,
       height: size,
@@ -41,11 +41,11 @@ const Avatar = ({ name, hue, size = 36 }: { name: string; hue: number; size?: nu
   </div>
 );
 
-const tierStyles: Record<LeaderEntry["tier"], string> = {
-  diamond: "bg-primary/15 text-primary",
-  gold: "bg-[hsl(var(--xp-gold)/0.18)] text-[hsl(var(--xp-gold))]",
-  silver: "bg-secondary text-secondary-foreground",
-  bronze: "bg-accent text-accent-foreground",
+const tierStyles: Record<LeaderEntry["tier"], { chip: string; label: string }> = {
+  diamond: { chip: "bg-primary text-primary-foreground", label: "DIAMOND" },
+  gold: { chip: "bg-[hsl(45_85%_55%)] text-black", label: "GOLD" },
+  silver: { chip: "bg-secondary text-secondary-foreground", label: "SILVER" },
+  bronze: { chip: "bg-accent text-accent-foreground", label: "BRONZE" },
 };
 
 const LeaderboardPage = () => {
@@ -54,102 +54,126 @@ const LeaderboardPage = () => {
   const rest = WEEKLY.slice(3);
 
   return (
-    <div className="min-h-screen bg-background px-4 pb-24 pt-8">
-      <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="mb-6 flex items-center gap-3">
-        <button onClick={() => navigate("/")} className="text-muted-foreground">
-          <ChevronLeft className="h-5 w-5" />
-        </button>
-        <div>
-          <h1 className="text-lg font-semibold text-foreground">Leaderboard</h1>
-          <p className="text-xs text-muted-foreground">Weekly XP — refreshes Sunday</p>
+    <div className="min-h-screen bg-background px-4 pb-24 pt-6 lg:px-8 lg:pt-8">
+      {/* Back */}
+      <motion.button
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        onClick={() => navigate("/")}
+        className="mb-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <ChevronLeft className="h-4 w-4" /> Home
+      </motion.button>
+
+      {/* Bold header tile */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bento-tile bento-ink p-6 mb-4 relative overflow-hidden"
+      >
+        <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-lime/10 pointer-events-none" />
+        <span className="sticker sticker-lime mb-3 inline-block">Weekly XP</span>
+        <h1 className="text-display-xl text-4xl text-white mb-1">LEADERBOARD</h1>
+        <p className="text-white/40 text-xs font-bold uppercase tracking-widest">Refreshes Sunday · All-time streak counts</p>
+
+        {/* Your rank callout */}
+        <div className="mt-4 flex items-center gap-3 bg-white/8 rounded-2xl p-3 border border-white/10">
+          <div className="h-9 w-9 rounded-xl bg-primary/30 flex items-center justify-center">
+            <Trophy className="h-4 w-4 text-primary" />
+          </div>
+          <div className="flex-1">
+            <p className="text-white text-sm font-black">RANK #5 — Silver Tier</p>
+            <p className="text-white/40 text-[10px]">Earn 1,110 XP to reach Gold</p>
+          </div>
+          <div className="flex items-center gap-1 bg-lime text-lime-foreground rounded-full px-2.5 py-1">
+            <Flame className="h-3 w-3" />
+            <span className="text-[10px] font-black">7</span>
+          </div>
         </div>
       </motion.div>
 
-      {/* Tier banner */}
+      {/* Podium — bento grid */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="soft-card p-4 mb-5 flex items-center gap-3"
+        transition={{ delay: 0.08 }}
+        className="grid grid-cols-3 gap-3 mb-4"
       >
-        <div className="h-10 w-10 rounded-xl bg-primary/15 flex items-center justify-center">
-          <Trophy className="h-5 w-5 text-primary" />
-        </div>
-        <div className="flex-1">
-          <p className="text-sm font-semibold text-foreground">Silver Tier</p>
-          <p className="text-xs text-muted-foreground">Earn 1,110 XP to reach Gold</p>
-        </div>
-        <span className="ae-label text-primary">RANK #5</span>
+        {/* 2nd place */}
+        {[
+          { entry: top3[1], place: 2, height: 88, tileClass: "bento-cream border-2 border-border" },
+          { entry: top3[0], place: 1, height: 112, tileClass: "bento-violet" },
+          { entry: top3[2], place: 3, height: 72, tileClass: "bento-cream border-2 border-border" },
+        ].map(({ entry, place, height, tileClass }) => (
+          <div key={entry.rank} className={`bento-tile ${tileClass} p-3 flex flex-col items-center justify-end gap-1.5`}
+            style={{ minHeight: height + 80 }}>
+            {place === 1 ? (
+              <Crown className="h-5 w-5 text-lime mb-1" />
+            ) : (
+              <Medal className="h-4 w-4 text-white/40 mb-1" />
+            )}
+            <Avatar name={entry.name} hue={entry.hue} size={place === 1 ? 44 : 36} />
+            <p className={`text-[11px] font-black text-center truncate max-w-full ${place === 1 ? "text-white" : "text-foreground"}`}>
+              {entry.name}
+            </p>
+            <p className={`text-[10px] font-bold ${place === 1 ? "text-white/60" : "text-muted-foreground"}`}>
+              {entry.xp.toLocaleString()}
+            </p>
+            <span className={`text-[9px] font-black uppercase tracking-wide px-2 py-0.5 rounded-full ${
+              place === 1 ? "bg-lime text-lime-foreground" : "bg-secondary text-secondary-foreground"
+            }`}>
+              #{entry.rank}
+            </span>
+          </div>
+        ))}
       </motion.div>
 
-      {/* Podium */}
+      {/* Rest of list */}
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.05 }}
-        className="grid grid-cols-3 gap-2 mb-5"
+        transition={{ delay: 0.12 }}
+        className="bento-tile bento-cream border-2 border-border overflow-hidden p-0"
       >
-        {[top3[1], top3[0], top3[2]].map((p, i) => {
-          const place = i === 1 ? 1 : i === 0 ? 2 : 3;
-          const heights = [88, 110, 76];
-          return (
-            <div key={p.rank} className="flex flex-col items-center justify-end">
-              <div className="mb-1.5">
-                <Avatar name={p.name} hue={p.hue} size={place === 1 ? 44 : 36} />
-              </div>
-              <p className="text-xs font-medium text-foreground truncate max-w-full">{p.name}</p>
-              <p className="text-[10px] text-muted-foreground mb-1.5">{p.xp.toLocaleString()} XP</p>
-              <div
-                className={`w-full rounded-t-xl flex items-start justify-center pt-2 ${
-                  place === 1 ? "bg-primary/25" : place === 2 ? "bg-secondary" : "bg-accent"
-                }`}
-                style={{ height: heights[i] }}
-              >
-                {place === 1 ? (
-                  <Crown className="h-4 w-4 text-primary" />
-                ) : (
-                  <Medal className="h-4 w-4 text-muted-foreground" />
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </motion.div>
-
-      {/* List */}
-      <div className="soft-card overflow-hidden">
         {rest.map((e, i) => {
           const isYou = e.name === "You";
+          const tier = tierStyles[e.tier];
           return (
             <motion.div
               key={e.rank}
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.08 + i * 0.03 }}
-              className={`flex items-center gap-3 px-4 py-3 border-b border-border/50 last:border-0 ${
+              transition={{ delay: 0.14 + i * 0.03 }}
+              className={`flex items-center gap-3 px-4 py-3.5 border-b border-border/50 last:border-0 ${
                 isYou ? "bg-primary/8" : ""
               }`}
             >
-              <span className="text-xs font-semibold text-muted-foreground w-5 text-center">{e.rank}</span>
+              <span className={`text-xs font-black w-5 text-center ${isYou ? "text-primary" : "text-muted-foreground"}`}>
+                {e.rank}
+              </span>
               <Avatar name={e.name} hue={e.hue} size={32} />
               <div className="flex-1 min-w-0">
-                <p className={`text-sm ${isYou ? "font-semibold text-primary" : "font-medium text-foreground"}`}>
+                <p className={`text-sm font-black ${isYou ? "text-primary" : "text-foreground"}`}>
                   {e.name}
                 </p>
                 <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                   <Flame className="h-3 w-3" />
-                  <span>{e.streak} day streak</span>
+                  <span>{e.streak}d streak</span>
                 </div>
               </div>
-              <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full uppercase tracking-wider ${tierStyles[e.tier]}`}>
-                {e.tier}
+              <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${tier.chip}`}>
+                {tier.label}
               </span>
-              <span className="text-xs font-semibold text-foreground tabular-nums w-14 text-right">
-                {e.xp.toLocaleString()}
-              </span>
+              <div className="flex items-center gap-1 text-right">
+                <Zap className="h-3 w-3 text-primary opacity-60" />
+                <span className="text-xs font-black text-foreground tabular-nums">
+                  {e.xp.toLocaleString()}
+                </span>
+              </div>
             </motion.div>
           );
         })}
-      </div>
+      </motion.div>
     </div>
   );
 };
