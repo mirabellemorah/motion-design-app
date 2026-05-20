@@ -63,6 +63,12 @@
     --success-foreground: 0 0% 100%;
     --xp-gold: 48 100% 60%;
 
+    /* Bold bento accents */
+    --lime: 74 85% 65%;
+    --lime-foreground: 0 0% 10%;
+    --ink: 0 0% 10%;
+    --ink-foreground: 0 0% 98%;
+
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 }
@@ -131,6 +137,37 @@
   }
   .glass-card {
     @apply bg-card/80 backdrop-blur-md border border-border/50 shadow-sm rounded-2xl;
+  }
+
+  /* Bento tiles — chunky rounded, bold borders, optional offset shadow */
+  .bento-tile {
+    @apply rounded-[2rem] overflow-hidden relative;
+  }
+  .bento-cream { background-color: hsl(var(--card)); }
+  .bento-ink {
+    background-color: hsl(var(--ink));
+    color: hsl(var(--ink-foreground));
+  }
+  .bento-lime {
+    background-color: hsl(var(--lime));
+    color: hsl(var(--lime-foreground));
+  }
+  .bento-violet {
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+
+  /* Sticker pill — small uppercase tag */
+  .sticker {
+    @apply inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest;
+  }
+  .sticker-lime { background-color: hsl(var(--lime)); color: hsl(var(--lime-foreground)); }
+  .sticker-ink  { background-color: hsl(var(--ink));  color: hsl(var(--ink-foreground)); }
+  .sticker-violet { background-color: hsl(var(--primary)); color: hsl(var(--primary-foreground)); }
+
+  /* Display headline — tight, heavy */
+  .text-display-xl {
+    @apply font-black tracking-tighter leading-[0.9];
   }
 }
 
